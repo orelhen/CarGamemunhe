@@ -1,7 +1,7 @@
 /**
  * 
  */
-package game.utilities;
+package utilities;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

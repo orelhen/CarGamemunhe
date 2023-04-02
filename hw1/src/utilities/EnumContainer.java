@@ -1,4 +1,4 @@
-package game.utilities;
+package utilities;
 
 /**
  * Contains all Enums for the game.

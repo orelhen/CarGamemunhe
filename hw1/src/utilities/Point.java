@@ -1,4 +1,4 @@
-package game.utilities;
+package utilities;
 
 //imports
 

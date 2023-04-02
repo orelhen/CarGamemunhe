@@ -1,5 +1,5 @@
 //package name
-package game.arenas;
+package game.arenas.air;
 
 //imports
 import java.util.ArrayList;
