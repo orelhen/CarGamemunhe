@@ -77,7 +77,7 @@ public abstract class Arena{
     }
 
     public boolean hasActiveRacers(){
-        if this.ActiveRacers!=NULL{return true;}
+        if (this.ActiveRacers!=null){return true;}
         else return false;
     }
 
