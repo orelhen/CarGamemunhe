@@ -1,4 +1,4 @@
-package game.utulities;
+package game.utilities;
 
 public class Mishap {
 
