@@ -1,5 +1,5 @@
 //pakages :
-package game.arenas;
+package game.arenas.air;
 
 //imports:
 import game.utilities.EnumContainer;
@@ -16,7 +16,7 @@ public class AerialArena extends Arena {
     private EnumContainer.Wind wind =EnumContainer.Wind.HIGH;
 
     public AerialArena(){
-        super(this.DEFAULT_LENGTH,this.DEFAULT_MAX_RACERS,this.DEFAULT_FRICTION);
+        super();
 
     };
 
