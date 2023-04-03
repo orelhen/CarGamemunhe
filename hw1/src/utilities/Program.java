@@ -19,7 +19,6 @@ import game.racers.air.Helicopter;
 import game.racers.land.Bicycle;
 import game.racers.land.Car;
 import game.racers.land.Horse;
-import game.racers.naval.RowBoat;
 import game.racers.naval.SpeedBoat;
 import utilities.EnumContainer.Color;
 
