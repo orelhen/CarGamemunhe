@@ -30,6 +30,9 @@ public class EnumContainer {
 	public static enum Water {
 		SALTED, SWEET
 	}
+	public static enum Surface {
+		FLAT, WAVY
+	}
 
 	public static enum Body {
 		SEA, LAKE, RIVER, OCEAN
