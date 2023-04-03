@@ -15,7 +15,9 @@ public class Helicopter extends Racer implements AerialRacer {
     private static final double DEFAULT_ACCELERATION=50;
     private static final EnumContainer.Color DEFUALT_color = BLUE;
 
-    public Helicopter() {
+    public Helicopter()
+    {
+        super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFUALT_color);
     }
 
     public Helicopter(String N, double MS, double ACC, EnumContainer.Color color) {
