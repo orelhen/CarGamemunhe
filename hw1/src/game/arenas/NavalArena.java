@@ -1,7 +1,10 @@
+
+//packages :
 package game.arenas;
 
+
+//imports :
 import game.arenas.air.Arena;
-import game.utilities.EnumContainer;
 import utilities.EnumContainer;
 
 
@@ -21,7 +24,7 @@ public class NavalArena extends Arena {
     public NavalArena(double length, int maxRacers, double friction) {
         super(length, maxRacers, friction);
     }
-
+    // getters and setters :
 
     public double getDEFAULT_FRICTION() {
         double DEFAULT_FRICTION = 0.5;
