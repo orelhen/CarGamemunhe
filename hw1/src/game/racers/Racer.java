@@ -32,6 +32,7 @@ public abstract class Racer {
         this.currentSpeed = 0;
         this.failureProbability = 0;
         //this.enum COLOR;
+
         //this.mishap;
     }
 

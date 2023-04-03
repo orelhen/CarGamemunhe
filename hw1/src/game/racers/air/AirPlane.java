@@ -5,7 +5,7 @@ import utilities.EnumContainer.Color;
 
 import static utilities.EnumContainer.Color.BLACK;
 
-public class AirPlane extends Racer {
+public class AirPlane extends Racer implements AerialRacer {
     private static final String CLASS_NAME = "Airplane";
     private static final int DEFAULT_MAX_SPEED=885;
     private static final double DEFAULT_ACCELERATION=100;
