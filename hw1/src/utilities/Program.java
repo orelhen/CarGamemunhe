@@ -25,7 +25,8 @@ import utilities.EnumContainer.Color;
 
 /**
  * @author
- *
+ *orel hen 316179423
+ * guy aloosh 316471465
  */
 public class Program {
 
@@ -65,7 +66,6 @@ public class Program {
 				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 			e1.printStackTrace();
 		}
-
 		addRacersToArena();
 	}
 

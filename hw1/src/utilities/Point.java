@@ -42,7 +42,7 @@ public class Point {
 		this.x= obj.GetX();
 		this.y= obj.GetY();
 	}
-	
+
 	//getters
 	public double GetX() { return this.x;}
 	public double GetY() { return this.y;}
@@ -56,7 +56,7 @@ public class Point {
 			return true;
 		}
 		else
-		return false;
+			return false;
 	}
 	public boolean SetY(double ny) 
 	{ 
@@ -66,7 +66,7 @@ public class Point {
 			return true;
 		}
 		else
-		return false;
+			return false;
 	}
 	
 	//ToString

@@ -173,16 +173,39 @@ public abstract class Racer {
 
 
     //methods
-    public void initRace(Arena arena, Point start, Point finish) {}
-    public Point move(double friction) {}
-    public String describeSpecific(){}
-    public String describeRacer(){}
+    public void initRace(Arena arena, Point start, Point finish)
+    {
 
-    public void intreduce(){}
 
-    public String className(){}
+    }
+    public Point move(double friction) {
+        if(this.currentSpeed<this.maxSpeed){
+            this.currentSpeed += this.acceleration*friction;
+        }
+        Point newPoint = new Point(this.currentLocation.GetX()+currentSpeed ,0);
+        //failure 4.2
+        return newPoint;
+    }
+    public abstract String describeSpecific()
+    {
 
-    public boolean hasMishap(){}
+    }
+    public String describeRacer()
+    {
+
+    }
+    public void intreduce(){
+        System.out.printf("racer type :"  + " racer info"); // **********************************
+    }
+    public String className()
+    {
+
+    }
+    public boolean hasMishap(){
+        if (this.mishap!=null)
+                return true;
+        return false;
+    }
 
 
 
