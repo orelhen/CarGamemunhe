@@ -23,24 +23,8 @@ public abstract class Racer {
     private Color color;
     private Mishap mishap;
 
-<<<<<<< HEAD
-    //constructors
-    public Racer() {
-        this.serialNumber =0;// +1 everytime
-        this.name = "noname";
-        this.currentLocation = null;
-        //this.arena = null;
-        this.maxSpeed = 0;
-        this.acceleration =0;
-        this.currentSpeed = 0;
-        this.failureProbability = 0;
-        //this.enum COLOR;
 
-        //this.mishap;
-    }
-=======
     //constructor
->>>>>>> 14fe2c5a952fdc5258146429a74d45e075b0e404
 
     public Racer(String N, double MS, double ACC,Color color)
     {
