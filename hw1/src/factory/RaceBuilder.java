@@ -16,20 +16,29 @@ public class RaceBuilder {
     public Arena buildArena(String arenaType,double length,int maxRacers)
     {
         //arena type
-        Arena newArena = new Arena(length,maxRacers,0); //friction
-        return newArena;
+        Class<?> clazz = Class.forName(arenaType);
+        //get constructor
+        Constructor<?> constructor = clazz.getConstructor(double.class,int.class);
+
+        return (Arena) constructor.newInstance(length,maxRacers,0);  //friction******************************
     }
     public Racer buildRacer(String racerType,String name,double maxSpeed, double acceleration,utilities.EnumContainer.Color color){
         //racer type
-        Racer newRacer = new Racer(name,maxSpeed,acceleration,color);
-        return newRacer;
+        Class<?> clazz = Class.forName(racerType);
+        //get constructor
+        Constructor<?> constructor = clazz.getConstructor(String.class, double.class, double.class, Color.class);
+
+        return (Racer) constructor.newInstance(name, maxSpeed, acceleration, color);
     }
     public Racer buildWheeledRacer(String racerType,String name, double maxSpeed,double acceleration,utilities.EnumContainer.Color color,int numOfWheels){
         //racer type
-        Racer newRacer = new Racer(name,maxSpeed,acceleration,color);
-        //num of wheels
-        return newRacer;
+        Class<?> clazz = Class.forName(racerType);
+        //get constructor
+        Constructor<?> constructor = clazz.getConstructor(String.class, double.class, double.class, Color.class, int.class);
+
+        return (Racer) constructor.newInstance(name, maxSpeed, acceleration, color, numOfWheels);
+        // car - bicycle - airplane
     }
-    //if needed- more methods
+
 
 }
