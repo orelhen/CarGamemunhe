@@ -7,7 +7,7 @@ import game.racers.Racer;
 
 public class RaceBuilder {
     private static RaceBuilder instance;
-    private ClassLoader classLoader;
+    private ClassLoader classLoader; // *****************************
     private Class<?> classObject;
     private Constructor<?> consctructor;
 

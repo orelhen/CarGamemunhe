@@ -3,7 +3,8 @@
 package game.arenas.land;
 
 //imports :
-import game.arenas.air.Arena;
+
+import game.arenas.Arena;
 import utilities.EnumContainer;
 
 public class LandArena extends Arena {
@@ -25,7 +26,7 @@ public class LandArena extends Arena {
         return surface;
     }
     public boolean SetSurface (EnumContainer.Surface surface){
-        if (water!=null)
+        if (surface!=null)
         {
             this.surface=surface;
             return true;

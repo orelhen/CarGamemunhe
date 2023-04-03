@@ -1,4 +1,5 @@
 package game.racers.air;
+
 import game.racers.Racer;
 import game.racers.Wheeled;
 import utilities.EnumContainer;
@@ -6,7 +7,7 @@ import utilities.EnumContainer.Color;
 
 import static utilities.EnumContainer.Color.BLACK;
 
-public class AirPlane extends Racer implements AerialRacer {
+public class Airplane extends Racer implements AerialRacer {
     private static final String CLASS_NAME = "Airplane";
     private static final int DEFAULT_MAX_SPEED=885;
     private static final double DEFAULT_ACCELERATION=100;
@@ -18,12 +19,12 @@ public class AirPlane extends Racer implements AerialRacer {
 
     //Constructors :
 
-    public AirPlane() {
+    public Airplane() {
         super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFUALT_color);
         this.wheeled=new Wheeled(DEFUALT_WHEELS);
     }
 
-    public AirPlane(String name, double maxSpeed, double acceleration, Color color, int numOfWheels) {
+    public Airplane(String name, double maxSpeed, double acceleration, Color color, int numOfWheels) {
         super(name,maxSpeed,acceleration,color);
         this.wheeled=new Wheeled(numOfWheels);
     }

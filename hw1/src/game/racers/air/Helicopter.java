@@ -6,6 +6,7 @@ package game.racers.air;
 
 import game.racers.Racer;
 import utilities.EnumContainer;
+import java.lang.String;
 
 import static utilities.EnumContainer.Color.BLUE;
 

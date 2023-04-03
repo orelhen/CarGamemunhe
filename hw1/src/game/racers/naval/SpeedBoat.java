@@ -1,4 +1,4 @@
-package game.racers.land.naval;
+package game.racers.naval;
 
 import game.racers.Racer;
 import game.racers.land.LandRacer;
@@ -7,7 +7,7 @@ import utilities.EnumContainer;
 
 import static utilities.EnumContainer.Color.RED;
 
-public class SpeedBoat  extends Racer implements NavalRacer, LandRacer {
+public class SpeedBoat  extends Racer implements NavalRacer {
     private static final String CLASS_NAME = "SpeedBoat";
     private static final int DEFAULT_MAX_SPEED=170;
     private static final double DEFAULT_ACCELERATION=5;

@@ -2,6 +2,7 @@
 package game.arenas.air;
 
 //imports:
+import game.arenas.Arena;
 import utilities.EnumContainer;
 
 
@@ -17,12 +18,11 @@ public class AerialArena extends Arena {
 
     public AerialArena(){
         super();
-
     };
 
     public AerialArena(double length,int maxRacer)
     {
-        super(length,maxRacer,this.DEFAULT_FRICTION);
+        super(length,maxRacer,0);
 
     }
 

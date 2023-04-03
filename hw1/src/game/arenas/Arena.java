@@ -2,8 +2,11 @@
 package game.arenas;
 
 //imports
-import java.util.ArrayList;
+
+import game.arenas.exceptions.RacerLimitException;
+import game.arenas.exceptions.RacerTypeException;
 import game.racers.Racer;
+import java.util.ArrayList;
 
 
 public abstract class Arena{
@@ -23,8 +26,8 @@ public abstract class Arena{
         this.MAX_RACERS =  0;
         this.length= 0;
         this.FRICTION = 0;
-        //this.ActiveRacers
-        //this.CompletedRacers
+        this.ActiveRacers=null;
+        this.CompletedRacers=null;
     }
     //1.1.4
     public Arena(double length, int maxRacers, double friction){
@@ -32,47 +35,21 @@ public abstract class Arena{
         this.MAX_RACERS =  maxRacers;
         this.length= length;
         this.FRICTION = friction;
-        //this.ActiveRacers
-        //this.CompletedRacers
+        this.ActiveRacers=null;
+        this.CompletedRacers=null;
 
     }
 
-    //getters
-    public ArrayList<Racer> GetActiveRacers() {
 
-        return this.ActiveRacers;
-    }
-
-    public ArrayList<Racer> GetCompletedRacers() {
-
-        return this.CompletedRacers;
-    }/*
-    public double GetFriction(){ }
-    public int GetMaxRacers(){ }
-    public int GetMinYgap(){ }
-    public double Getlength(){ }
-    */
-    //setters
-    /*
-    public boolean SetActiveRacers() {}
-    public boolean SetCompletedRacers(){}
-    public boolean SetFriction(){}
-    //finals
-    //public boolean SetMaxRacers(){}
-    //public boolean SetMinYgap(){}
-    //public boolean Setlength(){}
-   */
-
-    public void addRacer(Racer newRacer)
-    {
-        //throwables
-        //RacerTypeExeption
-        //RacerLimitException
+    public void addRacer(Racer newRacer) throws RacerLimitException,RacerTypeException {
+        if(ActiveRacers.size()>this.MAX_RACERS){throw new RacerLimitException("error");}
+        //if()???????????????????
     }
 
     public void initRace(){
         //for each racer determain starting point, x= default 0, y = 0+distance
-
+        int i =0;
+       // while(ActiveRacers[i]!=null){ActiveRacers[i].initRace(this,);}
         //init race for each racer
     }
 

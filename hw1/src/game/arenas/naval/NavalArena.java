@@ -5,13 +5,12 @@ package game.arenas.naval;
 
 //imports :
 import game.arenas.Arena;
-import game.arenas.air.Arena;
 import utilities.EnumContainer;
 
 
 public class NavalArena extends Arena {
     private final static int DEFAULT_LENGTH =1000;
-    private final int DEFAULT_MAX_RACERS=5;
+    private final int DEFAULT_MAX_RACERS = 5;
     private final static double DEFAULT_FRICTION =0.7;
     private EnumContainer.Water water = EnumContainer.Water.SWEET;
     private  EnumContainer.Surface surface=EnumContainer.Surface.FLAT;
@@ -22,6 +21,7 @@ public class NavalArena extends Arena {
 
 
     public NavalArena() {
+        super(DEFAULT_LENGTH, 5, DEFAULT_FRICTION);
     }
 
     public NavalArena(double length, int maxRacers, double friction) {

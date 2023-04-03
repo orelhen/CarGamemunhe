@@ -31,6 +31,11 @@ public abstract class Racer {
         this.maxSpeed=MS;
         this.acceleration =ACC;
         this.color = color;
+        //this.arena =null;
+        // this.finish=null;
+        // this.currentLocation = null;
+        // this.mishap = null;
+        //this.failureProbability = 0;
     }
 
     //getters
@@ -175,8 +180,9 @@ public abstract class Racer {
     //methods
     public void initRace(Arena arena, Point start, Point finish)
     {
-
-
+        this.arena = arena;
+        this.currentLocation = start;
+        this.finish = finish;
     }
     public Point move(double friction) {
         if(this.currentSpeed<this.maxSpeed){
@@ -186,6 +192,7 @@ public abstract class Racer {
         //failure 4.2
         return newPoint;
     }
+    /*
     public abstract String describeSpecific()
     {
 
@@ -207,19 +214,7 @@ public abstract class Racer {
         return false;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    */
 
 
 
