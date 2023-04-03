@@ -6,7 +6,7 @@ package utilities;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-import factory.RaceBuilder;
+import game.factory.RaceBuilder;
 import game.arenas.Arena;
 import game.arenas.air.AerialArena;
 import game.arenas.exceptions.RacerLimitException;
@@ -20,6 +20,7 @@ import game.racers.land.Bicycle;
 import game.racers.land.Car;
 import game.racers.land.Horse;
 import game.racers.naval.SpeedBoat;
+import game.racers.naval.RowBoat;//ADDED *****************************
 import utilities.EnumContainer.Color;
 
 /**
@@ -30,7 +31,7 @@ import utilities.EnumContainer.Color;
 public class Program {
 
 	private static Arena arena;
-	private static RaceBuilder builder = RaceBuilder.getInstance();;
+	private static RaceBuilder builder = RaceBuilder.getInstance();
 	private static ArrayList<Racer> racers;
 
 	private static void addRacersToArena() {
@@ -232,7 +233,7 @@ Introduction:
 java.lang.NoSuchMethodException: game.racers.land.Car.<init>(java.lang.String, double, double, utilities.EnumContainer$Color)
 	at java.lang.Class.getConstructor0(Unknown Source)
 	at java.lang.Class.getConstructor(Unknown Source)
-	at factory.RaceBuilder.buildRacer(RaceBuilder.java:43)
+	at game.factory.RaceBuilder.buildRacer(RaceBuilder.java:43)
 	at utilities.Program.initNavalRace(Program.java:110)
 	at utilities.Program.main(Program.java:142)
 [RowBoat] name: Bob, SerialNumber: 20, maxSpeed: 220.0, acceleration: 10.0, color: BLUE, Type: SKULLING, Team: SINGLE

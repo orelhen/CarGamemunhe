@@ -8,7 +8,7 @@ import utilities.EnumContainer.Color;
 public class Car extends Racer implements LandRacer
 {
 
-    private static final String CLASS_NAME = "car";
+    private static final String CLASS_NAME = "Car";
     private static final int DEFAULT_WHEELS = 4;
     private static final double DEFAULT_MAX_SPEED = 400;
     private static final double DEFAULT_ACCELERATION =20;
@@ -39,5 +39,10 @@ public class Car extends Racer implements LandRacer
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String describeSpecific() {
+        return null;
     }
 }

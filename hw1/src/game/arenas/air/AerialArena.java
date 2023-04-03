@@ -17,12 +17,12 @@ public class AerialArena extends Arena {
     private EnumContainer.Wind wind =EnumContainer.Wind.HIGH;
 
     public AerialArena(){
-        super();
+        super(1500,6,0.4);
     };
 
     public AerialArena(double length,int maxRacer)
     {
-        super(length,maxRacer,0);
+        super(length,maxRacer,0.4);
 
     }
 

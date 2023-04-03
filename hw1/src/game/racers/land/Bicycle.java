@@ -35,5 +35,10 @@ public class Bicycle extends Racer implements LandRacer{
         }
         return false;
     }
+
+    @Override
+    public String describeSpecific() {
+        return null;
+    }
 }
 

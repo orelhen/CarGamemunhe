@@ -30,4 +30,8 @@ public class Airplane extends Racer implements AerialRacer {
     }
 
 
+    @Override
+    public String describeSpecific() {
+        return null;
+    }
 }

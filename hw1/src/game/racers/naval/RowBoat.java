@@ -23,6 +23,11 @@ public class RowBoat extends Racer implements NavalRacer {
         super(N, MS, ACC, color);
     }
 
+    @Override
+    public String describeSpecific() {
+        return null;
+    }
+
 
     public EnumContainer.BoatType getBoatType() {
         return boatType;

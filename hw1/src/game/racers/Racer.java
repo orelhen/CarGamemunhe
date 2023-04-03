@@ -10,8 +10,7 @@ import utilities.Mishap;
 //Racer-class
 public abstract class Racer {
 
-
-    private int serialNumber;
+    private static int serialNumber = 0; // STATIC???? not writen
     private String name;
     private Point currentLocation;
     private Point finish;
@@ -27,6 +26,7 @@ public abstract class Racer {
     //constructor
     public Racer(String N, double MS, double ACC,Color color)
     {
+        serialNumber++;
         this.name = N;
         this.maxSpeed=MS;
         this.acceleration =ACC;
@@ -175,8 +175,6 @@ public abstract class Racer {
         return false;
     }
 
-
-
     //methods
     public void initRace(Arena arena, Point start, Point finish)
     {
@@ -192,21 +190,23 @@ public abstract class Racer {
         //failure 4.2
         return newPoint;
     }
-    /*
-    public abstract String describeSpecific()
-    {
 
+    public String describeSpecific()
+    {
+        return "DESCRIVE";
     }
     public String describeRacer()
     {
-
+        return "description";//********************************
     }
-    public void intreduce(){
-        System.out.printf("racer type :"  + " racer info"); // **********************************
+    public void introduce(){
+        //[Car] name: Car #1, SerialNumber: 1, maxSpeed: 400.0, acceleration: 20.0, color: RED, Number of Wheels: 4, Engine Type: MOUNTAIN
+
+        System.out.printf("["+this.className() +"]" +" name : " + this.getName() + ", SerialNumber: " +getSerialNumber() + ", maxSpeed : " + this.getMaxSpeed() + ", acceleration: : " + this.getAcceleration() + ", color: "  + ", Number of Wheels"  + ", Engine Type: "  + "\n");
     }
     public String className()
     {
-
+        return "CLASS"; // ***************************
     }
     public boolean hasMishap(){
         if (this.mishap!=null)
@@ -214,7 +214,7 @@ public abstract class Racer {
         return false;
     }
 
-    */
+
 
 
 

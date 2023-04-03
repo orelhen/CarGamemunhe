@@ -18,6 +18,12 @@ public class SpeedBoat  extends Racer implements NavalRacer {
     public SpeedBoat(String N, double MS, double ACC, EnumContainer.Color color) {
         super(N, MS, ACC, color);
     }
+
+    @Override
+    public String describeSpecific() {
+        return null;
+    }
+
     public SpeedBoat(){
         super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFUALT_color);
     }

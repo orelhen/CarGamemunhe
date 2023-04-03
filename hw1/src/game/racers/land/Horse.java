@@ -19,6 +19,11 @@ public class Horse extends Racer implements LandRacer  {
         super(name,maxSpeed,acceleration,color);
     }
 
+    @Override
+    public String describeSpecific() {
+        return null;
+    }
+
     public EnumContainer.Breed getBreed() {
         return breed;
     }
