@@ -4,6 +4,7 @@ package game.racers;
 //imports
 import game.arenas.Arena;
 import utilities.Point;
+import utilities.EnumContainer.Color;
 
 //Racer-class
 public abstract class Racer {
@@ -17,7 +18,7 @@ public abstract class Racer {
     private double acceleration;
     private double currentSpeed;
     private double failureProbability;
-    //private enum Color color;
+    private Color color;
     //private Mishap mishap;
 
     //constructors
@@ -34,7 +35,7 @@ public abstract class Racer {
         //this.mishap;
     }
 
-    public Racer(String N, double MS, double ACC)//, <enum> color)
+    public Racer(String N, double MS, double ACC,Color color)
     {
         this.serialNumber =0;// +1 everytime
         this.name = N;
@@ -44,7 +45,7 @@ public abstract class Racer {
         this.acceleration =ACC;
         this.currentSpeed = 0;
         this.failureProbability = 0;
-        //this.enum COLOR;
+        this.Color=color;
         //this.mishap;
     }
 
