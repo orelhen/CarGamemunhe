@@ -1,9 +1,10 @@
 
 //packages :
-package game.arenas;
+package game.arenas.naval;
 
 
 //imports :
+import game.arenas.Arena;
 import game.arenas.air.Arena;
 import utilities.EnumContainer;
 

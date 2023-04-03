@@ -1,9 +1,11 @@
-//package
+package game.racers;
+
+public class Wheeled //package
 package game.racers;
 
 //imports
 
-public class wheeled  {
+public class Wheeled  {
 
     private int numOfWheels;
 
@@ -22,4 +24,5 @@ public class wheeled  {
     //methods
     public String describeSpesific(){};//?? ************************
 
+}{
 }
