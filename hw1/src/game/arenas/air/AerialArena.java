@@ -2,7 +2,7 @@
 package game.arenas.air;
 
 //imports:
-import game.utilities.EnumContainer;
+import utilities.EnumContainer;
 
 
 public class AerialArena extends Arena {
