@@ -25,10 +25,6 @@ public abstract class Racer {
 
 
     //constructor
-<<<<<<< HEAD
-=======
-
->>>>>>> 110d0858a0a505ef33ff333f627df0c1a27dab2f
     public Racer(String N, double MS, double ACC,Color color)
     {
         this.name = N;
