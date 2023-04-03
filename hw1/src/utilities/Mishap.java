@@ -19,12 +19,34 @@ public class Mishap {
 
     //getters
 
+    public boolean isFixable() {
+        return fixable;
+    }
+
+
+
+    public double getReductionFactor() {
+        return reductionFactor;
+    }
+
+    public int getTurnsToFix() {
+        return turnsToFix;
+    }
+
 
     //setters
+    public void setReductionFactor(double reductionFactor) {
+        this.reductionFactor = reductionFactor;
+    }
+    public void setTurnsToFix(int turnsToFix) {
+        this.turnsToFix = turnsToFix;
+    }
+    public void setFixable(boolean fixable) {
+        this.fixable = fixable;
+    }
 
 
-    public void toString(){}
-
-
-
+    public String toString() {
+        return "Mishap{" + "fixable=" + fixable + ", reductionFactor=" + reductionFactor +", turnsToFix=" + turnsToFix +'}';
+    }
 }
