@@ -10,6 +10,8 @@ import utilities.EnumContainer;
 
 public class NavalArena extends Arena {
     private final static int DEFAULT_LENGTH =1000;
+    private final int DEFAULT_MAX_RACERS=5;
+    private final static double DEFAULT_FRICTION =0.7;
     private EnumContainer.Water water = EnumContainer.Water.SWEET;
     private  EnumContainer.Surface surface=EnumContainer.Surface.FLAT;
     private  EnumContainer.Body body=EnumContainer.Body.LAKE;
