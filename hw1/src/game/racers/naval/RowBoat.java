@@ -16,7 +16,6 @@ public class RowBoat extends Racer implements NavalRacer {
 
     public RowBoat(){
         super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFUALT_color);
-
     }
 
     public RowBoat(String N, double MS, double ACC, EnumContainer.Color color) {
@@ -25,9 +24,13 @@ public class RowBoat extends Racer implements NavalRacer {
 
     @Override
     public String describeSpecific() {
-        return null;
+        return "Type: " +this.getBoatType() + ", Team: " + this.getTeam();
     }
 
+    @Override
+    public String className() {
+        return "RowBoat";
+    }
 
     public EnumContainer.BoatType getBoatType() {
         return boatType;

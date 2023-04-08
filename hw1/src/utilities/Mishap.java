@@ -13,8 +13,9 @@ public class Mishap {
         this.reductionFactor = reductionFactor;
     }
 	//methods
-    void nextTurn(){
-        if (this.fixable){this.turnsToFix= this.turnsToFix-1;} // or minus reduction??
+    public void nextTurn(){
+        if (getTurnsToFix()>0)
+            setTurnsToFix(getTurnsToFix()-1);
     }
 
     //getters
@@ -47,6 +48,6 @@ public class Mishap {
 
 
     public String toString() {
-        return "Mishap{" + "fixable=" + fixable + ", reductionFactor=" + reductionFactor +", turnsToFix=" + turnsToFix +'}';
+        return "(" + fixable + ", " + turnsToFix + ", " + reductionFactor + ")";
     }
 }

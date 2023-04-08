@@ -36,9 +36,14 @@ public class Bicycle extends Racer implements LandRacer{
         return false;
     }
 
+
     @Override
     public String describeSpecific() {
-        return null;
+        return " Number of Wheels: "+ this.wheeled.getnumOfwheels() + ", Bicycle Type: " + this.bicycleType;
+    }
+    @Override
+    public String className() {
+        return "Bicycle";
     }
 }
 

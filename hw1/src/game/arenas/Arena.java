@@ -58,6 +58,10 @@ public abstract class Arena{
 
     }
 
+    public double getLength() {
+        return length;
+    }
+
     public void initRace() {
         //for each racer determain starting point, x= default 0, y = 0+distance
         //init race for each racer
@@ -69,20 +73,29 @@ public abstract class Arena{
         }
     }
     public boolean hasActiveRacers(){
-        if (this.activeRacers!=null){return true;}
-        else return false;
+        if (getActiveRacers().size() == 0){
+            return false;
+        }
+        return true;
     }
 
     public void playTurn(){
-        for (Racer racer : this.getActiveRacers()) {
-            racer.move(FRICTION);
-        }
+        while (this.activeRacers.size()> 0){
+            for (int i = 0; i< this.activeRacers.size(); i++) {
+                Point point = new Point(this.activeRacers.get(i).move(FRICTION));
 
+                if (this.activeRacers.get(i).getCurrentLocation().getX()>=getLength()) {
+                    crossFinishLine(this.activeRacers.get(i));
+                    i--;
+                }
+            }
+        }
     }
 
 
     public void crossFinishLine(Racer racer){
-        //racer finish
+        this.completedRacers.add(racer);
+        this.activeRacers.remove(racer);
     }
 
 

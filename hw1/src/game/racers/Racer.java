@@ -3,6 +3,7 @@ package game.racers;
 
 //imports
 import game.arenas.Arena;
+import utilities.Fate;
 import utilities.Point;
 import utilities.EnumContainer.Color;
 import utilities.Mishap;
@@ -27,7 +28,7 @@ public abstract class Racer {
     public Racer(String N, double MS, double ACC,Color color)
     {
         serialNumber++;
-        this.name = N;
+        this.name = N + " #"+serialNumber;
         this.maxSpeed=MS;
         this.acceleration =ACC;
         this.color = color;
@@ -183,31 +184,52 @@ public abstract class Racer {
         this.finish = finish;
     }
     public Point move(double friction) {
-        if(this.currentSpeed<this.maxSpeed){
+        /*if(this.currentSpeed<this.maxSpeed){
             this.currentSpeed += this.acceleration*friction;
         }
         Point newPoint = new Point(this.currentLocation.GetX()+currentSpeed ,0);
         //failure 4.2
         return newPoint;
+        */
+        double reductionFactor = 1; //If there is no mishap, then her factor will remain one, and will not affect the CurrentSpeed.
+//
+        if (this.mishap != null && this.mishap.isFixable() && this.mishap.getTurnsToFix() ==0){
+            this.mishap = null;
+        }
+        if (mishap==null){
+            if(Fate.breakDown()){
+                setMishap(Fate.generateMishap());
+                System.out.println(this.name+"Has a new mishap!"+mishap.toString());
+            }
+        }
+        if (mishap != null && mishap.isFixable()){
+            reductionFactor =this.mishap.getReductionFactor();
+            this.mishap.nextTurn();
+        }
+        setCurrentSpeed(this.currentSpeed += this.acceleration * reductionFactor * friction);
+        Point current = new Point(this.currentLocation.getX()+this.currentSpeed,0);
+        setCurrentLocation(current);
+        return this.currentLocation;
+
+
+
+
+
     }
 
-    public String describeSpecific()
-    {
-        return "DESCRIVE";
-    }
+    public abstract String describeSpecific();
+
     public String describeRacer()
     {
-        return "description";//********************************
+        if(describeSpecific()!=null) {
+            return "["+this.className() +"]" +" name : " + this.getName() + ", SerialNumber: " +getSerialNumber() + ", maxSpeed : " + this.getMaxSpeed() + ", acceleration: : " + this.getAcceleration() + ", color: " +this.color +  "," + this.describeSpecific();}
+        else
+            return "["+this.className() +"]" +" name : " + this.getName() + ", SerialNumber: " +getSerialNumber() + ", maxSpeed : " + this.getMaxSpeed() + ", acceleration: : " + this.getAcceleration() + ", color: " +this.color;
     }
     public void introduce(){
-        //[Car] name: Car #1, SerialNumber: 1, maxSpeed: 400.0, acceleration: 20.0, color: RED, Number of Wheels: 4, Engine Type: MOUNTAIN
-
-        System.out.printf("["+this.className() +"]" +" name : " + this.getName() + ", SerialNumber: " +getSerialNumber() + ", maxSpeed : " + this.getMaxSpeed() + ", acceleration: : " + this.getAcceleration() + ", color: "  + ", Number of Wheels"  + ", Engine Type: "  + "\n");
+        System.out.println(describeRacer());
     }
-    public String className()
-    {
-        return "CLASS"; // ***************************
-    }
+    public abstract String className();
     public boolean hasMishap(){
         if (this.mishap!=null)
                 return true;

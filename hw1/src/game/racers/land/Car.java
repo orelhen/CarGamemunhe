@@ -43,6 +43,11 @@ public class Car extends Racer implements LandRacer
 
     @Override
     public String describeSpecific() {
-        return null;
+        return " Number of Wheels: "+ this.wheeled.getnumOfwheels() + ", Engine Type: " + this.getEngine();
+    }
+
+    @Override
+    public String className() {
+        return "Car";
     }
 }

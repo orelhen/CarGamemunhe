@@ -21,9 +21,12 @@ public class SpeedBoat  extends Racer implements NavalRacer {
 
     @Override
     public String describeSpecific() {
-        return null;
+        return "Type: " +this.getBoatType() + ", Team: " + this.getTeam();
     }
-
+    @Override
+    public String className() {
+        return "SpeedBoat";
+    }
     public SpeedBoat(){
         super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFUALT_color);
     }

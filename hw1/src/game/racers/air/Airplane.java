@@ -32,6 +32,10 @@ public class Airplane extends Racer implements AerialRacer {
 
     @Override
     public String describeSpecific() {
-        return null;
+        return " Number of Wheels: "+ this.wheeled.getnumOfwheels() ;
+    }
+    @Override
+    public String className() {
+        return "AirPlane";
     }
 }

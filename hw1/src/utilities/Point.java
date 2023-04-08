@@ -68,7 +68,15 @@ public class Point {
 		else
 			return false;
 	}
-	
+
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
 	//ToString
 	public String toString() {
 		return "x cords: " + this.x +"\n y cords: "+ this.y +"\n";
