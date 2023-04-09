@@ -16,15 +16,15 @@ public class AerialArena extends Arena {
     private EnumContainer.Height height=EnumContainer.Height.HIGH;
     private EnumContainer.Wind wind =EnumContainer.Wind.HIGH;
 
-    public AerialArena(){
-        super(1500,6,0.4);
-    };
 
     public AerialArena(double length,int maxRacer)
     {
         super(length,maxRacer,0.4);
 
     }
+    public AerialArena(){
+        super(1500,6,0.4);
+    };
 
     public EnumContainer.Weather getWeather() {
         return weather;

@@ -24,8 +24,8 @@ public class NavalArena extends Arena {
         super(DEFAULT_LENGTH, 5, DEFAULT_FRICTION);
     }
 
-    public NavalArena(double length, int maxRacers, double friction) {
-        super(length, maxRacers, friction);
+    public NavalArena(double length, int maxRacers) {
+        super(length, maxRacers, DEFAULT_FRICTION);
     }
     // getters and setters :
 

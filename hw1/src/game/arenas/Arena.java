@@ -3,9 +3,15 @@ package game.arenas;
 
 //imports
 
+import game.arenas.air.AerialArena;
 import game.arenas.exceptions.RacerLimitException;
 import game.arenas.exceptions.RacerTypeException;
+import game.arenas.land.LandArena;
+import game.arenas.naval.NavalArena;
 import game.racers.Racer;
+import game.racers.air.AerialRacer;
+import game.racers.land.LandRacer;
+import game.racers.naval.NavalRacer;
 import utilities.Point;
 
 import java.util.ArrayList;
@@ -46,11 +52,11 @@ public abstract class Arena{
 
 
     public void addRacer(Racer newRacer) throws RacerLimitException,RacerTypeException {
-
-        if(newRacer == null){
-            throw new RacerTypeException("RacerTypeExeption");
-        } else if (getActiveRacers().size() == MAX_RACERS) {
-            throw new RacerLimitException("RacerLimitException");
+        if(this instanceof AerialArena) { if(!(newRacer instanceof AerialRacer)){throw new RacerTypeException(""+newRacer.className(),"Aerial arena" );}}
+        if(this instanceof NavalArena) { if(!(newRacer instanceof NavalRacer)){throw new RacerTypeException(""+newRacer.className(),"Naval arena");}}
+        if(this instanceof LandArena) {  if(!(newRacer instanceof LandRacer) ){throw new RacerTypeException(""+newRacer.className(),"Land arena");}}
+        if (getActiveRacers().size() == MAX_RACERS) {
+            throw new RacerLimitException(""+ this.getMAX_RACERS(),""+newRacer.getSerialNumber());
         }
         else {
             this.activeRacers.add(newRacer);
@@ -60,6 +66,10 @@ public abstract class Arena{
 
     public double getLength() {
         return length;
+    }
+
+    public int getMAX_RACERS() {
+        return MAX_RACERS;
     }
 
     public void initRace() {
@@ -81,12 +91,10 @@ public abstract class Arena{
 
     public void playTurn(){
         while (this.activeRacers.size()> 0){
-            for (int i = 0; i< this.activeRacers.size(); i++) {
+            for (int i=0; i < this.activeRacers.size() ; i++) {
                 Point point = new Point(this.activeRacers.get(i).move(FRICTION));
-
-                if (this.activeRacers.get(i).getCurrentLocation().getX()>=getLength()) {
+                if (point.getX()>= getLength()) {
                     crossFinishLine(this.activeRacers.get(i));
-                    i--;
                 }
             }
         }
@@ -102,12 +110,10 @@ public abstract class Arena{
     public void showResults(){
         //print game results
         for (int i = 0; i< this.completedRacers.size(); i++) {
-            System.out.printf(i+": ");
-            this.completedRacers.get(i).introduce();
+            System.out.println("#"+i+" -> "+"name : " + this.completedRacers.get(i).getName() + ", SerialNumber: " +this.completedRacers.get(i).getSerialNumber() + ", maxSpeed : " + this.completedRacers.get(i).getMaxSpeed() + ", acceleration: : " + this.completedRacers.get(i).getAcceleration() + ", color: " +this.completedRacers.get(i).getColor() +  "," + this.completedRacers.get(i).describeSpecific());
+
         }
     }
-
-
 }
 
 

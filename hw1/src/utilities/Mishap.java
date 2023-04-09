@@ -1,5 +1,8 @@
 package utilities;
 
+
+import java.text.DecimalFormat;
+
 public class Mishap {
 
 	private boolean fixable;
@@ -11,6 +14,7 @@ public class Mishap {
         this.fixable =fixable;
         this. turnsToFix = turnsToFix;
         this.reductionFactor = reductionFactor;
+
     }
 	//methods
     public void nextTurn(){
@@ -23,8 +27,6 @@ public class Mishap {
     public boolean isFixable() {
         return fixable;
     }
-
-
 
     public double getReductionFactor() {
         return reductionFactor;
@@ -48,6 +50,6 @@ public class Mishap {
 
 
     public String toString() {
-        return "(" + fixable + ", " + turnsToFix + ", " + reductionFactor + ")";
+        return "(" + fixable + ", " + turnsToFix + ", " + String.format("%.2f", reductionFactor) + ")";
     }
 }

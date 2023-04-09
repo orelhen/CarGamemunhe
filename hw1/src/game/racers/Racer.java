@@ -11,7 +11,8 @@ import utilities.Mishap;
 //Racer-class
 public abstract class Racer {
 
-    private static int serialNumber = 0; // STATIC???? not writen
+    private static int serial = 1; // STATIC???? not writen
+    private int serialNumber;
     private String name;
     private Point currentLocation;
     private Point finish;
@@ -27,16 +28,14 @@ public abstract class Racer {
     //constructor
     public Racer(String N, double MS, double ACC,Color color)
     {
-        serialNumber++;
-        this.name = N + " #"+serialNumber;
+
+        this.serialNumber=serial;
+        if(N == this.className()){this.name = N + " #"+serialNumber;}
+        else{this.name = N;}
         this.maxSpeed=MS;
         this.acceleration =ACC;
         this.color = color;
-        //this.arena =null;
-        // this.finish=null;
-        // this.currentLocation = null;
-        // this.mishap = null;
-        //this.failureProbability = 0;
+        this.serial++;
     }
 
     //getters
@@ -184,36 +183,34 @@ public abstract class Racer {
         this.finish = finish;
     }
     public Point move(double friction) {
-        /*if(this.currentSpeed<this.maxSpeed){
-            this.currentSpeed += this.acceleration*friction;
-        }
-        Point newPoint = new Point(this.currentLocation.GetX()+currentSpeed ,0);
-        //failure 4.2
-        return newPoint;
-        */
+
         double reductionFactor = 1; //If there is no mishap, then her factor will remain one, and will not affect the CurrentSpeed.
-//
-        if (this.mishap != null && this.mishap.isFixable() && this.mishap.getTurnsToFix() ==0){
+        if (mishap != null && mishap.isFixable()){
+            reductionFactor = this.mishap.getReductionFactor();
+            this.mishap.nextTurn();
+        }
+        if (mishap != null && !mishap.isFixable()){
+            reductionFactor = this.mishap.getReductionFactor();
+        }
+        if(currentSpeed<this.maxSpeed){
+        setCurrentSpeed(this.currentSpeed += this.acceleration * reductionFactor * friction);
+        }
+        if(currentSpeed>this.maxSpeed){this.currentSpeed = this.maxSpeed;}
+
+        if (this.mishap != null && this.mishap.isFixable() && this.mishap.getTurnsToFix() == 0){
             this.mishap = null;
         }
+
         if (mishap==null){
             if(Fate.breakDown()){
                 setMishap(Fate.generateMishap());
-                System.out.println(this.name+"Has a new mishap!"+mishap.toString());
+                System.out.println(this.name+" Has a new mishap!"+mishap.toString());
             }
         }
-        if (mishap != null && mishap.isFixable()){
-            reductionFactor =this.mishap.getReductionFactor();
-            this.mishap.nextTurn();
-        }
-        setCurrentSpeed(this.currentSpeed += this.acceleration * reductionFactor * friction);
+
         Point current = new Point(this.currentLocation.getX()+this.currentSpeed,0);
         setCurrentLocation(current);
         return this.currentLocation;
-
-
-
-
 
     }
 
@@ -226,9 +223,11 @@ public abstract class Racer {
         else
             return "["+this.className() +"]" +" name : " + this.getName() + ", SerialNumber: " +getSerialNumber() + ", maxSpeed : " + this.getMaxSpeed() + ", acceleration: : " + this.getAcceleration() + ", color: " +this.color;
     }
+
     public void introduce(){
         System.out.println(describeRacer());
     }
+
     public abstract String className();
     public boolean hasMishap(){
         if (this.mishap!=null)

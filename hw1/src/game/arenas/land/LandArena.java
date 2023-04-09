@@ -43,10 +43,10 @@ public class LandArena extends Arena {
     }
 
     public LandArena() {
-        super();
+        super(DEFAULT_LENGTH,8,0.5);
     }
 
-    public LandArena(double length, int maxRacers,double friction) {
-        super(length, maxRacers,friction);
+    public LandArena(double length, int maxRacers) {
+        super(length, maxRacers,0.5);
     }
 }
