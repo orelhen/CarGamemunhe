@@ -185,13 +185,14 @@ public abstract class Racer {
     public Point move(double friction) {
 
         double reductionFactor = 1; //If there is no mishap, then her factor will remain one, and will not affect the CurrentSpeed.
-        if (mishap != null && mishap.isFixable()){
+
+        if (mishap != null ){
+            if(mishap.isFixable()){
             reductionFactor = this.mishap.getReductionFactor();
-            this.mishap.nextTurn();
+            this.mishap.nextTurn();}
+            else{ reductionFactor = this.mishap.getReductionFactor();}
         }
-        if (mishap != null && !mishap.isFixable()){
-            reductionFactor = this.mishap.getReductionFactor();
-        }
+
         if(currentSpeed<this.maxSpeed){
         setCurrentSpeed(this.currentSpeed += this.acceleration * reductionFactor * friction);
         }
