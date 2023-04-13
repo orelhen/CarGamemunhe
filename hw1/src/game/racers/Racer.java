@@ -1,6 +1,16 @@
 //package name
 package game.racers;
 
+
+/**
+ * @author
+ *
+ * orel hen 316179423
+ * guy aloosh 316471465
+ *
+ *
+ */
+
 //imports
 import game.arenas.Arena;
 import utilities.Fate;
@@ -85,17 +95,15 @@ public abstract class Racer {
 
 
     //setters
-    public boolean  setFailureProbability(double failureProbability) //??????????????
-    {
-        if(failureProbability>0 ){
+    public boolean  setFailureProbability(double failureProbability)
+    { if(failureProbability>0 ){
             this.failureProbability = failureProbability;
             return true;
         }
         return false;
-
     }
 
-    public boolean setSerialNumber(int serialNumber) {//??????????????
+    public boolean setSerialNumber(int serialNumber) {
         if(serialNumber>0 ){
             this.serialNumber = serialNumber;
             return true;
@@ -184,9 +192,10 @@ public abstract class Racer {
     }
     public Point move(double friction) {
 
-        double reductionFactor = 1; //If there is no mishap, then her factor will remain one, and will not affect the CurrentSpeed.
+        double reductionFactor = 1;//No mishap, no reduction factor
 
-        if (mishap != null ){
+        //handle mishap
+        if (hasMishap()){
             if(mishap.isFixable()){
             reductionFactor = this.mishap.getReductionFactor();
             this.mishap.nextTurn();}
@@ -196,33 +205,35 @@ public abstract class Racer {
         if(currentSpeed<this.maxSpeed){
         setCurrentSpeed(this.currentSpeed += this.acceleration * reductionFactor * friction);
         }
+        //not more the max speed.
         if(currentSpeed>this.maxSpeed){this.currentSpeed = this.maxSpeed;}
 
-        if (this.mishap != null && this.mishap.isFixable() && this.mishap.getTurnsToFix() == 0){
+        if (hasMishap() && this.mishap.isFixable() && this.mishap.getTurnsToFix() == 0){
             this.mishap = null;
         }
 
-        if (mishap==null){
+        //generate new mishap
+        if (!hasMishap()){
             if(Fate.breakDown()){
                 setMishap(Fate.generateMishap());
                 System.out.println(this.name+" Has a new mishap!"+mishap.toString());
             }
         }
-
+        //create new point and return it.
         Point current = new Point(this.currentLocation.getX()+this.currentSpeed,0);
-        setCurrentLocation(current);
+        this.setCurrentLocation(current);
         return this.currentLocation;
 
     }
 
     public abstract String describeSpecific();
-
+    public String PrintRacer(){return " name : " + getName() + ", SerialNumber: " +getSerialNumber() + ", maxSpeed : " + getMaxSpeed() + ", acceleration: : " + getAcceleration() + ", color: " +getColor();}
     public String describeRacer()
     {
         if(describeSpecific()!=null) {
-            return "["+this.className() +"]" +" name : " + this.getName() + ", SerialNumber: " +getSerialNumber() + ", maxSpeed : " + this.getMaxSpeed() + ", acceleration: : " + this.getAcceleration() + ", color: " +this.color +  "," + this.describeSpecific();}
+            return "["+this.className() +"]" + PrintRacer() + "," + describeSpecific();}
         else
-            return "["+this.className() +"]" +" name : " + this.getName() + ", SerialNumber: " +getSerialNumber() + ", maxSpeed : " + this.getMaxSpeed() + ", acceleration: : " + this.getAcceleration() + ", color: " +this.color;
+            return "["+this.className() +"]" + PrintRacer();
     }
 
     public void introduce(){

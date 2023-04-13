@@ -21,9 +21,10 @@ public class Mishap {
         if (getTurnsToFix()>0)
             setTurnsToFix(getTurnsToFix()-1);
     }
-
+    public String toString() {
+        return "(" + fixable + ", " + turnsToFix + ", " + String.format("%.2f", reductionFactor) + ")";
+    }
     //getters
-
     public boolean isFixable() {
         return fixable;
     }
@@ -35,7 +36,6 @@ public class Mishap {
     public int getTurnsToFix() {
         return turnsToFix;
     }
-
 
     //setters
     public void setReductionFactor(double reductionFactor) {
@@ -49,7 +49,4 @@ public class Mishap {
     }
 
 
-    public String toString() {
-        return "(" + fixable + ", " + turnsToFix + ", " + String.format("%.2f", reductionFactor) + ")";
-    }
 }

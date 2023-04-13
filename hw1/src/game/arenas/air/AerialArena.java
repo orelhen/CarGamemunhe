@@ -16,7 +16,7 @@ public class AerialArena extends Arena {
     private EnumContainer.Height height=EnumContainer.Height.HIGH;
     private EnumContainer.Wind wind =EnumContainer.Wind.HIGH;
 
-
+    //constructors
     public AerialArena(double length,int maxRacer)
     {
         super(length,maxRacer,0.4);
@@ -26,6 +26,8 @@ public class AerialArena extends Arena {
         super(1500,6,0.4);
     };
 
+
+    //getters and setters
     public EnumContainer.Weather getWeather() {
         return weather;
     }
@@ -41,7 +43,6 @@ public class AerialArena extends Arena {
     public EnumContainer.Vision getVision() {
         return vision;
     }
-
 
 
     public boolean setWind(EnumContainer.Wind wind)
@@ -69,7 +70,6 @@ public class AerialArena extends Arena {
         }
         return false;
     }
-
     public boolean setWeather(EnumContainer.Weather weather)
     {
         if(weather != null) {

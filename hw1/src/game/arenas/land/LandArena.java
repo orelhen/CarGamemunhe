@@ -25,6 +25,20 @@ public class LandArena extends Arena {
     public EnumContainer.Surface getSurface() {
         return surface;
     }
+
+
+    //constuctors
+    public LandArena() {
+        super(DEFAULT_LENGTH,8,0.5);
+    }
+
+    public LandArena(double length, int maxRacers) {
+        super(length, maxRacers,0.5);
+    }
+
+
+
+    //getters and setters
     public boolean SetSurface (EnumContainer.Surface surface){
         if (surface!=null)
         {
@@ -42,11 +56,5 @@ public class LandArena extends Arena {
         return false;
     }
 
-    public LandArena() {
-        super(DEFAULT_LENGTH,8,0.5);
-    }
 
-    public LandArena(double length, int maxRacers) {
-        super(length, maxRacers,0.5);
-    }
 }

@@ -10,6 +10,8 @@ public class Horse extends Racer implements LandRacer  {
     private static final EnumContainer.Color DEFAULT_COLOR = EnumContainer.Color.BLACK;
     private EnumContainer.Breed breed = EnumContainer.Breed.THOROUGHBRED;
 
+
+    //constructors
     public Horse()
     {
         super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFAULT_COLOR);
@@ -18,16 +20,8 @@ public class Horse extends Racer implements LandRacer  {
     public Horse(String name, double maxSpeed, double acceleration, EnumContainer.Color color) {
         super(name,maxSpeed,acceleration,color);
     }
-
-    @Override
-    public String describeSpecific() {
-        return " Breed: "+ this.getBreed();
-    }
-    @Override
-    public String className() {
-        return "Horse";
-    }
-    public EnumContainer.Breed getBreed() {
+//getters and setters
+ public EnumContainer.Breed getBreed() {
         return breed;
     }
 
@@ -38,5 +32,15 @@ public class Horse extends Racer implements LandRacer  {
         }
         return false;
     }
+    //methods
+    @Override
+    public String describeSpecific() {
+        return " Breed: "+ getBreed();
+    }
+    @Override
+    public String className() {
+        return "Horse";
+    }
+
 }
 

@@ -27,6 +27,8 @@ public class NavalArena extends Arena {
     public NavalArena(double length, int maxRacers) {
         super(length, maxRacers, DEFAULT_FRICTION);
     }
+
+
     // getters and setters :
 
     public double getDEFAULT_FRICTION() {

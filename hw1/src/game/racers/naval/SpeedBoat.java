@@ -15,22 +15,17 @@ public class SpeedBoat  extends Racer implements NavalRacer {
     private EnumContainer.BoatType boatType = EnumContainer.BoatType.SKULLING;
     private EnumContainer.Team team = EnumContainer.Team.DOUBLE;
 
+    //constructors
+    public SpeedBoat(){
+        super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFUALT_color);
+    }
     public SpeedBoat(String N, double MS, double ACC, EnumContainer.Color color) {
         super(N, MS, ACC, color);
     }
 
-    @Override
-    public String describeSpecific() {
-        return "Type: " +this.getBoatType() + ", Team: " + this.getTeam();
-    }
-    @Override
-    public String className() {
-        return "SpeedBoat";
-    }
-    public SpeedBoat(){
-        super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFUALT_color);
-    }
 
+
+    //setters and getters
     public EnumContainer.BoatType getBoatType() {
         return boatType;
     }
@@ -53,5 +48,14 @@ public class SpeedBoat  extends Racer implements NavalRacer {
             return true;
         }
         return false;
+    }
+    //methods
+    @Override
+    public String describeSpecific() {
+        return "Type: " +this.getBoatType() + ", Team: " + this.getTeam();
+    }
+    @Override
+    public String className() {
+        return "SpeedBoat";
     }
 }

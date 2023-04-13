@@ -28,11 +28,17 @@ public class Airplane extends Racer implements AerialRacer {
         super(name,maxSpeed,acceleration,color);
         this.wheeled=new Wheeled(numOfWheels);
     }
+//getters
 
 
+    public Wheeled getWheeled() {
+        return wheeled;
+    }
+
+    //methods
     @Override
     public String describeSpecific() {
-        return " Number of Wheels: "+ this.wheeled.getnumOfwheels() ;
+        return getWheeled().describeSpesific() ;
     }
     @Override
     public String className() {

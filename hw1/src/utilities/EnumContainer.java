@@ -5,10 +5,10 @@ package utilities;
  * 
  * To set a field type: EnumContainer.Vision vision; To set a value: this.vision
  * = EnumContainer.Vision.Sunny
- * 
  * @author
- *orel hen, guy aloosh
+ *  orel hen 316179423 , guy aloosh 316471465
  */
+
 public class EnumContainer {
 
 	public static enum Vision {

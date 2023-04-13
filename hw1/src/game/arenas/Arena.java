@@ -1,6 +1,15 @@
 //package name
 package game.arenas;
 
+/**
+ * @author
+ *
+ * orel hen 316179423
+ * guy aloosh 316471465
+ *
+ *
+ */
+
 //imports
 
 import game.arenas.air.AerialArena;
@@ -48,20 +57,15 @@ public abstract class Arena{
 
     }
 
-    public ArrayList<Racer> getActiveRacers(){return this.activeRacers;}
+//getters
 
+public ArrayList<Racer> getActiveRacers(){return this.activeRacers;}
 
-    public void addRacer(Racer newRacer) throws RacerLimitException,RacerTypeException {
-        if(this instanceof AerialArena) { if(!(newRacer instanceof AerialRacer)){throw new RacerTypeException(""+newRacer.className(),"Aerial arena" );}}
-        if(this instanceof NavalArena) { if(!(newRacer instanceof NavalRacer)){throw new RacerTypeException(""+newRacer.className(),"Naval arena");}}
-        if(this instanceof LandArena) {  if(!(newRacer instanceof LandRacer) ){throw new RacerTypeException(""+newRacer.className(),"Land arena");}}
-        if (getActiveRacers().size() == MAX_RACERS) {
-            throw new RacerLimitException(""+ this.getMAX_RACERS(),""+newRacer.getSerialNumber());
-        }
-        else {
-            this.activeRacers.add(newRacer);
-        }
-
+    public ArrayList<Racer> getCompletedRacers() {
+        return completedRacers;
+    }
+    public double getFRICTION() {
+        return FRICTION;
     }
 
     public double getLength() {
@@ -77,40 +81,51 @@ public abstract class Arena{
         //init race for each racer
         int i = 0;
         for (Racer racer : this.getActiveRacers()) {
-            racer.initRace(this, new Point(0, i * MIN_Y_GAP), new Point(this.length, i * MIN_Y_GAP));
+            racer.initRace(this, new Point(0, i * MIN_Y_GAP), new Point(getLength(), i * MIN_Y_GAP));
             i++;
 
         }
     }
     public boolean hasActiveRacers(){
-        if (getActiveRacers().size() == 0){
-            return false;
+        if (getActiveRacers().size() > 0){
+            return true;
         }
-        return true;
+        return false;
+    }
+//methods
+public void addRacer(Racer newRacer) throws RacerLimitException,RacerTypeException {
+    if(this instanceof AerialArena) { if(!(newRacer instanceof AerialRacer)){throw new RacerTypeException(""+newRacer.className(),"Aerial arena" );}}
+    if(this instanceof NavalArena) { if(!(newRacer instanceof NavalRacer)){throw new RacerTypeException(""+newRacer.className(),"Naval arena");}}
+    if(this instanceof LandArena) {  if(!(newRacer instanceof LandRacer) ){throw new RacerTypeException(""+newRacer.className(),"Land arena");}}
+    if (getActiveRacers().size() == getMAX_RACERS()) {
+        throw new RacerLimitException(""+ this.getMAX_RACERS(),""+newRacer.getSerialNumber());
+    }
+    else {
+       getActiveRacers().add(newRacer);
     }
 
+}
     public void playTurn(){
-        while (this.activeRacers.size()> 0){
-            for (int i=0; i < this.activeRacers.size() ; i++) {
-                Point point = new Point(this.activeRacers.get(i).move(FRICTION));
+        //while has active racers, game continues until finish
+        while (hasActiveRacers()){
+            for (int i=0; i < getActiveRacers().size() ; i++) {
+                Point point = new Point(getActiveRacers().get(i).move(getFRICTION()));
                 if (point.getX()>= getLength()) {
-                    crossFinishLine(this.activeRacers.get(i));
+                    crossFinishLine( getActiveRacers().get(i));
                 }
             }
         }
     }
 
-
     public void crossFinishLine(Racer racer){
-        this.completedRacers.add(racer);
-        this.activeRacers.remove(racer);
+        getCompletedRacers().add(racer);
+        getActiveRacers().remove(racer);
     }
-
 
     public void showResults(){
         //print game results
-        for (int i = 0; i< this.completedRacers.size(); i++) {
-            System.out.println("#"+i+" -> "+"name : " + this.completedRacers.get(i).getName() + ", SerialNumber: " +this.completedRacers.get(i).getSerialNumber() + ", maxSpeed : " + this.completedRacers.get(i).getMaxSpeed() + ", acceleration: : " + this.completedRacers.get(i).getAcceleration() + ", color: " +this.completedRacers.get(i).getColor() +  "," + this.completedRacers.get(i).describeSpecific());
+        for (int i = 0; i<  getCompletedRacers().size(); i++) {
+            System.out.println("#"+i+" -> "+  getCompletedRacers().get(i).PrintRacer() +  "," +  getCompletedRacers().get(i).describeSpecific());
 
         }
     }

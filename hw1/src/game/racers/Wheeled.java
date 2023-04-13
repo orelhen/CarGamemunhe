@@ -19,7 +19,9 @@ public class Wheeled  {
         {this.numOfWheels=newnum; return true;}
         return false;}
     //methods
-    //public String describeSpesific(){};//??
+    public String describeSpesific(){
+        return " Number of Wheels: " + this.getnumOfwheels();
+    };
 
 }
 

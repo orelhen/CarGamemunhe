@@ -14,6 +14,8 @@ public class RowBoat extends Racer implements NavalRacer {
     private EnumContainer.BoatType boatType = EnumContainer.BoatType.SKULLING;
     private EnumContainer.Team team = EnumContainer.Team.DOUBLE;
 
+
+    //constructors
     public RowBoat(){
         super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFUALT_color);
     }
@@ -22,16 +24,8 @@ public class RowBoat extends Racer implements NavalRacer {
         super(N, MS, ACC, color);
     }
 
-    @Override
-    public String describeSpecific() {
-        return "Type: " +this.getBoatType() + ", Team: " + this.getTeam();
-    }
 
-    @Override
-    public String className() {
-        return "RowBoat";
-    }
-
+//setters and getters
     public EnumContainer.BoatType getBoatType() {
         return boatType;
     }
@@ -54,5 +48,15 @@ public class RowBoat extends Racer implements NavalRacer {
             return true;
         }
         return false;
+    }
+    //methods
+    @Override
+    public String describeSpecific() {
+        return "Type: " +getBoatType() + ", Team: " + getTeam();
+    }
+
+    @Override
+    public String className() {
+        return "RowBoat";
     }
 }
