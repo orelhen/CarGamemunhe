@@ -46,6 +46,12 @@ public abstract class Arena{
         this.activeRacers= new ArrayList<Racer>();
         this.completedRacers= new ArrayList<Racer>();
     }
+
+    /**
+     * @param length
+     * @param maxRacers
+     * @param friction
+     */
     //1.1.4
     public Arena(double length, int maxRacers, double friction){
 
@@ -86,12 +92,22 @@ public ArrayList<Racer> getActiveRacers(){return this.activeRacers;}
 
         }
     }
+
+    /**
+     * @return
+     */
     public boolean hasActiveRacers(){
         if (getActiveRacers().size() > 0){
             return true;
         }
         return false;
     }
+
+    /**
+     * @param newRacer
+     * @throws RacerLimitException
+     * @throws RacerTypeException
+     */
 //methods
 public void addRacer(Racer newRacer) throws RacerLimitException,RacerTypeException {
         //checking racer type
@@ -107,6 +123,10 @@ public void addRacer(Racer newRacer) throws RacerLimitException,RacerTypeExcepti
     }
 
 }
+
+    /**
+     *
+     */
     public void playTurn(){
         //while has active racers, game continues until finish
         while (hasActiveRacers()){
@@ -119,11 +139,17 @@ public void addRacer(Racer newRacer) throws RacerLimitException,RacerTypeExcepti
         }
     }
 
+    /**
+     * @param racer
+     */
     public void crossFinishLine(Racer racer){
         getCompletedRacers().add(racer);
         getActiveRacers().remove(racer);
     }
 
+    /**
+     *
+     */
     public void showResults(){
         //print game results
         for (int i = 0; i<  getCompletedRacers().size(); i++) {

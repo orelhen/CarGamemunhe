@@ -30,10 +30,17 @@ public class Helicopter extends Racer implements AerialRacer {
         super(N, MS, ACC, color);
     }
 
+    /**
+     * @return
+     */
     @Override
     public String describeSpecific() {
         return null;
     }
+
+    /**
+     * @return
+     */
     @Override
     public String className() {
         return "Helicopter";

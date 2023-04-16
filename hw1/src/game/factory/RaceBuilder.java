@@ -28,6 +28,17 @@ public class RaceBuilder {
     }
 
 
+    /**
+     * @param arenaType
+     * @param length
+     * @param maxRacers
+     * @return
+     * @throws ClassNotFoundException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     // methods - java reflection
     public Arena buildArena(String arenaType,double length,int maxRacers) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         //classloader
@@ -43,7 +54,19 @@ public class RaceBuilder {
     }
 
 
-
+    /**
+     * @param racerType
+     * @param name
+     * @param maxSpeed
+     * @param acceleration
+     * @param color
+     * @return
+     * @throws ClassNotFoundException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     */
     public Racer buildRacer(String racerType,String name,double maxSpeed, double acceleration,utilities.EnumContainer.Color color) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         //getclassloader
         classLoader =ClassLoader.getSystemClassLoader();
@@ -57,7 +80,20 @@ public class RaceBuilder {
     }
 
 
-
+    /**
+     * @param racerType
+     * @param name
+     * @param maxSpeed
+     * @param acceleration
+     * @param color
+     * @param numOfWheels
+     * @return
+     * @throws ClassNotFoundException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     */
     // car - bicycle - airplane
     public Racer buildWheeledRacer(String racerType,String name, double maxSpeed,double acceleration,utilities.EnumContainer.Color color,int numOfWheels) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         //classloader

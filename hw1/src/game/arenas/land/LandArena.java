@@ -38,12 +38,19 @@ public class LandArena extends Arena {
         super(DEFAULT_LENGTH,8,0.5);
     }
 
+    /**
+     * @param length
+     * @param maxRacers
+     */
     public LandArena(double length, int maxRacers) {
         super(length, maxRacers,0.5);
     }
 
 
-
+    /**
+     * @param surface
+     * @return
+     */
     //getters and setters
     public boolean SetSurface (EnumContainer.Surface surface){
         if (surface!=null)
@@ -53,6 +60,11 @@ public class LandArena extends Arena {
         }
         return false;
     }
+
+    /**
+     * @param coverage
+     * @return
+     */
     public boolean SetCoverage (EnumContainer.Coverage coverage){
         if (coverage!=null)
         {

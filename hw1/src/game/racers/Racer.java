@@ -94,6 +94,10 @@ public abstract class Racer {
     }
 
 
+    /**
+     * @param failureProbability
+     * @return
+     */
     //setters
     public boolean  setFailureProbability(double failureProbability)
     { if(failureProbability>0 ){
@@ -103,6 +107,10 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param serialNumber
+     * @return
+     */
     public boolean setSerialNumber(int serialNumber) {
         if(serialNumber>0 ){
             this.serialNumber = serialNumber;
@@ -111,6 +119,10 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param name
+     * @return
+     */
     public boolean setName(String name) {
         if(name!=null ){
             this.name = name;
@@ -119,6 +131,10 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param currentLocation
+     * @return
+     */
     public boolean setCurrentLocation(Point currentLocation) {
         if(currentLocation != null ){
             this.currentLocation = currentLocation;
@@ -127,6 +143,10 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param finish
+     * @return
+     */
     public boolean setFinish(Point finish) {
         if(finish != null ){
             this.finish = finish;
@@ -135,6 +155,10 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param arena
+     * @return
+     */
     public boolean setArena(Arena arena) {
         if(arena !=null ){
 
@@ -143,6 +167,11 @@ public abstract class Racer {
         }
         return false;
     }
+
+    /**
+     * @param maxSpeed
+     * @return
+     */
     public boolean setMaxSpeed(double maxSpeed) {
         if(maxSpeed>0 ){
             this.maxSpeed = maxSpeed;
@@ -151,6 +180,10 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param acceleration
+     * @return
+     */
     public boolean setAcceleration(double acceleration) {  //???????????????????????
         if(acceleration> 0){
             this.acceleration = acceleration;
@@ -159,6 +192,10 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param currentSpeed
+     * @return
+     */
     public boolean setCurrentSpeed(double currentSpeed) {
         if(currentSpeed>0){
             this.currentSpeed = currentSpeed;
@@ -169,6 +206,10 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param color
+     * @return
+     */
     public boolean setColor(Color color) {
         if( color !=null){
             this.color = color;
@@ -177,6 +218,10 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param mishap
+     * @return
+     */
     public boolean setMishap(Mishap mishap) {
         if(mishap !=null ){
             this.mishap = mishap;
@@ -185,6 +230,11 @@ public abstract class Racer {
         return false;
     }
 
+    /**
+     * @param arena
+     * @param start
+     * @param finish
+     */
     //methods
     public void initRace(Arena arena, Point start, Point finish)
     {
@@ -192,6 +242,12 @@ public abstract class Racer {
         this.currentLocation = start;
         this.finish = finish;
     }
+
+    /**
+     * @param friction
+     *
+     * @return
+     */
     public Point move(double friction) {
 
         double reductionFactor = 1;//No mishap, no reduction factor
@@ -226,8 +282,19 @@ public abstract class Racer {
 
     }
 
+    /**
+     * @return
+     */
     public abstract String describeSpecific();
+
+    /**
+     * @return
+     */
     public String PrintRacer(){return " name : " + getName() + ", SerialNumber: " +getSerialNumber() + ", maxSpeed : " + getMaxSpeed() + ", acceleration: : " + getAcceleration() + ", color: " +getColor();}
+
+    /**
+     * @return
+     */
     public String describeRacer()
     {
         if(describeSpecific()!=null) {
@@ -236,6 +303,9 @@ public abstract class Racer {
             return "["+this.className() +"]" + PrintRacer();
     }
 
+    /**
+     *
+     */
     public void introduce(){
         System.out.println(describeRacer());
     }

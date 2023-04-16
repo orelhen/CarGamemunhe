@@ -30,6 +30,10 @@ public class Horse extends Racer implements LandRacer  {
         return breed;
     }
 
+    /**
+     * @param breed
+     * @return
+     */
     public boolean setBreed(EnumContainer.Breed breed) {
         if (breed != null) {
             this.breed = breed;
@@ -37,11 +41,19 @@ public class Horse extends Racer implements LandRacer  {
         }
         return false;
     }
+
+    /**
+     * @return
+     */
     //methods
     @Override
     public String describeSpecific() {
         return " Breed: "+ getBreed();
     }
+
+    /**
+     * @return
+     */
     @Override
     public String className() {
         return "Horse";

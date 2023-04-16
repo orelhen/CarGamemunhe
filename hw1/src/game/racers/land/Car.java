@@ -29,6 +29,13 @@ public class Car extends Racer implements LandRacer
         this.wheeled=new Wheeled(DEFAULT_WHEELS);
     }
 
+    /**
+     * @param name
+     * @param maxSpeed
+     * @param acceleration
+     * @param color
+     * @param numOfWheels
+     */
     public Car(String name, double maxSpeed, double acceleration,Color color, int numOfWheels){
         super(name,maxSpeed,acceleration,color);
         this.wheeled=new Wheeled(numOfWheels);
@@ -39,6 +46,10 @@ public class Car extends Racer implements LandRacer
         return engine;
     }
 
+    /**
+     * @param engine
+     * @return
+     */
     public boolean setEngine(EnumContainer.Engine engine) {
         if(engine!=null) {
             this.engine = engine;
@@ -47,11 +58,17 @@ public class Car extends Racer implements LandRacer
         return false;
     }
 
+    /**
+     * @return
+     */
     @Override
     public String describeSpecific() {
         return this.wheeled.describeSpesific() + ", Engine Type: " + this.getEngine();
     }
 
+    /**
+     * @return
+     */
     @Override
     public String className() {
         return "Car";

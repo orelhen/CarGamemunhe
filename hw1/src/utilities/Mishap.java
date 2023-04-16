@@ -10,10 +10,15 @@ package utilities;
 
 public class Mishap {
 
-	private boolean fixable;
+    private boolean fixable;
     private double reductionFactor;
     private int turnsToFix;
 
+    /**
+     * @param fixable
+     * @param turnsToFix
+     * @param reductionFactor
+     */
     //constructors
     Mishap(boolean fixable,int turnsToFix,double reductionFactor){
         this.fixable =fixable;
@@ -21,11 +26,19 @@ public class Mishap {
         this.reductionFactor = reductionFactor;
 
     }
-	//methods
+
+    /**
+     *
+     */
+    //methods
     public void nextTurn(){
         if (getTurnsToFix()>0)
             setTurnsToFix(getTurnsToFix()-1);
     }
+
+    /**
+     * @return
+     */
     public String toString() {
         return "(" + fixable + ", " + turnsToFix + ", " + String.format("%.2f", reductionFactor) + ")";
     }

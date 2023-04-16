@@ -30,6 +30,13 @@ public class Airplane extends Racer implements AerialRacer {
         this.wheeled=new Wheeled(DEFUALT_WHEELS);
     }
 
+    /**
+     * @param name
+     * @param maxSpeed
+     * @param acceleration
+     * @param color
+     * @param numOfWheels
+     */
     public Airplane(String name, double maxSpeed, double acceleration, Color color, int numOfWheels) {
         super(name,maxSpeed,acceleration,color);
         this.wheeled=new Wheeled(numOfWheels);
@@ -41,11 +48,18 @@ public class Airplane extends Racer implements AerialRacer {
         return wheeled;
     }
 
+    /**
+     * @return
+     */
     //methods
     @Override
     public String describeSpecific() {
         return getWheeled().describeSpesific() ;
     }
+
+    /**
+     * @return
+     */
     @Override
     public String className() {
         return "AirPlane";

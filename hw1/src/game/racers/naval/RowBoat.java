@@ -20,16 +20,29 @@ public class RowBoat extends Racer implements NavalRacer {
         super(CLASS_NAME,DEFAULT_MAX_SPEED,DEFAULT_ACCELERATION,DEFUALT_color);
     }
 
+    /**
+     * @param N
+     * @param MS
+     * @param ACC
+     * @param color
+     */
     public RowBoat(String N, double MS, double ACC, EnumContainer.Color color) {
         super(N, MS, ACC, color);
     }
 
 
+    /**
+     * @return
+     */
 //setters and getters
     public EnumContainer.BoatType getBoatType() {
         return boatType;
     }
 
+    /**
+     * @param boatType
+     * @return
+     */
     public boolean setBoatType(EnumContainer.BoatType boatType) {
         if (boatType != null) {
             this.boatType = boatType;
@@ -42,6 +55,10 @@ public class RowBoat extends Racer implements NavalRacer {
         return team;
     }
 
+    /**
+     * @param team
+     * @return
+     */
     public boolean setTeam(EnumContainer.Team team) {
         if (team != null) {
             this.team = team;
@@ -49,12 +66,19 @@ public class RowBoat extends Racer implements NavalRacer {
         }
         return false;
     }
+
+    /**
+     * @return
+     */
     //methods
     @Override
     public String describeSpecific() {
         return "Type: " +getBoatType() + ", Team: " + getTeam();
     }
 
+    /**
+     * @return
+     */
     @Override
     public String className() {
         return "RowBoat";

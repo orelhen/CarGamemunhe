@@ -25,6 +25,13 @@ public class Bicycle extends Racer implements LandRacer{
         this.wheeled=new Wheeled(DEFAULT_WHEELS);
     }
 
+    /**
+     * @param name
+     * @param maxSpeed
+     * @param acceleration
+     * @param color
+     * @param numOfWheels
+     */
     public Bicycle(String name, double maxSpeed, double acceleration, EnumContainer.Color color, int numOfWheels) {
         super(name,maxSpeed,acceleration,color);
         this.wheeled=new Wheeled(numOfWheels);
@@ -34,6 +41,10 @@ public class Bicycle extends Racer implements LandRacer{
         return bicycleType;
     }
 
+    /**
+     * @param bicycleType
+     * @return
+     */
     public boolean setBicycleType(EnumContainer.BicycleType bicycleType) {
         if (bicycleType!=null) {
             this.bicycleType = bicycleType;
@@ -46,10 +57,17 @@ public class Bicycle extends Racer implements LandRacer{
         return wheeled;
     }
 
+    /**
+     * @return
+     */
     @Override
     public String describeSpecific() {
         return getWheeled() .describeSpesific() + ", Bicycle Type: " + getBicycleType();
     }
+
+    /**
+     * @return
+     */
     @Override
     public String className() {
         return "Bicycle";
