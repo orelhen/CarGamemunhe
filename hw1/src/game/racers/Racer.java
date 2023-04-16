@@ -162,6 +162,8 @@ public abstract class Racer {
     public boolean setCurrentSpeed(double currentSpeed) {
         if(currentSpeed>0){
             this.currentSpeed = currentSpeed;
+            //not more the max speed.
+            if(currentSpeed>getMaxSpeed()){this.currentSpeed = maxSpeed;}
             return true;
         }
         return false;
@@ -196,33 +198,31 @@ public abstract class Racer {
 
         //handle mishap
         if (hasMishap()){
-            if(mishap.isFixable()){
-            reductionFactor = this.mishap.getReductionFactor();
-            this.mishap.nextTurn();}
-            else{ reductionFactor = this.mishap.getReductionFactor();}
+            if(getMishap().isFixable()){
+            reductionFactor = getMishap().getReductionFactor();
+                getMishap().nextTurn();}
+            else{ reductionFactor = getMishap().getReductionFactor();}
         }
 
-        if(currentSpeed<this.maxSpeed){
-        setCurrentSpeed(this.currentSpeed += this.acceleration * reductionFactor * friction);
+        if(getCurrentSpeed()<getMaxSpeed()){
+        setCurrentSpeed(getCurrentSpeed() + getAcceleration() * reductionFactor * friction);
         }
-        //not more the max speed.
-        if(currentSpeed>this.maxSpeed){this.currentSpeed = this.maxSpeed;}
 
-        if (hasMishap() && this.mishap.isFixable() && this.mishap.getTurnsToFix() == 0){
-            this.mishap = null;
+        if (hasMishap() && getMishap().isFixable() && getMishap().getTurnsToFix() == 0){
+            setMishap(null);
         }
 
         //generate new mishap
         if (!hasMishap()){
             if(Fate.breakDown()){
                 setMishap(Fate.generateMishap());
-                System.out.println(this.name+" Has a new mishap!"+mishap.toString());
+                System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
             }
         }
         //create new point and return it.
-        Point current = new Point(this.currentLocation.getX()+this.currentSpeed,0);
+        Point current = new Point(getCurrentLocation().getX()+getCurrentSpeed(),0);
         this.setCurrentLocation(current);
-        return this.currentLocation;
+        return getCurrentLocation();
 
     }
 
@@ -241,6 +241,7 @@ public abstract class Racer {
     }
 
     public abstract String className();
+
     public boolean hasMishap(){
         if (this.mishap!=null)
                 return true;

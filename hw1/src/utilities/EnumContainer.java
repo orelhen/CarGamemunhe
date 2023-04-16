@@ -1,5 +1,6 @@
 package utilities;
 
+//javadoc
 /**
  * Contains all Enums for the game.
  * 

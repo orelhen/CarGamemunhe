@@ -4,6 +4,12 @@ import game.racers.Racer;
 import game.racers.Wheeled;
 import utilities.EnumContainer;
 
+//javadoc
+/**
+ * @author
+ * orel hen 316179423
+ * guy aloosh 316471465
+ */
 public class Bicycle extends Racer implements LandRacer{
     private static final String CLASS_NAME = "Bicycle";
     private static final int DEFAULT_WHEELS = 2;

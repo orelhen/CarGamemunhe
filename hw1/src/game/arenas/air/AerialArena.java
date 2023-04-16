@@ -5,7 +5,12 @@ package game.arenas.air;
 import game.arenas.Arena;
 import utilities.EnumContainer;
 
-
+//javadoc
+/**
+ * @author
+ * orel hen 316179423
+ * guy aloosh 316471465
+ */
 public class AerialArena extends Arena {
     private final double DEFAULT_FRICTION=0.4;
     private final int DEFAULT_MAX_RACERS=6;

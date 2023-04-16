@@ -1,12 +1,18 @@
 package game.racers.air;
 
+//imports
 import game.racers.Racer;
 import game.racers.Wheeled;
 import utilities.EnumContainer;
 import utilities.EnumContainer.Color;
-
 import static utilities.EnumContainer.Color.BLACK;
 
+//javadoc
+/**
+ * @author
+ * orel hen 316179423
+ * guy aloosh 316471465
+ */
 public class Airplane extends Racer implements AerialRacer {
     private static final String CLASS_NAME = "Airplane";
     private static final int DEFAULT_MAX_SPEED=885;

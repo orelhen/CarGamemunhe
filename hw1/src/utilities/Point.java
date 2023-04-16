@@ -2,7 +2,12 @@ package utilities;
 
 //imports
 
-//
+//javadoc
+/**
+ * @author
+ * orel hen 316179423
+ * guy aloosh 316471465
+ */
 public class Point {
 
 	private static final int MAX_X = 1000000;

@@ -7,6 +7,12 @@ package game.arenas.land;
 import game.arenas.Arena;
 import utilities.EnumContainer;
 
+//javadoc
+/**
+ * @author
+ * orel hen 316179423
+ * guy aloosh 316471465
+ */
 public class LandArena extends Arena {
     private final static int DEFAULT_LENGTH =800;
     private final int DEFAULT_MAX_RACERS=8;

@@ -15,7 +15,6 @@ import java.lang.reflect.InvocationTargetException;
  * orel hen 316179423
  * guy aloosh 316471465
  *
- *
  */
 
 public class RaceBuilder {
@@ -29,7 +28,7 @@ public class RaceBuilder {
     }
 
 
-    //methods
+    // methods - java reflection
     public Arena buildArena(String arenaType,double length,int maxRacers) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         //classloader
 
@@ -42,6 +41,9 @@ public class RaceBuilder {
         constructor = classObject.getConstructor(double.class,int.class);
         return (Arena) constructor.newInstance(length,maxRacers);
     }
+
+
+
     public Racer buildRacer(String racerType,String name,double maxSpeed, double acceleration,utilities.EnumContainer.Color color) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         //getclassloader
         classLoader =ClassLoader.getSystemClassLoader();

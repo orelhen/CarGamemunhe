@@ -94,9 +94,11 @@ public ArrayList<Racer> getActiveRacers(){return this.activeRacers;}
     }
 //methods
 public void addRacer(Racer newRacer) throws RacerLimitException,RacerTypeException {
+        //checking racer type
     if(this instanceof AerialArena) { if(!(newRacer instanceof AerialRacer)){throw new RacerTypeException(""+newRacer.className(),"Aerial arena" );}}
     if(this instanceof NavalArena) { if(!(newRacer instanceof NavalRacer)){throw new RacerTypeException(""+newRacer.className(),"Naval arena");}}
     if(this instanceof LandArena) {  if(!(newRacer instanceof LandRacer) ){throw new RacerTypeException(""+newRacer.className(),"Land arena");}}
+    //checking arena limits
     if (getActiveRacers().size() == getMAX_RACERS()) {
         throw new RacerLimitException(""+ this.getMAX_RACERS(),""+newRacer.getSerialNumber());
     }

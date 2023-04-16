@@ -7,7 +7,12 @@ package game.arenas.naval;
 import game.arenas.Arena;
 import utilities.EnumContainer;
 
-
+//javadoc
+/**
+ * @author
+ * orel hen 316179423
+ * guy aloosh 316471465
+ */
 public class NavalArena extends Arena {
     private final static int DEFAULT_LENGTH =1000;
     private final int DEFAULT_MAX_RACERS = 5;

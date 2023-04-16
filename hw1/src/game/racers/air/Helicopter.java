@@ -3,12 +3,17 @@
 package game.racers.air;
 
 //imports:
-
 import game.racers.Racer;
 import utilities.EnumContainer;
 import java.lang.String;
-
 import static utilities.EnumContainer.Color.BLUE;
+
+//javadoc
+/**
+ * @author
+ * orel hen 316179423
+ * guy aloosh 316471465
+ */
 
 public class Helicopter extends Racer implements AerialRacer {
     private static final String CLASS_NAME = "Helicopter";
