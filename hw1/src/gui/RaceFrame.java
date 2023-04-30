@@ -2,41 +2,94 @@ package gui;
 
 
 //imports
+import game.arenas.Arena;
 import game.arenas.air.AerialArena;
 import game.arenas.land.LandArena;
 import game.arenas.naval.NavalArena;
-
+import game.factory.RaceBuilder;
+import game.racers.Racer;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class RaceFrame extends JFrame  {
+
+public class RaceFrame extends JFrame implements ActionListener {
     //disable main
+    private static RaceBuilder builder = RaceBuilder.getInstance();
+    private static ArrayList<Racer> racers;
+    private static Arena arena=null;
+    private ImageIcon racersImages[] = null;
+    private boolean raceStarted = false;
 
 
-    //add privates
-    private JTextField ArenaLengthfield;
+    /*
+    private JTextField txtArenaLength;
+    private JTextField txtMaxRacers;
+    private JTextField txtRacerName;
+    private JTextField txtMaxSpeed;
+    private JTextField txtAcceleration;
+    private JComboBox<String> cbArena;
+    private JComboBox<String> cbRacer;
+    private JComboBox<String> cbColor;
+    private int arenaLength = 1000;
+    private int arenaHeight = 700;
+    private int maxRacers = 8;
+    private int racersNumber = 0;
+    private String chosenArena = null;
 
+
+*/
 
     public RaceFrame() {
-            super("Race");}
+        super("Race");
+        this.setContentPane(getframe());
+        //this.setContentPane(getframe());
+        this.pack();
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+        this.setLocation(x, y);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+
+
+    }
+    public void BuildArenaAction(ActionEvent e) {
+
+        JFrame frame = new JFrame();
+        frame.setLayout(null);
+        frame.setVisible(true);
+        frame.setSize(1100, 700);
+        frame.setResizable(false);
+        frame.setTitle("new frame");
+
+    }
 
     public JFrame getframe() {
         //main RaceFrame
 
         JFrame frame = new JFrame();
-        frame.setTitle("Race");
-        frame.setVisible(true);
         frame.setLayout(null);
-        frame.setResizable(false);
+        frame.setVisible(true);
         frame.setSize(1100, 700);
+        frame.setResizable(false);
+        frame.setTitle("Race");
+
 
         //right side panel
         JPanel rightpanel = new JPanel();
         rightpanel.setBounds(910, 0, 200, 700);
-        rightpanel.setVisible(true);
         rightpanel.setBackground(Color.lightGray);
         rightpanel.setLayout(null);
 
+        //adding new panel to main frame
         frame.add(rightpanel);
 
         //Choose Arena ComboBox
@@ -79,7 +132,7 @@ public class RaceFrame extends JFrame  {
         rightpanel.add(buildArenaBut);
         buildArenaBut.setLocation(10, 175);
         buildArenaBut.setSize(150, 30);
-        //buildArenaBut.addActionListener(this);
+        buildArenaBut.addActionListener(this::BuildArenaAction);
 
         //seperator line
         JSeparator Seperator1 = new JSeparator(SwingConstants.HORIZONTAL);
@@ -136,14 +189,13 @@ public class RaceFrame extends JFrame  {
         Speedfield.setLocation(10, 430);
         Speedfield.setSize(150, 25);
 
-
         //Acceleration
         JLabel Accelerationlable = new JLabel("Acceleration:");
         rightpanel.add(Accelerationlable);
         Accelerationlable.setLocation(15, 470);
         Accelerationlable.setSize(150, 15);
 
-        JTextField Accelerationfield = new JTextField();
+        JTextField Accelerationfield  = new JTextField();
         rightpanel.add(Accelerationfield);
         Accelerationfield.setLocation(10, 490);
         Accelerationfield.setSize(150, 25);
@@ -167,15 +219,24 @@ public class RaceFrame extends JFrame  {
         rightpanel.add(StartBut);
         StartBut.setLocation(10, 585);
         StartBut.setSize(150, 30);
+        //StartBut.addActionListener(this);
 
         //Show info btn
         JButton infoBut = new JButton("Show Info");
         rightpanel.add(infoBut);
         infoBut.setLocation(10, 625);
         infoBut.setSize(150, 30);
+        //infoBut.addActionListener(this);
         return frame;
+
+    }
+
+    public static void main(String[] args){
+        new RaceFrame();
     }
 
 
 
 }
+
+
