@@ -9,21 +9,30 @@ import game.arenas.naval.NavalArena;
 import javax.swing.*;
 import java.awt.*;
 
-public class RaceFrame  {
-    public static void main(String[] args){
+public class RaceFrame extends JFrame  {
+    //disable main
 
 
+    //add privates
+    private JTextField ArenaLengthfield;
+
+
+    public RaceFrame() {
+            super("Race");}
+
+    public JFrame getframe() {
         //main RaceFrame
+
         JFrame frame = new JFrame();
         frame.setTitle("Race");
         frame.setVisible(true);
         frame.setLayout(null);
         frame.setResizable(false);
-        frame.setSize(1100,700);
+        frame.setSize(1100, 700);
 
         //right side panel
         JPanel rightpanel = new JPanel();
-        rightpanel.setBounds(910,0,200,700);
+        rightpanel.setBounds(910, 0, 200, 700);
         rightpanel.setVisible(true);
         rightpanel.setBackground(Color.lightGray);
         rightpanel.setLayout(null);
@@ -36,7 +45,7 @@ public class RaceFrame  {
         ChooseArenalable.setLocation(15, 10);
         ChooseArenalable.setSize(150, 15);
 
-        String[] Arenanames =  {"AerialArena", "NavalArena", "LandArena"};
+        String[] Arenanames = {"AerialArena", "NavalArena", "LandArena"};
         JComboBox SelectArena = new JComboBox(Arenanames);
         rightpanel.add(SelectArena);
         SelectArena.setLocation(10, 30);
@@ -70,7 +79,7 @@ public class RaceFrame  {
         rightpanel.add(buildArenaBut);
         buildArenaBut.setLocation(10, 175);
         buildArenaBut.setSize(150, 30);
-//        buildArenaBut.addActionListener(this);
+        //buildArenaBut.addActionListener(this);
 
         //seperator line
         JSeparator Seperator1 = new JSeparator(SwingConstants.HORIZONTAL);
@@ -85,7 +94,7 @@ public class RaceFrame  {
         ChooseRacerlable.setLocation(15, 230);
         ChooseRacerlable.setSize(150, 15);
 
-        String[] Racernames =  {"Airplane", "Helicopter", "Bicycle","Car", "Horse", "RowBoat","SpeedBoat"};
+        String[] Racernames = {"Airplane", "Helicopter", "Bicycle", "Car", "Horse", "RowBoat", "SpeedBoat"};
         JComboBox SelectRacer = new JComboBox(Racernames);
         rightpanel.add(SelectRacer);
         SelectRacer.setLocation(10, 250);
@@ -98,7 +107,7 @@ public class RaceFrame  {
         ChooseColorlable.setLocation(15, 290);
         ChooseColorlable.setSize(150, 15);
 
-        String[] colors =  {"Black", "Red", "Green","Blue", "Yellow"};
+        String[] colors = {"Black", "Red", "Green", "Blue", "Yellow"};
         JComboBox SelectColor = new JComboBox(colors);
         rightpanel.add(SelectColor);
         SelectColor.setLocation(10, 310);
@@ -164,6 +173,7 @@ public class RaceFrame  {
         rightpanel.add(infoBut);
         infoBut.setLocation(10, 625);
         infoBut.setSize(150, 30);
+        return frame;
     }
 
 
