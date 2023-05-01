@@ -8,44 +8,38 @@ import game.arenas.land.LandArena;
 import game.arenas.naval.NavalArena;
 import game.factory.RaceBuilder;
 import game.racers.Racer;
+import utilities.EnumContainer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 
 public class RaceFrame extends JFrame implements ActionListener {
     //disable main
     private static RaceBuilder builder = RaceBuilder.getInstance();
+    private static JFrame MainFrame ;
     private static ArrayList<Racer> racers;
     private static Arena arena=null;
     private ImageIcon racersImages[] = null;
     private boolean raceStarted = false;
-
-
-    /*
-    private JTextField txtArenaLength;
-    private JTextField txtMaxRacers;
-    private JTextField txtRacerName;
-    private JTextField txtMaxSpeed;
-    private JTextField txtAcceleration;
-    private JComboBox<String> cbArena;
-    private JComboBox<String> cbRacer;
-    private JComboBox<String> cbColor;
-    private int arenaLength = 1000;
-    private int arenaHeight = 700;
+    private int ArenaLength = 1000;
+    private int ArenaHeight = 700;
     private int maxRacers = 8;
-    private int racersNumber = 0;
-    private String chosenArena = null;
-
-
-*/
-
+    private JComboBox SelectArena ;
+    private JTextField ArenaLengthfield;
+    private JTextField MaxRaceersfield;
+    private JComboBox SelectRacer;
+    private JComboBox SelectColor;
+    private JTextField Namefield;
+    private JTextField Speedfield;
+    private JTextField Accelerationfield;
     public RaceFrame() {
         super("Race");
-        this.setContentPane(getframe());
-        //this.setContentPane(getframe());
+        MainFrame =getframe();
         this.pack();
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - getWidth()) / 2);
@@ -53,6 +47,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         this.setLocation(x, y);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
+        racers = new ArrayList<>();
     }
 
     @Override
@@ -63,34 +58,90 @@ public class RaceFrame extends JFrame implements ActionListener {
     }
     public void BuildArenaAction(ActionEvent e) {
 
-        JFrame frame = new JFrame();
-        frame.setLayout(null);
-        frame.setVisible(true);
-        frame.setSize(1100, 700);
-        frame.setResizable(false);
-        frame.setTitle("new frame");
+        int chosenArena = SelectArena.getSelectedIndex();
+        String ArenaType="";
+        if(chosenArena == 0){ArenaType = "air.AerialArena"; }
+        if(chosenArena == 1){ArenaType = "naval.NavalArena"; }
+        if(chosenArena == 2){ArenaType = "land.LandArena"; }
 
+        //get and convert text for Len
+        ArenaLength =Integer.parseInt(ArenaLengthfield.getText());
+        //get and convert text for Maxracers
+        maxRacers =Integer.parseInt(MaxRaceersfield.getText());
+
+        try {
+            arena = builder.buildArena("game.arenas."+ArenaType, ArenaLength, maxRacers);
+            System.out.println(ArenaType+" succecfully created , Len:" + ArenaLength + " , MaxRacers:" + maxRacers );
+
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+            System.out.println("Unable to build arena!");
+        }
+
+    }
+    public void AddRacer(ActionEvent e) {
+
+        int newRacer = SelectRacer.getSelectedIndex();
+        int newcolor = SelectColor.getSelectedIndex();
+        EnumContainer.Color NewColor = null;
+        if(newcolor == 0){NewColor = EnumContainer.Color.BLACK;}
+        if(newcolor == 1){NewColor = EnumContainer.Color.RED;}
+        if(newcolor == 2){NewColor = EnumContainer.Color.GREEN;}
+        if(newcolor == 3){NewColor = EnumContainer.Color.BLUE;}
+        if(newcolor == 4){NewColor = EnumContainer.Color.YELLOW;}
+        
+        String RacerName=Namefield.getText();
+        int Mspeed = Integer.parseInt(Speedfield.getText());
+        int Acc = Integer.parseInt(Accelerationfield.getText());
+        if(newRacer == 0){addWR("air.Airplane",RacerName,Mspeed,Acc,NewColor);}
+        if(newRacer == 1){addR("air.Helicopter",RacerName,Mspeed,Acc,NewColor);}
+        if(newRacer == 2){addWR("land.Bicycle",RacerName,Mspeed,Acc,NewColor);}
+        if(newRacer == 3){addWR("land.Car",RacerName,Mspeed,Acc,NewColor);}
+        if(newRacer == 4){addR("land.Horse",RacerName,Mspeed,Acc,NewColor);}
+        if(newRacer == 5){addR("naval.RowBoat",RacerName,Mspeed,Acc,NewColor);}
+        if(newRacer == 6){addR("naval.SpeedBoat",RacerName,Mspeed,Acc,NewColor);}
+
+        //addRacersToArena();
+    }
+    void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor ){
+        try {
+            racers.add(builder.buildRacer("game.racers."+ rt, name, mSpeed, 8, NewColor));
+            System.out.println("new racer" + rt + " " + name + " created, ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
+
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+            e1.printStackTrace();
+        }
+    }
+    void addWR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
+        try {
+            racers.add(builder.buildWheeledRacer("game.racers."+rt, name, mSpeed, 1,NewColor, 3));
+            System.out.println("new racer" + rt + " " + name + " created, ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+            e1.printStackTrace();
+        }
     }
 
     public JFrame getframe() {
-        //main RaceFrame
 
-        JFrame frame = new JFrame();
-        frame.setLayout(null);
-        frame.setVisible(true);
-        frame.setSize(1100, 700);
-        frame.setResizable(false);
-        frame.setTitle("Race");
+        //main RaceFrame
+        MainFrame = new JFrame();
+        MainFrame.setLayout(null);
+        MainFrame.setVisible(true);
+        MainFrame.setSize(1100, 700);
+        MainFrame.setResizable(false);
+        MainFrame.setTitle("Race");
 
 
         //right side panel
         JPanel rightpanel = new JPanel();
-        rightpanel.setBounds(910, 0, 200, 700);
+        rightpanel.setBounds(900, 0, 200, 700);
         rightpanel.setBackground(Color.lightGray);
         rightpanel.setLayout(null);
 
         //adding new panel to main frame
-        frame.add(rightpanel);
+        MainFrame.add(rightpanel);
 
         //Choose Arena ComboBox
         JLabel ChooseArenalable = new JLabel("Choose arena:");
@@ -99,7 +150,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         ChooseArenalable.setSize(150, 15);
 
         String[] Arenanames = {"AerialArena", "NavalArena", "LandArena"};
-        JComboBox SelectArena = new JComboBox(Arenanames);
+        SelectArena = new JComboBox(Arenanames);
         rightpanel.add(SelectArena);
         SelectArena.setLocation(10, 30);
         SelectArena.setSize(150, 25);
@@ -111,7 +162,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         ArenaLenlable.setLocation(15, 60);
         ArenaLenlable.setSize(150, 15);
 
-        JTextField ArenaLengthfield = new JTextField("1000");
+        ArenaLengthfield = new JTextField("1000");
         rightpanel.add(ArenaLengthfield);
         ArenaLengthfield.setLocation(10, 80);
         ArenaLengthfield.setSize(150, 25);
@@ -122,7 +173,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         MaxRaceerslable.setLocation(15, 110);
         MaxRaceerslable.setSize(150, 15);
 
-        JTextField MaxRaceersfield = new JTextField("8");
+        MaxRaceersfield = new JTextField("8");
         rightpanel.add(MaxRaceersfield);
         MaxRaceersfield.setLocation(10, 130);
         MaxRaceersfield.setSize(150, 25);
@@ -148,7 +199,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         ChooseRacerlable.setSize(150, 15);
 
         String[] Racernames = {"Airplane", "Helicopter", "Bicycle", "Car", "Horse", "RowBoat", "SpeedBoat"};
-        JComboBox SelectRacer = new JComboBox(Racernames);
+        SelectRacer = new JComboBox(Racernames);
         rightpanel.add(SelectRacer);
         SelectRacer.setLocation(10, 250);
         SelectRacer.setSize(150, 25);
@@ -161,7 +212,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         ChooseColorlable.setSize(150, 15);
 
         String[] colors = {"Black", "Red", "Green", "Blue", "Yellow"};
-        JComboBox SelectColor = new JComboBox(colors);
+        SelectColor = new JComboBox(colors);
         rightpanel.add(SelectColor);
         SelectColor.setLocation(10, 310);
         SelectColor.setSize(150, 25);
@@ -172,7 +223,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Namelable.setLocation(15, 350);
         Namelable.setSize(150, 15);
 
-        JTextField Namefield = new JTextField();
+        Namefield = new JTextField();
         rightpanel.add(Namefield);
         Namefield.setLocation(10, 370);
         Namefield.setSize(150, 25);
@@ -184,7 +235,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Maxspeedlable.setLocation(15, 410);
         Maxspeedlable.setSize(150, 15);
 
-        JTextField Speedfield = new JTextField();
+        Speedfield = new JTextField();
         rightpanel.add(Speedfield);
         Speedfield.setLocation(10, 430);
         Speedfield.setSize(150, 25);
@@ -195,7 +246,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Accelerationlable.setLocation(15, 470);
         Accelerationlable.setSize(150, 15);
 
-        JTextField Accelerationfield  = new JTextField();
+        Accelerationfield  = new JTextField();
         rightpanel.add(Accelerationfield);
         Accelerationfield.setLocation(10, 490);
         Accelerationfield.setSize(150, 25);
@@ -205,7 +256,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         rightpanel.add(addRacerBut);
         addRacerBut.setLocation(10, 530);
         addRacerBut.setSize(150, 30);
-//        addRacerBut.addActionListener(this);
+        addRacerBut.addActionListener(this::AddRacer);
 
         //seperator line
         JSeparator Seperator2 = new JSeparator(SwingConstants.HORIZONTAL);
@@ -227,8 +278,8 @@ public class RaceFrame extends JFrame implements ActionListener {
         infoBut.setLocation(10, 625);
         infoBut.setSize(150, 30);
         //infoBut.addActionListener(this);
-        return frame;
 
+        return MainFrame;
     }
 
     public static void main(String[] args){
