@@ -4,6 +4,8 @@ package gui;
 //imports
 import game.arenas.Arena;
 import game.arenas.air.AerialArena;
+import game.arenas.exceptions.RacerLimitException;
+import game.arenas.exceptions.RacerTypeException;
 import game.arenas.land.LandArena;
 import game.arenas.naval.NavalArena;
 import game.factory.RaceBuilder;
@@ -101,7 +103,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         if(newRacer == 5){addR("naval.RowBoat",RacerName,Mspeed,Acc,NewColor);}
         if(newRacer == 6){addR("naval.SpeedBoat",RacerName,Mspeed,Acc,NewColor);}
 
-        //addRacersToArena();
+        addRacersToArena();
     }
     void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor ){
         try {
@@ -116,7 +118,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     void addWR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
         try {
             racers.add(builder.buildWheeledRacer("game.racers."+rt, name, mSpeed, 1,NewColor, 3));
-            System.out.println("new racer" + rt + " " + name + " created, ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
+            System.out.println("new racer created " + rt + " " + name + "  ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
             e1.printStackTrace();
@@ -287,6 +289,18 @@ public class RaceFrame extends JFrame implements ActionListener {
     }
 
 
+
+    private static void addRacersToArena() {
+        for (Racer racer : racers) {
+            try {
+                arena.addRacer(racer);
+            } catch (RacerLimitException e) {
+                System.out.println("[Error] " + e.getMessage());
+            } catch (RacerTypeException e) {
+                System.out.println("[Error] " + e.getMessage());
+            }
+        }
+    }
 
 }
 
