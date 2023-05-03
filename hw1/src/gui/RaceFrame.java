@@ -2,12 +2,9 @@ package gui;
 
 
 //imports
-import game.arenas.Arena;
-import game.arenas.air.AerialArena;
-import game.arenas.exceptions.RacerLimitException;
-import game.arenas.exceptions.RacerTypeException;
-import game.arenas.land.LandArena;
-import game.arenas.naval.NavalArena;
+import arenas.Arena;
+import arenas.exceptions.RacerLimitException;
+import arenas.exceptions.RacerTypeException;
 import game.factory.RaceBuilder;
 import game.racers.Racer;
 import utilities.EnumContainer;
@@ -24,8 +21,9 @@ public class RaceFrame extends JFrame implements ActionListener {
     //disable main
     private static RaceBuilder builder = RaceBuilder.getInstance();
     private static JFrame MainFrame ;
+
     private static ArrayList<Racer> racers;
-    private static Arena arena=null;
+    private static Arena arena;
     private ImageIcon racersImages[] = null;
     private boolean raceStarted = false;
     private int ArenaLength = 1000;
@@ -39,9 +37,15 @@ public class RaceFrame extends JFrame implements ActionListener {
     private JTextField Namefield;
     private JTextField Speedfield;
     private JTextField Accelerationfield;
+    private JPanel arenaPanel;
+    private ImageIcon image;
+    private JLabel dispalyArena;
+
+
     public RaceFrame() {
         super("Race");
-        MainFrame =getframe();
+        getframe();
+
         this.pack();
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - getWidth()) / 2);
@@ -50,6 +54,21 @@ public class RaceFrame extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
         racers = new ArrayList<>();
+    }
+
+
+
+    public void ArenaImage(String Atype){
+        //add image
+        ImageIcon imageIcon1 = new ImageIcon(new ImageIcon("icons/"+Atype+".jpg").getImage()
+                .getScaledInstance(1000, 700, Image.SCALE_DEFAULT));
+        JLabel picLabel1 = new JLabel(imageIcon1);
+        picLabel1.setLocation(0, 0);
+        picLabel1.setSize(1000, 700);
+        arenaPanel.add(picLabel1);
+
+        //updateFrame(); -------ERROR
+
     }
 
     @Override
@@ -62,23 +81,33 @@ public class RaceFrame extends JFrame implements ActionListener {
 
         int chosenArena = SelectArena.getSelectedIndex();
         String ArenaType="";
-        if(chosenArena == 0){ArenaType = "air.AerialArena"; }
-        if(chosenArena == 1){ArenaType = "naval.NavalArena"; }
-        if(chosenArena == 2){ArenaType = "land.LandArena"; }
-
+        if(arena==null) {
+            if (chosenArena == 0) {
+                ArenaType = "air.AerialArena";
+                ArenaImage("AerialArena");
+            }
+            if (chosenArena == 1) {
+                ArenaType = "naval.NavalArena";
+                ArenaImage("NavalArena");
+            }
+            if (chosenArena == 2) {
+                ArenaType = "land.LandArena";
+                ArenaImage("LandArena");
+            }
+        }
         //get and convert text for Len
         ArenaLength =Integer.parseInt(ArenaLengthfield.getText());
         //get and convert text for Maxracers
         maxRacers =Integer.parseInt(MaxRaceersfield.getText());
-
         try {
-            arena = builder.buildArena("game.arenas."+ArenaType, ArenaLength, maxRacers);
+            arena = builder.buildArena("arenas."+ArenaType, ArenaLength, maxRacers);
             System.out.println(ArenaType+" succecfully created , Len:" + ArenaLength + " , MaxRacers:" + maxRacers );
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
             System.out.println("Unable to build arena!");
         }
+
 
     }
     public void AddRacer(ActionEvent e) {
@@ -91,10 +120,11 @@ public class RaceFrame extends JFrame implements ActionListener {
         if(newcolor == 2){NewColor = EnumContainer.Color.GREEN;}
         if(newcolor == 3){NewColor = EnumContainer.Color.BLUE;}
         if(newcolor == 4){NewColor = EnumContainer.Color.YELLOW;}
-        
+
         String RacerName=Namefield.getText();
         int Mspeed = Integer.parseInt(Speedfield.getText());
         int Acc = Integer.parseInt(Accelerationfield.getText());
+
         if(newRacer == 0){addWR("air.Airplane",RacerName,Mspeed,Acc,NewColor);}
         if(newRacer == 1){addR("air.Helicopter",RacerName,Mspeed,Acc,NewColor);}
         if(newRacer == 2){addWR("land.Bicycle",RacerName,Mspeed,Acc,NewColor);}
@@ -104,10 +134,11 @@ public class RaceFrame extends JFrame implements ActionListener {
         if(newRacer == 6){addR("naval.SpeedBoat",RacerName,Mspeed,Acc,NewColor);}
 
         addRacersToArena();
+        racers = new ArrayList<>();
     }
     void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor ){
         try {
-            racers.add(builder.buildRacer("game.racers."+ rt, name, mSpeed, 8, NewColor));
+            racers.add(builder.buildRacer("game.racers."+ rt, name, mSpeed, Acc, NewColor));
             System.out.println("new racer" + rt + " " + name + " created, ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
@@ -117,7 +148,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     }
     void addWR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
         try {
-            racers.add(builder.buildWheeledRacer("game.racers."+rt, name, mSpeed, 1,NewColor, 3));
+            racers.add(builder.buildWheeledRacer("game.racers."+rt, name, mSpeed, Acc,NewColor, 3));
             System.out.println("new racer created " + rt + " " + name + "  ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
@@ -125,25 +156,43 @@ public class RaceFrame extends JFrame implements ActionListener {
         }
     }
 
+    public void StartAction(ActionEvent e) //Start Racer Btn ON-CLICK
+    {startRace();}
+    public void ShowRes(ActionEvent e){arena.showResults();} //RaceInfo Btn ON-CLICK
+
+
+
+
+    private void updateFrame() {
+        getframe();
+        this.pack();
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+        this.setLocation(x, y);
+        this.setVisible(true);
+    }
+
     public JFrame getframe() {
+        setPreferredSize(new Dimension(1200 , 700));
+        setResizable(false);
 
         //main RaceFrame
-        MainFrame = new JFrame();
-        MainFrame.setLayout(null);
-        MainFrame.setVisible(true);
-        MainFrame.setSize(1100, 700);
-        MainFrame.setResizable(false);
-        MainFrame.setTitle("Race");
-
+        arenaPanel = new JPanel();
+        arenaPanel.setLayout(null);
+        arenaPanel.setPreferredSize(new Dimension(1000 , 700));
+        arenaPanel.setVisible(true);
+        add(arenaPanel, BorderLayout.WEST);
 
         //right side panel
         JPanel rightpanel = new JPanel();
-        rightpanel.setBounds(900, 0, 200, 700);
+        rightpanel.setSize(200, 700);
+        rightpanel.setLocation(1000,0);
         rightpanel.setBackground(Color.lightGray);
         rightpanel.setLayout(null);
-
         //adding new panel to main frame
-        MainFrame.add(rightpanel);
+        add(rightpanel);
+
 
         //Choose Arena ComboBox
         JLabel ChooseArenalable = new JLabel("Choose arena:");
@@ -272,14 +321,14 @@ public class RaceFrame extends JFrame implements ActionListener {
         rightpanel.add(StartBut);
         StartBut.setLocation(10, 585);
         StartBut.setSize(150, 30);
-        //StartBut.addActionListener(this);
+        StartBut.addActionListener(this::StartAction);
 
         //Show info btn
         JButton infoBut = new JButton("Show Info");
         rightpanel.add(infoBut);
         infoBut.setLocation(10, 625);
         infoBut.setSize(150, 30);
-        //infoBut.addActionListener(this);
+        infoBut.addActionListener(this::ShowRes);
 
         return MainFrame;
     }
@@ -287,8 +336,6 @@ public class RaceFrame extends JFrame implements ActionListener {
     public static void main(String[] args){
         new RaceFrame();
     }
-
-
 
     private static void addRacersToArena() {
         for (Racer racer : racers) {
@@ -300,6 +347,16 @@ public class RaceFrame extends JFrame implements ActionListener {
                 System.out.println("[Error] " + e.getMessage());
             }
         }
+    }
+    private static void startRace() {
+        System.out.println("Introduction: ");
+        for (Racer racer : arena.getActiveRacers())
+            racer.introduce();
+        System.out.println("Strat Race!");
+        while (arena.hasActiveRacers()) {
+            arena.playTurn();
+        }
+        System.out.println("Race Compleated!");
     }
 
 }

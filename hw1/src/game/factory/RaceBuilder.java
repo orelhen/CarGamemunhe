@@ -1,7 +1,7 @@
 package game.factory;
 
 //imports
-import game.arenas.Arena;
+import arenas.Arena;
 import game.racers.Racer;
 import utilities.EnumContainer;
 

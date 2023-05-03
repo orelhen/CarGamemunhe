@@ -7,12 +7,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import game.factory.RaceBuilder;
-import game.arenas.Arena;
-import game.arenas.air.AerialArena;
-import game.arenas.exceptions.RacerLimitException;
-import game.arenas.exceptions.RacerTypeException;
-import game.arenas.land.LandArena;
-import game.arenas.naval.NavalArena;
+import arenas.Arena;
+import arenas.air.AerialArena;
+import arenas.exceptions.RacerLimitException;
+import arenas.exceptions.RacerTypeException;
+import arenas.land.LandArena;
+import arenas.naval.NavalArena;
 import game.racers.Racer;
 import game.racers.air.Airplane;
 import game.racers.air.Helicopter;
@@ -49,7 +49,7 @@ public class Program {
 
 	private static void initAirRace() {
 		try {
-			arena = builder.buildArena("game.arenas.air.AerialArena", 1450, 4);
+			arena = builder.buildArena("arenas.air.AerialArena", 1450, 4);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
 				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 			System.out.println("Unable to build arena!");
@@ -72,7 +72,7 @@ public class Program {
 
 	private static void initLandRace() {
 		try {
-			arena = builder.buildArena("game.arenas.land.LandArena", 1450, 8);
+			arena = builder.buildArena("arenas.land.LandArena", 1450, 8);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
 				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 			System.out.println("Unable to build arena!");
@@ -96,7 +96,7 @@ public class Program {
 
 	private static void initNavalRace() {
 		try {
-			arena = builder.buildArena("game.arenas.naval.NavalArena", 1225, 2);
+			arena = builder.buildArena("arenas.naval.NavalArena", 1225, 2);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
 				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 			System.out.println("Unable to build arena!");

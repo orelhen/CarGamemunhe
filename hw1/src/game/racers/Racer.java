@@ -12,7 +12,7 @@ package game.racers;
  */
 
 //imports
-import game.arenas.Arena;
+import arenas.Arena;
 import utilities.Fate;
 import utilities.Point;
 import utilities.EnumContainer.Color;
@@ -46,6 +46,7 @@ public abstract class Racer {
         this.acceleration =ACC;
         this.color = color;
         this.serial++;
+        this.currentLocation = new Point();
     }
 
     //getters
