@@ -58,16 +58,17 @@ public class RaceFrame extends JFrame implements ActionListener {
 
 
 
-    public void ArenaImage(String Atype){
+    public void ArenaImage(String Atype,int W,int H){
         //add image
         arenaPanel.removeAll();
         ImageIcon imageIcon1 = new ImageIcon(new ImageIcon("icons/"+Atype+".jpg").getImage()
-                .getScaledInstance(1000, 700, Image.SCALE_DEFAULT));
+                .getScaledInstance(W, H, Image.SCALE_DEFAULT));
         JLabel picLabel1 = new JLabel(imageIcon1);
         picLabel1.setLocation(0, 0);
-        picLabel1.setSize(1000, 700);
+        picLabel1.setSize(W, H);
+        this.setSize(200+W,H);
+        arenaPanel.setPreferredSize(new Dimension(W , H));
         arenaPanel.add(picLabel1);
-
         setResizable(false);
     }
 
@@ -81,59 +82,83 @@ public class RaceFrame extends JFrame implements ActionListener {
 
         int chosenArena = SelectArena.getSelectedIndex();
         String ArenaType="";
-
+        String ImageType ="";
         if (chosenArena == 0) {
             ArenaType = "air.AerialArena";
-            ArenaImage("AerialArena");
+            ImageType="AerialArena";
         }
         if (chosenArena == 1) {
             ArenaType = "naval.NavalArena";
-            ArenaImage("NavalArena");
+            ImageType="NavalArena";
         }if (chosenArena == 2) {
             ArenaType = "land.LandArena";
-            ArenaImage("LandArena");
+            ImageType="LandArena";
         }
 
         //get and convert text for Len
         ArenaLength =Integer.parseInt(ArenaLengthfield.getText());
         //get and convert text for Maxracers
         maxRacers =Integer.parseInt(MaxRaceersfield.getText());
+
+
         try {
+            if(maxRacers>20 || maxRacers <1){ throw new IllegalArgumentException("Error");  }
+            if(ArenaLength>3000 || ArenaLength <100){ throw new IllegalArgumentException("Error");  }
             arena = builder.buildArena("arenas."+ArenaType, ArenaLength, maxRacers);
+            ArenaImage(ImageType,ArenaLength,maxRacers*100);
             System.out.println(ArenaType+" succecfully created , Len:" + ArenaLength + " , MaxRacers:" + maxRacers );
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-            System.out.println("Unable to build arena!");
+
+            JOptionPane.showMessageDialog(this,"Inviald input values! Please try again.");
         }
 
 
     }
     public void AddRacer(ActionEvent e) {
+        try {
+            if(arena==null){throw new IllegalArgumentException("Error");}
+            int newRacer = SelectRacer.getSelectedIndex();
+            int newcolor = SelectColor.getSelectedIndex();
+            EnumContainer.Color NewColor = null;
+            if (newcolor == 0)
+                NewColor = EnumContainer.Color.BLACK;
+            if (newcolor == 1)
+                NewColor = EnumContainer.Color.RED;
+            if (newcolor == 2)
+                NewColor = EnumContainer.Color.GREEN;
+            if (newcolor == 3)
+                NewColor = EnumContainer.Color.BLUE;
+            if (newcolor == 4)
+                NewColor = EnumContainer.Color.YELLOW;
 
-        int newRacer = SelectRacer.getSelectedIndex();
-        int newcolor = SelectColor.getSelectedIndex();
-        EnumContainer.Color NewColor = null;
-        if(newcolor == 0){NewColor = EnumContainer.Color.BLACK;}
-        if(newcolor == 1){NewColor = EnumContainer.Color.RED;}
-        if(newcolor == 2){NewColor = EnumContainer.Color.GREEN;}
-        if(newcolor == 3){NewColor = EnumContainer.Color.BLUE;}
-        if(newcolor == 4){NewColor = EnumContainer.Color.YELLOW;}
 
-        String RacerName=Namefield.getText();
-        int Mspeed = Integer.parseInt(Speedfield.getText());
-        int Acc = Integer.parseInt(Accelerationfield.getText());
+            String RacerName = Namefield.getText();
+            int Mspeed = Integer.parseInt(Speedfield.getText());
+            int Acc = Integer.parseInt(Accelerationfield.getText());
 
-        if(newRacer == 0){addWR("air.Airplane",RacerName,Mspeed,Acc,NewColor);}
-        if(newRacer == 1){addR("air.Helicopter",RacerName,Mspeed,Acc,NewColor);}
-        if(newRacer == 2){addWR("land.Bicycle",RacerName,Mspeed,Acc,NewColor);}
-        if(newRacer == 3){addWR("land.Car",RacerName,Mspeed,Acc,NewColor);}
-        if(newRacer == 4){addR("land.Horse",RacerName,Mspeed,Acc,NewColor);}
-        if(newRacer == 5){addR("naval.RowBoat",RacerName,Mspeed,Acc,NewColor);}
-        if(newRacer == 6){addR("naval.SpeedBoat",RacerName,Mspeed,Acc,NewColor);}
+            if (newRacer == 0)
+                addWR("air.Airplane", RacerName, Mspeed, Acc, NewColor);
+            if (newRacer == 1)
+                addR("air.Helicopter", RacerName, Mspeed, Acc, NewColor);
+            if (newRacer == 2)
+                addWR("land.Bicycle", RacerName, Mspeed, Acc, NewColor);
+            if (newRacer == 3)
+                addWR("land.Car", RacerName, Mspeed, Acc, NewColor);
+            if (newRacer == 4)
+                addR("land.Horse", RacerName, Mspeed, Acc, NewColor);
+            if (newRacer == 5)
+                addR("naval.RowBoat", RacerName, Mspeed, Acc, NewColor);
+            if (newRacer == 6)
+                addR("naval.SpeedBoat", RacerName, Mspeed, Acc, NewColor);
 
-        addRacersToArena();
-        racers = new ArrayList<>();
+            addRacersToArena();
+            racers = new ArrayList<>();
+        }
+        catch (IllegalArgumentException e1){
+            JOptionPane.showMessageDialog(this,"Please build arena first and add racers!");
+        }
     }
     void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor ){
         try {
@@ -143,6 +168,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
             e1.printStackTrace();
+            JOptionPane.showMessageDialog(this,"Unable To add Racer");
         }
     }
     void addWR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
@@ -150,8 +176,11 @@ public class RaceFrame extends JFrame implements ActionListener {
             racers.add(builder.buildWheeledRacer("game.racers."+rt, name, mSpeed, Acc,NewColor, 3));
             System.out.println("new racer created " + rt + " " + name + "  ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
-                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1)
+        {
             e1.printStackTrace();
+            JOptionPane.showMessageDialog(this,"Unable To add Racer");
+
         }
     }
 
