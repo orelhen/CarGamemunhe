@@ -118,40 +118,66 @@ public class RaceFrame extends JFrame implements ActionListener {
     }
     public void AddRacer(ActionEvent e) {
         try {
+            String RacerType="";
+            String RacerColor="";
             if(arena==null){throw new IllegalArgumentException("Error");}
             int newRacer = SelectRacer.getSelectedIndex();
             int newcolor = SelectColor.getSelectedIndex();
             EnumContainer.Color NewColor = null;
-            if (newcolor == 0)
+            if (newcolor == 0) {
                 NewColor = EnumContainer.Color.BLACK;
-            if (newcolor == 1)
+                RacerColor="Black";
+            }
+            if (newcolor == 1) {
                 NewColor = EnumContainer.Color.RED;
-            if (newcolor == 2)
+                RacerColor="Red";
+            }
+            if (newcolor == 2) {
                 NewColor = EnumContainer.Color.GREEN;
-            if (newcolor == 3)
+                RacerColor="Green";
+            }
+            if (newcolor == 3) {
                 NewColor = EnumContainer.Color.BLUE;
-            if (newcolor == 4)
+                RacerColor="Blue";
+            }
+            if (newcolor == 4) {
                 NewColor = EnumContainer.Color.YELLOW;
+                RacerColor="Yellow";
+            }
 
 
             String RacerName = Namefield.getText();
             int Mspeed = Integer.parseInt(Speedfield.getText());
             int Acc = Integer.parseInt(Accelerationfield.getText());
 
-            if (newRacer == 0)
+            if (newRacer == 0) {
                 addWR("air.Airplane", RacerName, Mspeed, Acc, NewColor);
-            if (newRacer == 1)
+                RacerType = "Airplane";
+            }
+            if (newRacer == 1) {
                 addR("air.Helicopter", RacerName, Mspeed, Acc, NewColor);
-            if (newRacer == 2)
+                RacerType = "Helicopter";
+            }
+            if (newRacer == 2) {
                 addWR("land.Bicycle", RacerName, Mspeed, Acc, NewColor);
-            if (newRacer == 3)
+                RacerType = "Bicycle";
+            }
+            if (newRacer == 3) {
                 addWR("land.Car", RacerName, Mspeed, Acc, NewColor);
-            if (newRacer == 4)
+                RacerType = "Car";
+            }
+            if (newRacer == 4) {
                 addR("land.Horse", RacerName, Mspeed, Acc, NewColor);
-            if (newRacer == 5)
+                RacerType = "Horse";
+            }
+            if (newRacer == 5) {
                 addR("naval.RowBoat", RacerName, Mspeed, Acc, NewColor);
-            if (newRacer == 6)
+                RacerType = "RowBoat";
+            }
+            if (newRacer == 6) {
                 addR("naval.SpeedBoat", RacerName, Mspeed, Acc, NewColor);
+                RacerType = "SpeedBoat";
+            }
 
             addRacersToArena();
             racers = new ArrayList<>();
@@ -160,10 +186,22 @@ public class RaceFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this,"Please build arena first and add racers!");
         }
     }
-    void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor ){
+
+    public void RacerImage(String RacerType,String RacerColor){
+        //add image for racer
+
+        ImageIcon imageIcon2 = new ImageIcon(new ImageIcon("icons/"+RacerType+RacerColor+".jpg").getImage()
+                .getScaledInstance(70, 70, Image.SCALE_DEFAULT));
+        JLabel picLabel1 = new JLabel(imageIcon2);
+        picLabel1.setLocation(0, 0);
+        arenaPanel.add(picLabel1);
+        setResizable(false);
+    }
+    void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
         try {
             racers.add(builder.buildRacer("game.racers."+ rt, name, mSpeed, Acc, NewColor));
             System.out.println("new racer" + rt + " " + name + " created, ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
+
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
@@ -357,6 +395,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         for (Racer racer : racers) {
             try {
                 arena.addRacer(racer);
+              //  RacerImage(racer.className(),racer.getColor());
             } catch (RacerLimitException e) {
                 System.out.println("[Error] " + e.getMessage());
             } catch (RacerTypeException e) {
