@@ -39,8 +39,8 @@ public class RaceFrame extends JFrame implements ActionListener {
     private JTextField Accelerationfield;
     private JPanel arenaPanel;
     private ImageIcon image;
-    private JLabel dispalyArena;
-
+    private  JLabel Arenapic;
+    private int RacerY= 0;
 
     public RaceFrame() {
         super("Race");
@@ -63,12 +63,14 @@ public class RaceFrame extends JFrame implements ActionListener {
         arenaPanel.removeAll();
         ImageIcon imageIcon1 = new ImageIcon(new ImageIcon("icons/"+Atype+".jpg").getImage()
                 .getScaledInstance(W, H, Image.SCALE_DEFAULT));
-        JLabel picLabel1 = new JLabel(imageIcon1);
-        picLabel1.setLocation(0, 0);
-        picLabel1.setSize(W, H);
-        this.setSize(200+W,H);
+        Arenapic = new JLabel(imageIcon1);
+        Arenapic.setLocation(0, 0);
+        Arenapic.setSize(W, H);
+        if(H<700)
+            this.setSize(200+W,700);
+        else this.setSize(200+W,H);
         arenaPanel.setPreferredSize(new Dimension(W , H));
-        arenaPanel.add(picLabel1);
+        arenaPanel.add(Arenapic);
         setResizable(false);
     }
 
@@ -105,7 +107,8 @@ public class RaceFrame extends JFrame implements ActionListener {
             if(maxRacers>20 || maxRacers <1){ throw new IllegalArgumentException("Error");  }
             if(ArenaLength>3000 || ArenaLength <100){ throw new IllegalArgumentException("Error");  }
             arena = builder.buildArena("arenas."+ArenaType, ArenaLength, maxRacers);
-            ArenaImage(ImageType,ArenaLength,maxRacers*100);
+            ArenaImage(ImageType,ArenaLength,maxRacers*70);
+            RacerY = 0;
             System.out.println(ArenaType+" succecfully created , Len:" + ArenaLength + " , MaxRacers:" + maxRacers );
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
@@ -150,34 +153,20 @@ public class RaceFrame extends JFrame implements ActionListener {
             int Mspeed = Integer.parseInt(Speedfield.getText());
             int Acc = Integer.parseInt(Accelerationfield.getText());
 
-            if (newRacer == 0) {
+            if (newRacer == 0)
                 addWR("air.Airplane", RacerName, Mspeed, Acc, NewColor);
-                RacerType = "Airplane";
-            }
-            if (newRacer == 1) {
+            if (newRacer == 1)
                 addR("air.Helicopter", RacerName, Mspeed, Acc, NewColor);
-                RacerType = "Helicopter";
-            }
-            if (newRacer == 2) {
+            if (newRacer == 2)
                 addWR("land.Bicycle", RacerName, Mspeed, Acc, NewColor);
-                RacerType = "Bicycle";
-            }
-            if (newRacer == 3) {
+            if (newRacer == 3)
                 addWR("land.Car", RacerName, Mspeed, Acc, NewColor);
-                RacerType = "Car";
-            }
-            if (newRacer == 4) {
+            if (newRacer == 4)
                 addR("land.Horse", RacerName, Mspeed, Acc, NewColor);
-                RacerType = "Horse";
-            }
-            if (newRacer == 5) {
+            if (newRacer == 5)
                 addR("naval.RowBoat", RacerName, Mspeed, Acc, NewColor);
-                RacerType = "RowBoat";
-            }
-            if (newRacer == 6) {
+            if (newRacer == 6)
                 addR("naval.SpeedBoat", RacerName, Mspeed, Acc, NewColor);
-                RacerType = "SpeedBoat";
-            }
 
             addRacersToArena();
             racers = new ArrayList<>();
@@ -189,13 +178,15 @@ public class RaceFrame extends JFrame implements ActionListener {
 
     public void RacerImage(String RacerType,String RacerColor){
         //add image for racer
-
-        ImageIcon imageIcon2 = new ImageIcon(new ImageIcon("icons/"+RacerType+RacerColor+".jpg").getImage()
+        ImageIcon imageIcon2 = new ImageIcon(new ImageIcon("icons/"+RacerType+RacerColor+".png").getImage()
                 .getScaledInstance(70, 70, Image.SCALE_DEFAULT));
         JLabel picLabel1 = new JLabel(imageIcon2);
-        picLabel1.setLocation(0, 0);
-        arenaPanel.add(picLabel1);
-        setResizable(false);
+        picLabel1.setLocation(0, RacerY);
+        RacerY +=70;
+        picLabel1.setSize(70,70);
+        Arenapic.add(picLabel1);
+        setResizable(true);
+
     }
     void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
         try {
@@ -391,15 +382,16 @@ public class RaceFrame extends JFrame implements ActionListener {
         new RaceFrame();
     }
 
-    private static void addRacersToArena() {
+    private void addRacersToArena() {
         for (Racer racer : racers) {
             try {
                 arena.addRacer(racer);
-              //  RacerImage(racer.className(),racer.getColor());
+                RacerImage(racer.className(),racer.getColor().toString());
             } catch (RacerLimitException e) {
-                System.out.println("[Error] " + e.getMessage());
+                JOptionPane.showMessageDialog(this,"[Error] " + e.getMessage());
+
             } catch (RacerTypeException e) {
-                System.out.println("[Error] " + e.getMessage());
+                JOptionPane.showMessageDialog(this,"[Error] " + e.getMessage());
             }
         }
     }
