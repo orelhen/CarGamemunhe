@@ -66,9 +66,6 @@ public class RaceFrame extends JFrame implements ActionListener {
         picLabel1.setLocation(0, 0);
         picLabel1.setSize(1000, 700);
         arenaPanel.add(picLabel1);
-
-        //updateFrame(); -------ERROR
-
     }
 
     @Override
@@ -175,7 +172,7 @@ public class RaceFrame extends JFrame implements ActionListener {
 
     public JFrame getframe() {
         setPreferredSize(new Dimension(1200 , 700));
-        setResizable(false);
+        //setResizable(false);
 
         //main RaceFrame
         arenaPanel = new JPanel();
