@@ -60,12 +60,15 @@ public class RaceFrame extends JFrame implements ActionListener {
 
     public void ArenaImage(String Atype){
         //add image
+        arenaPanel.removeAll();
         ImageIcon imageIcon1 = new ImageIcon(new ImageIcon("icons/"+Atype+".jpg").getImage()
                 .getScaledInstance(1000, 700, Image.SCALE_DEFAULT));
         JLabel picLabel1 = new JLabel(imageIcon1);
         picLabel1.setLocation(0, 0);
         picLabel1.setSize(1000, 700);
         arenaPanel.add(picLabel1);
+
+        setResizable(false);
     }
 
     @Override
@@ -78,20 +81,19 @@ public class RaceFrame extends JFrame implements ActionListener {
 
         int chosenArena = SelectArena.getSelectedIndex();
         String ArenaType="";
-        if(arena==null) {
-            if (chosenArena == 0) {
-                ArenaType = "air.AerialArena";
-                ArenaImage("AerialArena");
-            }
-            if (chosenArena == 1) {
-                ArenaType = "naval.NavalArena";
-                ArenaImage("NavalArena");
-            }
-            if (chosenArena == 2) {
-                ArenaType = "land.LandArena";
-                ArenaImage("LandArena");
-            }
+
+        if (chosenArena == 0) {
+            ArenaType = "air.AerialArena";
+            ArenaImage("AerialArena");
         }
+        if (chosenArena == 1) {
+            ArenaType = "naval.NavalArena";
+            ArenaImage("NavalArena");
+        }if (chosenArena == 2) {
+            ArenaType = "land.LandArena";
+            ArenaImage("LandArena");
+        }
+
         //get and convert text for Len
         ArenaLength =Integer.parseInt(ArenaLengthfield.getText());
         //get and convert text for Maxracers
@@ -157,18 +159,6 @@ public class RaceFrame extends JFrame implements ActionListener {
     {startRace();}
     public void ShowRes(ActionEvent e){arena.showResults();} //RaceInfo Btn ON-CLICK
 
-
-
-
-    private void updateFrame() {
-        getframe();
-        this.pack();
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (int) ((dimension.getWidth() - getWidth()) / 2);
-        int y = (int) ((dimension.getHeight() - getHeight()) / 2);
-        this.setLocation(x, y);
-        this.setVisible(true);
-    }
 
     public JFrame getframe() {
         setPreferredSize(new Dimension(1200 , 700));
