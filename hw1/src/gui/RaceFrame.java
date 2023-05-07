@@ -8,6 +8,7 @@ import arenas.exceptions.RacerTypeException;
 import game.factory.RaceBuilder;
 import game.racers.Racer;
 import utilities.EnumContainer;
+import utilities.Point;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,6 +42,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     private ImageIcon image;
     private  JLabel Arenapic;
     private int RacerY= 0;
+    private int ActiveRacersAmount=0;
 
     public RaceFrame() {
         super("Race");
@@ -72,6 +74,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         arenaPanel.setPreferredSize(new Dimension(W , H));
         arenaPanel.add(Arenapic);
         setResizable(false);
+        ActiveRacersAmount = 0;
     }
 
     @Override
@@ -127,26 +130,19 @@ public class RaceFrame extends JFrame implements ActionListener {
             int newRacer = SelectRacer.getSelectedIndex();
             int newcolor = SelectColor.getSelectedIndex();
             EnumContainer.Color NewColor = null;
-            if (newcolor == 0) {
+
+            if (newcolor == 0)
                 NewColor = EnumContainer.Color.BLACK;
-                RacerColor="Black";
-            }
-            if (newcolor == 1) {
+            if (newcolor == 1)
                 NewColor = EnumContainer.Color.RED;
-                RacerColor="Red";
-            }
-            if (newcolor == 2) {
+            if (newcolor == 2)
                 NewColor = EnumContainer.Color.GREEN;
-                RacerColor="Green";
-            }
-            if (newcolor == 3) {
+            if (newcolor == 3)
                 NewColor = EnumContainer.Color.BLUE;
-                RacerColor="Blue";
-            }
-            if (newcolor == 4) {
+            if (newcolor == 4)
                 NewColor = EnumContainer.Color.YELLOW;
-                RacerColor="Yellow";
-            }
+
+
 
 
             String RacerName = Namefield.getText();
@@ -168,6 +164,7 @@ public class RaceFrame extends JFrame implements ActionListener {
             if (newRacer == 6)
                 addR("naval.SpeedBoat", RacerName, Mspeed, Acc, NewColor);
 
+            racers.get(0).setCurrentLocation(new Point(0,70*ActiveRacersAmount));
             addRacersToArena();
             racers = new ArrayList<>();
         }
@@ -176,23 +173,20 @@ public class RaceFrame extends JFrame implements ActionListener {
         }
     }
 
-    public void RacerImage(String RacerType,String RacerColor){
-        //add image for racer
+    public void RacerImage(String RacerType,String RacerColor,int CurrentX,int CurrentY){
+        //add image for racerz
         ImageIcon imageIcon2 = new ImageIcon(new ImageIcon("icons/"+RacerType+RacerColor+".png").getImage()
                 .getScaledInstance(70, 70, Image.SCALE_DEFAULT));
         JLabel picLabel1 = new JLabel(imageIcon2);
-        picLabel1.setLocation(0, RacerY);
-        RacerY +=70;
+        picLabel1.setLocation(CurrentX, CurrentY);
         picLabel1.setSize(70,70);
         Arenapic.add(picLabel1);
         setResizable(true);
-
     }
     void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
         try {
             racers.add(builder.buildRacer("game.racers."+ rt, name, mSpeed, Acc, NewColor));
             System.out.println("new racer" + rt + " " + name + " created, ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
-
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
@@ -209,7 +203,6 @@ public class RaceFrame extends JFrame implements ActionListener {
         {
             e1.printStackTrace();
             JOptionPane.showMessageDialog(this,"Unable To add Racer");
-
         }
     }
 
@@ -386,7 +379,8 @@ public class RaceFrame extends JFrame implements ActionListener {
         for (Racer racer : racers) {
             try {
                 arena.addRacer(racer);
-                RacerImage(racer.className(),racer.getColor().toString());
+                RacerImage(racer.className(),racer.getColor().toString(),(int)racer.getCurrentLocation().getX(),(int)racer.getCurrentLocation().getY());
+                ActiveRacersAmount++;
             } catch (RacerLimitException e) {
                 JOptionPane.showMessageDialog(this,"[Error] " + e.getMessage());
 
@@ -395,17 +389,46 @@ public class RaceFrame extends JFrame implements ActionListener {
             }
         }
     }
-    private static void startRace() {
-        System.out.println("Introduction: ");
-        for (Racer racer : arena.getActiveRacers())
-            racer.introduce();
-        System.out.println("Strat Race!");
-        while (arena.hasActiveRacers()) {
-            arena.playTurn();
+    private void UpdateRaceFrame() {
+
+        Arenapic.removeAll();
+        for (Racer racer : arena.getActiveRacers()) {
+            System.out.println(" " + racer.className()+ racer.getColor().toString() + racer.getCurrentLocation().getX() + racer.getCurrentLocation().getY());
+            RacerImage(racer.className(),racer.getColor().toString(),(int)racer.getCurrentLocation().getX(),(int)racer.getCurrentLocation().getY());
+
         }
-        System.out.println("Race Compleated!");
+        for (Racer racer : arena.getCompletedRacers()) {
+            System.out.println(" " + racer.className()+ racer.getColor().toString() + racer.getCurrentLocation().getX() + racer.getCurrentLocation().getY());
+            RacerImage(racer.className(),racer.getColor().toString(),(int)racer.getCurrentLocation().getX()-250,(int)racer.getCurrentLocation().getY());
+        }
+
     }
 
+    private  void startRace() {
+
+
+        for (Racer racer : arena.getActiveRacers()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (arena.hasActiveRacers()) {
+                        if (racer.getCurrentLocation().getX() >= arena.getLength()) {
+                            arena.crossFinishLine(racer);
+                        }else{
+                            racer.move(arena.getFRICTION());
+                        try {
+                            Thread.sleep(30);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        }
+                        UpdateRaceFrame();
+                    }
+                }
+            }).start();
+            UpdateRaceFrame();
+        }
+    }
 }
 
 

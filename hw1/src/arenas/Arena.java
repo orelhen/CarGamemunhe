@@ -77,7 +77,9 @@ public ArrayList<Racer> getActiveRacers(){return this.activeRacers;}
     public double getLength() {
         return length;
     }
-
+    public double getMinYgap() {
+        return MIN_Y_GAP;
+    }
     public int getMAX_RACERS() {
         return MAX_RACERS;
     }
