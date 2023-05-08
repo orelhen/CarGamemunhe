@@ -43,6 +43,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     private  JLabel Arenapic;
     private int RacerY= 0;
     private int ActiveRacersAmount=0;
+    private ArrayList<JLabel> RacerImeges = new ArrayList<JLabel>();
 
     public RaceFrame() {
         super("Race");
@@ -58,20 +59,18 @@ public class RaceFrame extends JFrame implements ActionListener {
         racers = new ArrayList<>();
     }
 
-
-
     public void ArenaImage(String Atype,int W,int H){
         //add image
         arenaPanel.removeAll();
         ImageIcon imageIcon1 = new ImageIcon(new ImageIcon("icons/"+Atype+".jpg").getImage()
-                .getScaledInstance(W, H, Image.SCALE_DEFAULT));
+                .getScaledInstance(W+70, H, Image.SCALE_DEFAULT));
         Arenapic = new JLabel(imageIcon1);
         Arenapic.setLocation(0, 0);
-        Arenapic.setSize(W, H);
+        Arenapic.setSize(W+70, H);
         if(H<700)
-            this.setSize(200+W,700);
-        else this.setSize(200+W,H);
-        arenaPanel.setPreferredSize(new Dimension(W , H));
+            this.setSize(270+W,700);
+        else this.setSize(270+W,H);
+        arenaPanel.setPreferredSize(new Dimension(W+70 , H));
         arenaPanel.add(Arenapic);
         setResizable(false);
         ActiveRacersAmount = 0;
@@ -119,8 +118,6 @@ public class RaceFrame extends JFrame implements ActionListener {
 
             JOptionPane.showMessageDialog(this,"Inviald input values! Please try again.");
         }
-
-
     }
     public void AddRacer(ActionEvent e) {
         try {
@@ -173,13 +170,14 @@ public class RaceFrame extends JFrame implements ActionListener {
         }
     }
 
-    public void RacerImage(String RacerType,String RacerColor,int CurrentX,int CurrentY){
+    public void RacerImage(String RacerType,String RacerColor,int CurrentX,int CurrentY) {
         //add image for racerz
-        ImageIcon imageIcon2 = new ImageIcon(new ImageIcon("icons/"+RacerType+RacerColor+".png").getImage()
+        ImageIcon imageIcon2 = new ImageIcon(new ImageIcon("icons/" + RacerType + RacerColor + ".png").getImage()
                 .getScaledInstance(70, 70, Image.SCALE_DEFAULT));
         JLabel picLabel1 = new JLabel(imageIcon2);
         picLabel1.setLocation(CurrentX, CurrentY);
-        picLabel1.setSize(70,70);
+        picLabel1.setSize(70, 70);
+        RacerImeges.add(picLabel1);
         Arenapic.add(picLabel1);
         setResizable(true);
     }
@@ -390,30 +388,27 @@ public class RaceFrame extends JFrame implements ActionListener {
         }
     }
     private void UpdateRaceFrame() {
-
-        Arenapic.removeAll();
-        for (Racer racer : arena.getActiveRacers()) {
-            System.out.println(" " + racer.className()+ racer.getColor().toString() + racer.getCurrentLocation().getX() + racer.getCurrentLocation().getY());
-            RacerImage(racer.className(),racer.getColor().toString(),(int)racer.getCurrentLocation().getX(),(int)racer.getCurrentLocation().getY());
-
-        }
-        for (Racer racer : arena.getCompletedRacers()) {
-            System.out.println(" " + racer.className()+ racer.getColor().toString() + racer.getCurrentLocation().getX() + racer.getCurrentLocation().getY());
-            RacerImage(racer.className(),racer.getColor().toString(),(int)racer.getCurrentLocation().getX()-250,(int)racer.getCurrentLocation().getY());
-        }
-
+        ArrayList<Racer> racerARR= arena.getActiveRacers();
+        for(int i =0;i<ActiveRacersAmount;i++) {
+            if(racerARR.get(i)!=null&&racerARR!=null){
+            if (racerARR.get(i).getCurrentLocation().getX() < arena.getLength() ){
+            RacerImeges.get(i).setLocation((int)racerARR.get(i).getCurrentLocation().getX(), (int) racerARR.get(i).getCurrentLocation().getY());
+            Arenapic.add(RacerImeges.get(i));
+        }}}
     }
 
     private  void startRace() {
-
-
-        for (Racer racer : arena.getActiveRacers()) {
+        ArrayList<Racer> racerARR= arena.getActiveRacers();
+        for (Racer racer : racerARR) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     while (arena.hasActiveRacers()) {
                         if (racer.getCurrentLocation().getX() >= arena.getLength()) {
                             arena.crossFinishLine(racer);
+                            racerARR.remove(racer);
+                            ActiveRacersAmount--;
+
                         }else{
                             racer.move(arena.getFRICTION());
                         try {
@@ -426,7 +421,7 @@ public class RaceFrame extends JFrame implements ActionListener {
                     }
                 }
             }).start();
-            UpdateRaceFrame();
+
         }
     }
 }
