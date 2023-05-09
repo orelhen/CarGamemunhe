@@ -89,9 +89,8 @@ public ArrayList<Racer> getActiveRacers(){return this.activeRacers;}
         //init race for each racer
         int i = 0;
         for (Racer racer : this.getActiveRacers()) {
-            racer.initRace(this, new Point(0, i * MIN_Y_GAP), new Point(getLength(), i * MIN_Y_GAP));
+            racer.initRace(this, new Point(0, i * 70), new Point(getLength(), i * 70));
             i++;
-
         }
     }
 

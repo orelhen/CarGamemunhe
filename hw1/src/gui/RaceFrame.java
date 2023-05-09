@@ -11,17 +11,20 @@ import utilities.EnumContainer;
 import utilities.Point;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class RaceFrame extends JFrame implements ActionListener {
     //disable main
     private static RaceBuilder builder = RaceBuilder.getInstance();
     private static JFrame MainFrame ;
+    private static JFrame ResFrame;
 
     private static ArrayList<Racer> racers;
     private static Arena arena;
@@ -73,13 +76,14 @@ public class RaceFrame extends JFrame implements ActionListener {
         arenaPanel.setPreferredSize(new Dimension(W+70 , H));
         arenaPanel.add(Arenapic);
         setResizable(false);
+
+
         ActiveRacersAmount = 0;
+        RacerImeges = new ArrayList<JLabel>();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-
 
     }
     public void BuildArenaAction(ActionEvent e) {
@@ -205,8 +209,91 @@ public class RaceFrame extends JFrame implements ActionListener {
     }
 
     public void StartAction(ActionEvent e) //Start Racer Btn ON-CLICK
-    {startRace();}
-    public void ShowRes(ActionEvent e){arena.showResults();} //RaceInfo Btn ON-CLICK
+    {
+        arena.initRace();
+        for (Racer racer :  arena.getActiveRacers()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (racer.getCurrentLocation().getX()< arena.getLength()) {
+                        racer.move(arena.getFRICTION());
+                        try {
+                            Thread.sleep(30);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        UpdateRaceFrame();
+                    }
+                }
+            }).start();
+            UpdateRaceFrame();
+        }
+    }
+    public class AbsurvablleThread extends Thread {
+        private volatile boolean running;
+
+        public AbsurvablleThread() {
+            this.running = true;
+        }
+
+        @Override
+        public void run() {
+            while (running) {
+                // Perform your thread's logic here
+                showRes();
+
+                // Sleep for a certain duration (e.g., 1 second)
+                try {
+                    Thread.sleep(1000000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        public void stopThread() {
+            running = false;
+        }
+        public void showRes() {
+            JFrame resFrame = new JFrame("Racer information");
+            DefaultTableModel table = new DefaultTableModel(0, 5);
+            String[] row = {"name", "speed", "Mspeed", "location", "finish"};
+            table.addRow(row);
+            JTable table2 = new JTable(table);
+            JScrollPane scrollPane = new JScrollPane(table2);
+
+            resFrame.add(scrollPane, BorderLayout.CENTER);
+            resFrame.setSize(500, 500);
+            resFrame.setLocation(850, 500);
+            resFrame.setVisible(true);
+
+            int counter = 1;
+            String Finish = "";
+            for (Racer racer : arena.getCompletedRacers()) {
+                if(racer.getCurrentLocation().getX() < arena.getLength())
+                    Finish = "No";
+                else Finish = "Yes";
+                String[] tempRow = {racer.getName(), String.valueOf(racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(racer.getCurrentLocation().getX()), Finish};
+                table.addRow(tempRow);
+                counter++;
+            }
+            for (Racer racer : arena.getActiveRacers()) {
+                if(racer.getCurrentLocation().getX() < arena.getLength())
+                    Finish = "No";
+                else Finish = "Yes";
+                String[] tempRow = {racer.getName(), String.valueOf(racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(racer.getCurrentLocation().getX()), Finish};
+                table.addRow(tempRow);
+                counter++;
+            }
+
+        }
+    }
+
+    public void ShowRes(ActionEvent e){
+        AbsurvablleThread thread = new AbsurvablleThread();
+        thread.start();
+    }
+
+    //RaceInfo Btn ON-CLICK
 
 
     public JFrame getframe() {
@@ -390,40 +477,12 @@ public class RaceFrame extends JFrame implements ActionListener {
     private void UpdateRaceFrame() {
         ArrayList<Racer> racerARR= arena.getActiveRacers();
         for(int i =0;i<ActiveRacersAmount;i++) {
-            if(racerARR.get(i)!=null&&racerARR!=null){
-            if (racerARR.get(i).getCurrentLocation().getX() < arena.getLength() ){
+            if (racerARR.get(i).getCurrentLocation().getX() < arena.getLength() )
             RacerImeges.get(i).setLocation((int)racerARR.get(i).getCurrentLocation().getX(), (int) racerARR.get(i).getCurrentLocation().getY());
-            Arenapic.add(RacerImeges.get(i));
-        }}}
-    }
-
-    private  void startRace() {
-        ArrayList<Racer> racerARR= arena.getActiveRacers();
-        for (Racer racer : racerARR) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (arena.hasActiveRacers()) {
-                        if (racer.getCurrentLocation().getX() >= arena.getLength()) {
-                            arena.crossFinishLine(racer);
-                            racerARR.remove(racer);
-                            ActiveRacersAmount--;
-
-                        }else{
-                            racer.move(arena.getFRICTION());
-                        try {
-                            Thread.sleep(30);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
-                        }
-                        UpdateRaceFrame();
-                    }
-                }
-            }).start();
-
+            else RacerImeges.get(i).setLocation((int)arena.getLength(), (int) racerARR.get(i).getCurrentLocation().getY());
         }
     }
+
 }
 
 

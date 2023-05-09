@@ -277,6 +277,7 @@ public abstract class Racer {
             }
         }
         //create new point and return it.
+
         Point current = new Point(getCurrentLocation().getX()+getCurrentSpeed(),getCurrentLocation().getY());
         this.setCurrentLocation(current);
         return getCurrentLocation();
