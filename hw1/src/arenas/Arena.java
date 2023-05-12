@@ -145,7 +145,7 @@ public void addRacer(Racer newRacer) throws RacerLimitException,RacerTypeExcepti
      */
     public void crossFinishLine(Racer racer){
         getCompletedRacers().add(racer);
-        getActiveRacers().remove(racer);
+        //getActiveRacers().remove(racer);
     }
 
     /**
