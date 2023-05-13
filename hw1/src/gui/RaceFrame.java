@@ -62,6 +62,11 @@ public class RaceFrame extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }
+
+    /**
+     * initalizing main frame
+     * adding all lables,fields and buttons
+     */
     //MainFrame
     public JFrame getframe() {
         setPreferredSize(new Dimension(1200 , 700));
@@ -222,12 +227,24 @@ public class RaceFrame extends JFrame implements ActionListener {
 
         return MainFrame;
     }
+
+    /**
+     * @param e the event to be processed
+     * overide
+     */
     //methods
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
+    /**
+     * @param e
+     * build arena button - on click
+     * checking all inputs of build arena action
+     * trying to create an arena object
+     * calling arena image func.
+     */
     //Add arne ON-CLICK
     public void BuildArenaAction(ActionEvent e) {
         if(RaceStarted==false) {
@@ -269,6 +286,14 @@ public class RaceFrame extends JFrame implements ActionListener {
         else
             JOptionPane.showMessageDialog(this,"Race Started - wait for finish");
     }
+
+    /**
+     * adding new arena image to frame by input.
+     * handle vaild arena sizes required
+     * @param Atype
+     * @param W
+     * @param H
+     */
     public void ArenaImage(String Atype,int W,int H){
         //add image
         arenaPanel.removeAll();
@@ -287,6 +312,15 @@ public class RaceFrame extends JFrame implements ActionListener {
         RaceStarted = false;
         RacerImeges = new ArrayList<JLabel>();
     }
+
+    /**
+     * add racer button - on click
+     * checking all imputs of add racer action
+     * trying to create a racer object
+     * calling addr or addwr
+     * calling racer image function
+     * @param e
+     */
     //Add racer ON-CLICK
     public void AddRacer(ActionEvent e) {
         if(RaceStarted==false){
@@ -338,6 +372,15 @@ public class RaceFrame extends JFrame implements ActionListener {
         else
         JOptionPane.showMessageDialog(this,"Race Started - wait for finish");
     }
+
+    /**
+     * adding new racer image to frame by input
+     * handle vailed racer inputs
+     * @param RacerType
+     * @param RacerColor
+     * @param CurrentX
+     * @param CurrentY
+     */
     public void RacerImage(String RacerType,String RacerColor,int CurrentX,int CurrentY) {
         //add image for racerz
         ImageIcon imageIcon2 = new ImageIcon(new ImageIcon("icons/" + RacerType + RacerColor + ".png").getImage()
@@ -350,6 +393,15 @@ public class RaceFrame extends JFrame implements ActionListener {
         setResizable(true);
     }
 
+    /**
+     * creating a racer acording to inputs
+     * calling addRacerstoarena
+     * @param rt
+     * @param name
+     * @param mSpeed
+     * @param Acc
+     * @param NewColor
+     */
     //add racers methods
     public void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
         try {
@@ -360,6 +412,17 @@ public class RaceFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this,"Unable To add Racer");
         }
     }
+
+    /**
+     * creating a wheeled racer acording to inputs
+     * calling addRacerstoarena
+     * @param rt
+     * @param name
+     * @param mSpeed
+     * @param Acc
+     * @param NewColor
+     * @param Numofwheels
+     */
     public void addWR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor,int Numofwheels){
         try {
             racer=builder.buildWheeledRacer("game.racers."+rt, name, mSpeed, Acc,NewColor, Numofwheels);
@@ -370,6 +433,11 @@ public class RaceFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this,"Unable To add Racer");
         }
     }
+
+    /**
+     *adding new instance of racer to arena created.
+     * handle invaild inputs
+     */
     public void addRacersToArena() {
             try {
                 arena.addRacer(racer);
@@ -382,6 +450,14 @@ public class RaceFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this,"[Error] " + e.getMessage());
             }
     }
+
+    /**
+     * start racer button -  on click
+     * handles all invaild starting situations
+     * for each racer active, starts a new runnable thread
+     * initialzing race
+     * @param e
+     */
     //Start Racer Btn ON-CLICK
     public void StartAction(ActionEvent e) {
         if(arena !=null) {
@@ -419,6 +495,12 @@ public class RaceFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Please Build arena first");
     }
 
+    /**
+     * absurvable thread for showRes button
+     * thread collects all information from race data
+     * opens a new window to absurve, showing all invormation
+     * and then stop.
+     */
     //Show results ON-CLICK
     public class AbsurvablleThread extends Thread {
         private volatile boolean running = true;
@@ -467,6 +549,13 @@ public class RaceFrame extends JFrame implements ActionListener {
         }
 
     }
+
+    /**
+     * show results button - on click
+     * handles vaild results situations
+     * creates a new absurvabble thread - show res thread
+     * @param e
+     */
     public void ShowRes(ActionEvent e){
         if(arena != null&& ActiveRacersAmount>0) {
             AbsurvablleThread thread = new AbsurvablleThread();
@@ -475,8 +564,13 @@ public class RaceFrame extends JFrame implements ActionListener {
         else JOptionPane.showMessageDialog(this,"No race in progress");
     }
 
+    /**
+     * update frame
+     * moves all racer images location acording to initialized race data by threads
+     * when racer cross finishline, notices that the race had ended
+     */
     //update Frame progression
-    private void UpdateRaceFrame() {
+    public void UpdateRaceFrame() {
         int didnotfinish =0;
         ArrayList<Racer> racerARR= arena.getActiveRacers();
         for(int i =0;i<ActiveRacersAmount;i++) {
@@ -487,6 +581,11 @@ public class RaceFrame extends JFrame implements ActionListener {
         }
         if(didnotfinish == 0)RaceStarted=false;
     }
+
+
+
+
+
     public static void main(String[] args){
         new RaceFrame();
     }
