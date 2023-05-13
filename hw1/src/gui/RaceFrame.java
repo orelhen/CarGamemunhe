@@ -1,6 +1,5 @@
 package gui;
 
-
 //imports
 import arenas.Arena;
 import arenas.exceptions.RacerLimitException;
@@ -10,8 +9,6 @@ import game.racers.Racer;
 import utilities.EnumContainer;
 import utilities.Point;
 import utilities.Program;
-
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -25,7 +22,6 @@ import javax.swing.table.TableRowSorter;
 
 
 public class RaceFrame extends JFrame implements ActionListener {
-    //disable main
     private static RaceBuilder builder = RaceBuilder.getInstance();
     private static JFrame MainFrame ;
     private static JFrame ResFrame;
@@ -51,7 +47,9 @@ public class RaceFrame extends JFrame implements ActionListener {
     private int ActiveRacersAmount=0;
     private ArrayList<JLabel> RacerImeges = new ArrayList<JLabel>();
     private boolean RaceStarted= false;
+    private boolean NewArena= false;
 
+    //constructor
     public RaceFrame() {
         super("Race");
         getframe();
@@ -105,7 +103,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         ArenaLenlable.setLocation(15, 60);
         ArenaLenlable.setSize(150, 15);
 
-        ArenaLengthfield = new JTextField("1000");
+        ArenaLengthfield = new JTextField("1400");
         rightpanel.add(ArenaLengthfield);
         ArenaLengthfield.setLocation(10, 80);
         ArenaLengthfield.setSize(150, 25);
@@ -116,7 +114,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         MaxRaceerslable.setLocation(15, 110);
         MaxRaceerslable.setSize(150, 15);
 
-        MaxRaceersfield = new JTextField("8");
+        MaxRaceersfield = new JTextField("12");
         rightpanel.add(MaxRaceersfield);
         MaxRaceersfield.setLocation(10, 130);
         MaxRaceersfield.setSize(150, 25);
@@ -166,7 +164,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Namelable.setLocation(15, 350);
         Namelable.setSize(150, 15);
 
-        Namefield = new JTextField();
+        Namefield = new JTextField("RacerX");
         rightpanel.add(Namefield);
         Namefield.setLocation(10, 370);
         Namefield.setSize(150, 25);
@@ -178,7 +176,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Maxspeedlable.setLocation(15, 410);
         Maxspeedlable.setSize(150, 15);
 
-        Speedfield = new JTextField();
+        Speedfield = new JTextField("15");
         rightpanel.add(Speedfield);
         Speedfield.setLocation(10, 430);
         Speedfield.setSize(150, 25);
@@ -189,7 +187,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Accelerationlable.setLocation(15, 470);
         Accelerationlable.setSize(150, 15);
 
-        Accelerationfield  = new JTextField();
+        Accelerationfield  = new JTextField("2");
         rightpanel.add(Accelerationfield);
         Accelerationfield.setLocation(10, 490);
         Accelerationfield.setSize(150, 25);
@@ -224,6 +222,53 @@ public class RaceFrame extends JFrame implements ActionListener {
 
         return MainFrame;
     }
+    //methods
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    //Add arne ON-CLICK
+    public void BuildArenaAction(ActionEvent e) {
+        if(RaceStarted==false) {
+            NewArena= true;
+            int chosenArena = SelectArena.getSelectedIndex();
+            String ArenaType = "";
+            String ImageType = "";
+            if (chosenArena == 0) {
+                ArenaType = "air.AerialArena";
+                ImageType = "AerialArena";
+            }
+            if (chosenArena == 1) {
+                ArenaType = "naval.NavalArena";
+                ImageType = "NavalArena";
+            }
+            if (chosenArena == 2) {
+                ArenaType = "land.LandArena";
+                ImageType = "LandArena";
+            }
+
+            try {
+                //get and convert text for Len
+                ArenaLength = Integer.parseInt(ArenaLengthfield.getText());
+                //get and convert text for Maxracers
+                maxRacers = Integer.parseInt(MaxRaceersfield.getText());
+                if ((int)maxRacers > 20 || (int)maxRacers < 1)
+                    throw new IllegalArgumentException("Error");
+                if ((int)ArenaLength > 3000 || (int)ArenaLength < 100)
+                    throw new IllegalArgumentException("Error");
+                arena = builder.buildArena("arenas." + ArenaType, ArenaLength, maxRacers);
+                ArenaImage(ImageType, ArenaLength, maxRacers * 70 +30);
+                RacerY = 0;
+            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+                     | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+
+                JOptionPane.showMessageDialog(this, "Inviald input values! Please try again.");
+            }
+        }
+        else
+            JOptionPane.showMessageDialog(this,"Race Started - wait for finish");
+    }
     public void ArenaImage(String Atype,int W,int H){
         //add image
         arenaPanel.removeAll();
@@ -242,54 +287,15 @@ public class RaceFrame extends JFrame implements ActionListener {
         RaceStarted = false;
         RacerImeges = new ArrayList<JLabel>();
     }
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-    public void BuildArenaAction(ActionEvent e) {
-
-        int chosenArena = SelectArena.getSelectedIndex();
-        String ArenaType="";
-        String ImageType ="";
-        if (chosenArena == 0) {
-            ArenaType = "air.AerialArena";
-            ImageType="AerialArena";
-        }
-        if (chosenArena == 1) {
-            ArenaType = "naval.NavalArena";
-            ImageType="NavalArena";
-        }if (chosenArena == 2) {
-            ArenaType = "land.LandArena";
-            ImageType="LandArena";
-        }
-        //get and convert text for Len
-        ArenaLength =Integer.parseInt(ArenaLengthfield.getText());
-        //get and convert text for Maxracers
-        maxRacers =Integer.parseInt(MaxRaceersfield.getText());
-
-        try {
-            if(maxRacers>20 || maxRacers <1){ throw new IllegalArgumentException("Error");  }
-            if(ArenaLength>3000 || ArenaLength <100){ throw new IllegalArgumentException("Error");  }
-            arena = builder.buildArena("arenas."+ArenaType, ArenaLength, maxRacers);
-            ArenaImage(ImageType,ArenaLength,maxRacers*70);
-            RacerY = 0;
-            System.out.println(ArenaType+" succecfully created , Len:" + ArenaLength + " , MaxRacers:" + maxRacers );
-
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
-                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-
-            JOptionPane.showMessageDialog(this,"Inviald input values! Please try again.");
-        }
-    }
+    //Add racer ON-CLICK
     public void AddRacer(ActionEvent e) {
+        if(RaceStarted==false){
         try {
-            String RacerType="";
-            String RacerColor="";
-            if(arena==null){throw new IllegalArgumentException("Error");}
+            if(arena==null||NewArena==false){throw new IllegalArgumentException("Please build arena first to add racers!");}
             int newRacer = SelectRacer.getSelectedIndex();
             int newcolor = SelectColor.getSelectedIndex();
-            EnumContainer.Color NewColor = null;
 
+            EnumContainer.Color NewColor = null;
             if (newcolor == 0)
                 NewColor = EnumContainer.Color.BLACK;
             if (newcolor == 1)
@@ -302,17 +308,20 @@ public class RaceFrame extends JFrame implements ActionListener {
                 NewColor = EnumContainer.Color.YELLOW;
 
             String RacerName = Namefield.getText();
+
             int Mspeed = Integer.parseInt(Speedfield.getText());
+            if(Mspeed<=0){throw new IllegalArgumentException("ivaild input values for Racer ,please try again.");}
             int Acc = Integer.parseInt(Accelerationfield.getText());
+            if(Acc<=0){throw new IllegalArgumentException("ivaild input values for Racer ,please try again.");}
 
             if (newRacer == 0)
-                addWR("air.Airplane", RacerName, Mspeed, Acc, NewColor);
+                addWR("air.Airplane", RacerName, Mspeed, Acc, NewColor,3);
             if (newRacer == 1)
                 addR("air.Helicopter", RacerName, Mspeed, Acc, NewColor);
             if (newRacer == 2)
-                addWR("land.Bicycle", RacerName, Mspeed, Acc, NewColor);
+                addWR("land.Bicycle", RacerName, Mspeed, Acc, NewColor,2);
             if (newRacer == 3)
-                addWR("land.Car", RacerName, Mspeed, Acc, NewColor);
+                addWR("land.Car", RacerName, Mspeed, Acc, NewColor,4);
             if (newRacer == 4)
                 addR("land.Horse", RacerName, Mspeed, Acc, NewColor);
             if (newRacer == 5)
@@ -324,8 +333,10 @@ public class RaceFrame extends JFrame implements ActionListener {
             addRacersToArena();
         }
         catch (IllegalArgumentException e1){
-            JOptionPane.showMessageDialog(this,"Please build arena first and add racers!");
-        }
+            JOptionPane.showMessageDialog(this,e1.getMessage());
+        }}
+        else
+        JOptionPane.showMessageDialog(this,"Race Started - wait for finish");
     }
     public void RacerImage(String RacerType,String RacerColor,int CurrentX,int CurrentY) {
         //add image for racerz
@@ -338,21 +349,20 @@ public class RaceFrame extends JFrame implements ActionListener {
         Arenapic.add(picLabel1);
         setResizable(true);
     }
-    void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
+
+    //add racers methods
+    public void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
         try {
             racer=builder.buildRacer("game.racers."+ rt, name, mSpeed, Acc, NewColor);
-            System.out.println("new racer" + rt + " " + name + " created, ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
-
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
             e1.printStackTrace();
             JOptionPane.showMessageDialog(this,"Unable To add Racer");
         }
     }
-    void addWR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
+    public void addWR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor,int Numofwheels){
         try {
-            racer=builder.buildWheeledRacer("game.racers."+rt, name, mSpeed, Acc,NewColor, 3);
-            System.out.println("new racer created " + rt + " " + name + "  ms:" + mSpeed+"  acc:" + Acc + "  colo:" + NewColor);
+            racer=builder.buildWheeledRacer("game.racers."+rt, name, mSpeed, Acc,NewColor, Numofwheels);
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1)
         {
@@ -360,7 +370,7 @@ public class RaceFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this,"Unable To add Racer");
         }
     }
-    private void addRacersToArena() {
+    public void addRacersToArena() {
             try {
                 arena.addRacer(racer);
                 RacerImage(racer.className(),racer.getColor().toString(),(int)racer.getCurrentLocation().getX(),(int)racer.getCurrentLocation().getY());
@@ -374,55 +384,55 @@ public class RaceFrame extends JFrame implements ActionListener {
     }
     //Start Racer Btn ON-CLICK
     public void StartAction(ActionEvent e) {
-        if(RaceStarted == false){
-        RaceStarted = true;
-        racersArr = arena.getActiveRacers();
-        //arena.initRace();
-        for (Racer racer :  racersArr) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (racer.getCurrentLocation().getX()< arena.getLength()) {
-                        racer.move(arena.getFRICTION());
-                        if(racer.getCurrentLocation().getX()>= arena.getLength()){arena.crossFinishLine(racer);}
-                        try {
-                            Thread.sleep(30);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
+        if(arena !=null) {
+            if (ActiveRacersAmount != 0){
+                if(RaceStarted == false) {
+                    if (NewArena == true) {
+                        NewArena = false;
+                        RaceStarted = true;
+                        racersArr = arena.getActiveRacers();
+                        for (Racer racer : racersArr) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    while (racer.getCurrentLocation().getX() < arena.getLength()) {
+                                        racer.move(arena.getFRICTION());
+                                        try {
+                                            Thread.sleep(30);
+                                        } catch (InterruptedException ex) {
+                                            ex.printStackTrace();
+                                        }
+                                        UpdateRaceFrame();
+                                    }
+                                    arena.crossFinishLine(racer);
+                                }
+                            }).start();
+                            UpdateRaceFrame();
                         }
-                        UpdateRaceFrame();
-                    }
-                    //arena.crossFinishLine(racer);
-                    }
-                }).start();
-            UpdateRaceFrame();
-            }
-        }
-        else
-            JOptionPane.showMessageDialog(this,"Race Started - wait for finish");
+                    } else
+                        JOptionPane.showMessageDialog(this,"Race has ended - create new arena");
+                }else
+                    JOptionPane.showMessageDialog(this, "Race in progress - wait for finish" );
+            }else
+            JOptionPane.showMessageDialog(this, "Please add Racer to Arena ");
+        }else
+            JOptionPane.showMessageDialog(this, "Please Build arena first");
     }
-    public class AbsurvablleThread extends Thread {
 
-        private volatile boolean running;
-        public AbsurvablleThread() {
-            this.running = true;
-        }
+    //Show results ON-CLICK
+    public class AbsurvablleThread extends Thread {
+        private volatile boolean running = true;
         @Override
         public void run() {
             while (running) {
-                // Perform your thread's logic here
                 showRes();
-
-                // Sleep for a certain duration (e.g., 1 second)
+                running=false;
                 try {
-                    Thread.sleep(1000000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-        }
-        public void stopThread() {
-            running = false;
         }
         public void showRes() {
             ResFrame = new JFrame("Racer information");
@@ -434,55 +444,52 @@ public class RaceFrame extends JFrame implements ActionListener {
 
             TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(table);
             table2.setRowSorter(sorter);
-
             int counter = 1;
             for (Racer racer : arena.getCompletedRacers()) {
                 int location = (int) racer.getCurrentLocation().getX();
                 if(location >= arena.getLength()) location = (int) arena.getLength();
-                String[] tempRow = {racer.getName(), String.valueOf(racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), "Yes"};
+                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), "Yes"};
                 table.addRow(tempRow);
                 counter++;
             }
             for (Racer racer : arena.getActiveRacers()) {
                 int location = (int) racer.getCurrentLocation().getX();
                 if(location < arena.getLength()){
-                String[] tempRow = {racer.getName(), String.valueOf(racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), "No"};
+                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), "No"};
                 table.addRow(tempRow);
                 counter++;
                 }
             }
-            // Set a custom Comparator for the "location" column
-            sorter.setComparator(3, new Comparator<Integer>() {
-                @Override
-                public int compare(Integer loc1, Integer loc2) {
-                    return loc1.compareTo(loc2);
-                }
-            });
-
             ResFrame.add(scrollPane, BorderLayout.CENTER);
-            ResFrame.setSize(500, 500);
+            ResFrame.setSize(500,300);
             ResFrame.setLocation(850, 500);
             ResFrame.setVisible(true);
         }
 
     }
-    //RaceInfo Btn ON-CLICK
     public void ShowRes(ActionEvent e){
-        AbsurvablleThread thread = new AbsurvablleThread();
-        thread.start();
+        if(arena != null&& ActiveRacersAmount>0) {
+            AbsurvablleThread thread = new AbsurvablleThread();
+            thread.start();
+        }
+        else JOptionPane.showMessageDialog(this,"No race in progress");
     }
+
+    //update Frame progression
     private void UpdateRaceFrame() {
+        int didnotfinish =0;
         ArrayList<Racer> racerARR= arena.getActiveRacers();
         for(int i =0;i<ActiveRacersAmount;i++) {
-            if (racerARR.get(i).getCurrentLocation().getX() < arena.getLength() )
+            if (racerARR.get(i).getCurrentLocation().getX() < arena.getLength() ){
             RacerImeges.get(i).setLocation((int)racerARR.get(i).getCurrentLocation().getX(), (int) racerARR.get(i).getCurrentLocation().getY());
+            didnotfinish++;}
             else RacerImeges.get(i).setLocation((int)arena.getLength(), (int) racerARR.get(i).getCurrentLocation().getY());
         }
+        if(didnotfinish == 0)RaceStarted=false;
     }
     public static void main(String[] args){
         new RaceFrame();
     }
-
 }
 
 
