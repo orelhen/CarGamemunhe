@@ -40,6 +40,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     private static ArrayList<Racer> racersArr =new ArrayList<Racer>();;
     private static Arena arena;
     private ImageIcon racersImages[] = null;
+    private String[] ARacernames = {};
     private int ArenaLength = 1000;
     private int ArenaHeight = 700;
     private int maxRacers = 8;
@@ -48,6 +49,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     private JTextField MaxRaceersfield;
     private JComboBox SelectRacer;
     private JComboBox SelectColor;
+    private JComboBox ActiveRacersCombobox;
     private JTextField Namefield;
     private JTextField Speedfield;
     private JTextField Accelerationfield;
@@ -80,7 +82,7 @@ public class RaceFrame extends JFrame implements ActionListener {
      */
     //MainFrame
     public JFrame getframe() {
-        setPreferredSize(new Dimension(1200 , 700));
+        setPreferredSize(new Dimension(1400 , 700));
         //setResizable(false);
 
         //main RaceFrame
@@ -92,7 +94,7 @@ public class RaceFrame extends JFrame implements ActionListener {
 
         //right side panel
         JPanel rightpanel = new JPanel();
-        rightpanel.setSize(200, 700);
+        rightpanel.setSize(400, 700);
         rightpanel.setLocation(1000,0);
         rightpanel.setBackground(Color.lightGray);
         rightpanel.setLayout(null);
@@ -236,6 +238,45 @@ public class RaceFrame extends JFrame implements ActionListener {
         infoBut.setSize(150, 30);
         infoBut.addActionListener(this::ShowRes);
 
+
+        //hw3
+        //seperator line
+        JSeparator Seperator3 = new JSeparator(SwingConstants.VERTICAL);
+        rightpanel.add(Seperator3);
+        Seperator3.setLocation(200, 0);
+        Seperator3.setSize(10, 700);
+
+
+        //Prototype btn
+        //build arena btn
+        JButton PrototypeBut = new JButton("Prototype");
+        rightpanel.add(PrototypeBut);
+        PrototypeBut.setLocation(215, 30);
+        PrototypeBut.setSize(150, 30);
+        PrototypeBut.addActionListener(this::Prototype);
+
+
+        // active racers lable
+        JLabel ActiveRacersLabel = new JLabel("Active Racers:");
+        rightpanel.add(ActiveRacersLabel);
+        ActiveRacersLabel.setLocation(220, 65);
+        ActiveRacersLabel.setSize(150, 15);
+
+        //ActiveRacers Combobox
+        ActiveRacersCombobox = new JComboBox();
+        rightpanel.add(ActiveRacersCombobox);
+        ActiveRacersCombobox.setLocation(215, 80);
+        ActiveRacersCombobox.setSize(150, 25);
+
+
+        //Clone btn
+        //build arena btn
+        JButton CloneBut = new JButton("Clone");
+        rightpanel.add(CloneBut);
+        CloneBut.setLocation(215, 120);
+        CloneBut.setSize(150, 30);
+        CloneBut.addActionListener(this::Clone);
+
         return MainFrame;
     }
 
@@ -288,6 +329,7 @@ public class RaceFrame extends JFrame implements ActionListener {
                 arena = builder.buildArena("arenas." + ArenaType, ArenaLength, maxRacers);
                 ArenaImage(ImageType, ArenaLength, maxRacers * 70 +30);
                 RacerY = 0;
+                ActiveRacersCombobox.removeAllItems();
             } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                      | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 
@@ -314,8 +356,8 @@ public class RaceFrame extends JFrame implements ActionListener {
         Arenapic.setLocation(0, 0);
         Arenapic.setSize(W+70, H);
         if(H<700)
-            this.setSize(270+W,700);
-        else this.setSize(270+W,H);
+            this.setSize(470+W,700);
+        else this.setSize(470+W,H);
         arenaPanel.setPreferredSize(new Dimension(W+70 , H));
         arenaPanel.add(Arenapic);
         setResizable(false);
@@ -455,6 +497,17 @@ public class RaceFrame extends JFrame implements ActionListener {
     public void addRacersToArena() {
             try {
                 arena.addRacer(racer);
+
+                //clone racer name and add to combobox
+                String[] newArray = new String[ARacernames.length + 1];
+                for (int i = 0; i < ARacernames.length; i++) {
+                    newArray[i] = ARacernames[i];
+                }
+                newArray[newArray.length - 1] = racer.getName();
+                ARacernames = newArray;
+                ActiveRacersCombobox.addItem(racer.getName());
+
+
                 RacerImage(racer.className(),racer.getColor().toString(),(int)racer.getCurrentLocation().getX(),(int)racer.getCurrentLocation().getY());
                 ActiveRacersAmount =arena.getActiveRacers().size();
             } catch (RacerLimitException e) {
@@ -609,6 +662,51 @@ public class RaceFrame extends JFrame implements ActionListener {
         if(didnotfinish == 0)RaceStarted=false;
     }
 
+
+
+
+    public void Prototype(ActionEvent e)
+    {
+        // works only for Air race
+        if(RaceStarted==false){
+            try {
+                if(arena==null||NewArena==false){throw new IllegalArgumentException("Please build arena first to add racers!");}
+                addWR("air.Airplane", "Protytpe " + ActiveRacersAmount, 5, 2, EnumContainer.Color.BLACK,3);
+                racer.setCurrentLocation(new Point(0,70*ActiveRacersAmount));
+                addRacersToArena();
+                 }
+            catch (IllegalArgumentException e1){
+                if(e1.getMessage()== "ivaild input values for Racer ,please try again."||e1.getMessage() =="Please build arena first to add racers!")
+                    JOptionPane.showMessageDialog(this,e1.getMessage());
+                else
+                    JOptionPane.showMessageDialog(this,"please fill Racer information fields.");
+            }}
+        else
+            JOptionPane.showMessageDialog(this,"Race Started - wait for finish.");
+    }
+
+    public void Clone(ActionEvent e)
+    {
+        int CloneRacer = ActiveRacersCombobox.getSelectedIndex();
+
+        if(RaceStarted==false){
+            try {
+                if(arena==null||NewArena==false){throw new IllegalArgumentException("Please build arena first to add racers!");}
+                racer = (Racer) arena.getActiveRacers().get(CloneRacer).clone();
+                racer.setCurrentLocation(new Point(0,70*ActiveRacersAmount));
+                racer.setName(racer.getName() + " "+ ActiveRacersAmount);
+                addRacersToArena();
+            }
+            catch (CloneNotSupportedException | IllegalArgumentException e1){
+                if(e1.getMessage()== "ivaild input values for Racer ,please try again."||e1.getMessage() =="Please build arena first to add racers!")
+                    JOptionPane.showMessageDialog(this,e1.getMessage());
+                else
+                    JOptionPane.showMessageDialog(this,"please fill Racer information fields.");
+            }}
+        else
+            JOptionPane.showMessageDialog(this,"Race Started - wait for finish.");
+
+    }
 }
 
 

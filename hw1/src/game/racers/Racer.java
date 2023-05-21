@@ -19,7 +19,7 @@ import utilities.EnumContainer.Color;
 import utilities.Mishap;
 
 //Racer-class
-public abstract class Racer {
+public abstract class Racer implements Cloneable {
 
     private static int serial = 1; // STATIC???? not writen
     private int serialNumber;
@@ -36,11 +36,11 @@ public abstract class Racer {
 
 
     //constructor
-    public Racer(String N, double MS, double ACC,Color color)
+    public Racer (String N, double MS, double ACC,Color color)
     {
 
         this.serialNumber=serial;
-        if(N == this.className()){this.name = N + " #"+serialNumber;}
+        if(N == this.className()){this.name = N + " #"+ serialNumber;}
         else{this.name = N;}
         this.maxSpeed=MS;
         this.acceleration =ACC;
@@ -48,7 +48,9 @@ public abstract class Racer {
         this.serial++;
         this.currentLocation = new Point();
     }
-
+    @Override public Object clone() throws CloneNotSupportedException{
+        return super.clone();
+    }
     //getters
 
     public int getSerialNumber() {
