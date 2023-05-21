@@ -39,8 +39,10 @@ public class RaceFrame extends JFrame implements ActionListener {
     private static Racer racer;
     private static ArrayList<Racer> racersArr =new ArrayList<Racer>();;
     private static Arena arena;
-    private int ArenaLength ;
-    private int maxRacers ;
+    private ImageIcon racersImages[] = null;
+    private int ArenaLength = 1000;
+    private int ArenaHeight = 700;
+    private int maxRacers = 8;
     private JComboBox SelectArena ;
     private JTextField ArenaLengthfield;
     private JTextField MaxRaceersfield;
@@ -50,7 +52,9 @@ public class RaceFrame extends JFrame implements ActionListener {
     private JTextField Speedfield;
     private JTextField Accelerationfield;
     private JPanel arenaPanel;
+    private ImageIcon image;
     private  JLabel Arenapic;
+    private int RacerY= 0;
     private int ActiveRacersAmount=0;
     private ArrayList<JLabel> RacerImeges = new ArrayList<JLabel>();
     private boolean RaceStarted= false;
@@ -144,6 +148,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Seperator1.setLocation(0, 220);
         Seperator1.setSize(200, 10);
 
+
         //Choose Racer ComboBox
         JLabel ChooseRacerlable = new JLabel("Choose Racer:");
         rightpanel.add(ChooseRacerlable);
@@ -155,6 +160,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         rightpanel.add(SelectRacer);
         SelectRacer.setLocation(10, 250);
         SelectRacer.setSize(150, 25);
+
 
         //Choose Color ComboBox
         JLabel ChooseColorlable = new JLabel("Choose color:");
@@ -178,6 +184,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         rightpanel.add(Namefield);
         Namefield.setLocation(10, 370);
         Namefield.setSize(150, 25);
+
 
         //Max speed
         JLabel Maxspeedlable = new JLabel("Max speed:");
@@ -214,6 +221,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Seperator2.setLocation(0, 570);
         Seperator2.setSize(200, 10);
 
+
         //Start Race btn
         JButton StartBut = new JButton("Start Race");
         rightpanel.add(StartBut);
@@ -237,8 +245,7 @@ public class RaceFrame extends JFrame implements ActionListener {
      */
     //methods
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e) {
 
     }
 
@@ -280,6 +287,7 @@ public class RaceFrame extends JFrame implements ActionListener {
                     throw new IllegalArgumentException("Error");
                 arena = builder.buildArena("arenas." + ArenaType, ArenaLength, maxRacers);
                 ArenaImage(ImageType, ArenaLength, maxRacers * 70 +30);
+                RacerY = 0;
             } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                      | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 
@@ -345,11 +353,11 @@ public class RaceFrame extends JFrame implements ActionListener {
                 NewColor = EnumContainer.Color.YELLOW;
 
             String RacerName = Namefield.getText();
-            int Mspeed = Integer.parseInt(Speedfield.getText());
-            int Acc = Integer.parseInt(Accelerationfield.getText());
 
-            if(Mspeed<=0){throw new IllegalArgumentException();}
-            if(Acc<=0){throw new IllegalArgumentException();}
+            int Mspeed = Integer.parseInt(Speedfield.getText());
+            if(Mspeed<=0){throw new IllegalArgumentException("ivaild input values for Racer ,please try again.");}
+            int Acc = Integer.parseInt(Accelerationfield.getText());
+            if(Acc<=0){throw new IllegalArgumentException("ivaild input values for Racer ,please try again.");}
 
             if (newRacer == 0)
                 addWR("air.Airplane", RacerName, Mspeed, Acc, NewColor,3);
@@ -370,17 +378,10 @@ public class RaceFrame extends JFrame implements ActionListener {
             addRacersToArena();
         }
         catch (IllegalArgumentException e1){
-<<<<<<< HEAD
             if(e1.getMessage()== "ivaild input values for Racer ,please try again."||e1.getMessage() =="Please build arena first to add racers!")
                 JOptionPane.showMessageDialog(this,e1.getMessage());
             else
                 JOptionPane.showMessageDialog(this,"please fill Racer information fields.");
-=======
-            if(e1.getMessage() == "Please build arena first to add racers!")
-                JOptionPane.showMessageDialog(this,e1.getMessage());
-            else
-                JOptionPane.showMessageDialog(this,"ivaild input values for Racer ,please try again.");
->>>>>>> 174fac9479eb19cbe85c9d2ea2a84c8061c6e24b
         }}
         else
         JOptionPane.showMessageDialog(this,"Race Started - wait for finish.");
@@ -608,13 +609,6 @@ public class RaceFrame extends JFrame implements ActionListener {
         if(didnotfinish == 0)RaceStarted=false;
     }
 
-<<<<<<< HEAD
-=======
-
-    public static void main(String[] args){
-        new RaceFrame();
-    }
->>>>>>> 174fac9479eb19cbe85c9d2ea2a84c8061c6e24b
 }
 
 
