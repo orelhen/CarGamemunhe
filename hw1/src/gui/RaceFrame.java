@@ -1,5 +1,16 @@
 package gui;
 
+
+
+/**
+ * @author
+ *
+ * orel hen 316179423
+ * guy aloosh 316471465
+ *
+ *
+ */
+
 //imports
 import arenas.Arena;
 import arenas.exceptions.RacerLimitException;
@@ -108,7 +119,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         ArenaLenlable.setLocation(15, 60);
         ArenaLenlable.setSize(150, 15);
 
-        ArenaLengthfield = new JTextField("1400");
+        ArenaLengthfield = new JTextField();
         rightpanel.add(ArenaLengthfield);
         ArenaLengthfield.setLocation(10, 80);
         ArenaLengthfield.setSize(150, 25);
@@ -119,7 +130,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         MaxRaceerslable.setLocation(15, 110);
         MaxRaceerslable.setSize(150, 15);
 
-        MaxRaceersfield = new JTextField("12");
+        MaxRaceersfield = new JTextField();
         rightpanel.add(MaxRaceersfield);
         MaxRaceersfield.setLocation(10, 130);
         MaxRaceersfield.setSize(150, 25);
@@ -169,7 +180,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Namelable.setLocation(15, 350);
         Namelable.setSize(150, 15);
 
-        Namefield = new JTextField("RacerX");
+        Namefield = new JTextField();
         rightpanel.add(Namefield);
         Namefield.setLocation(10, 370);
         Namefield.setSize(150, 25);
@@ -181,7 +192,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Maxspeedlable.setLocation(15, 410);
         Maxspeedlable.setSize(150, 15);
 
-        Speedfield = new JTextField("15");
+        Speedfield = new JTextField();
         rightpanel.add(Speedfield);
         Speedfield.setLocation(10, 430);
         Speedfield.setSize(150, 25);
@@ -192,7 +203,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         Accelerationlable.setLocation(15, 470);
         Accelerationlable.setSize(150, 15);
 
-        Accelerationfield  = new JTextField("2");
+        Accelerationfield  = new JTextField();
         rightpanel.add(Accelerationfield);
         Accelerationfield.setLocation(10, 490);
         Accelerationfield.setSize(150, 25);
@@ -367,10 +378,13 @@ public class RaceFrame extends JFrame implements ActionListener {
             addRacersToArena();
         }
         catch (IllegalArgumentException e1){
-            JOptionPane.showMessageDialog(this,e1.getMessage());
+            if(e1.getMessage()== "ivaild input values for Racer ,please try again."||e1.getMessage() =="Please build arena first to add racers!")
+                JOptionPane.showMessageDialog(this,e1.getMessage());
+            else
+                JOptionPane.showMessageDialog(this,"please fill Racer information fields.");
         }}
         else
-        JOptionPane.showMessageDialog(this,"Race Started - wait for finish");
+        JOptionPane.showMessageDialog(this,"Race Started - wait for finish.");
     }
 
     /**
@@ -466,33 +480,46 @@ public class RaceFrame extends JFrame implements ActionListener {
                     if (NewArena == true) {
                         NewArena = false;
                         RaceStarted = true;
-                        racersArr = arena.getActiveRacers();
-                        for (Racer racer : racersArr) {
+                        //update raceFrame Thread - 30 miliseconds refreshrate
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                while (RaceStarted) {
+                                    UpdateRaceFrame();
+                                    try {
+                                        Thread.sleep(30);
+                                    } catch (InterruptedException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }
+                        }).start();
+
+                        for (Racer racer : arena.getActiveRacers()) {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
                                     while (racer.getCurrentLocation().getX() < arena.getLength()) {
+                                        //activate RacerMove Thread - 100 miliseconds refreshrate
                                         racer.move(arena.getFRICTION());
                                         try {
-                                            Thread.sleep(30);
+                                            Thread.sleep(100);
                                         } catch (InterruptedException ex) {
                                             ex.printStackTrace();
                                         }
-                                        UpdateRaceFrame();
                                     }
                                     arena.crossFinishLine(racer);
                                 }
                             }).start();
-                            UpdateRaceFrame();
                         }
                     } else
-                        JOptionPane.showMessageDialog(this,"Race has ended - create new arena");
+                        JOptionPane.showMessageDialog(this,"Race has ended - create new arena.");
                 }else
-                    JOptionPane.showMessageDialog(this, "Race in progress - wait for finish" );
+                    JOptionPane.showMessageDialog(this, "Race in progress - wait for finish." );
             }else
-            JOptionPane.showMessageDialog(this, "Please add Racer to Arena ");
+            JOptionPane.showMessageDialog(this, "Please add Racer to Arena.");
         }else
-            JOptionPane.showMessageDialog(this, "Please Build arena first");
+            JOptionPane.showMessageDialog(this, "Please Build arena first.");
     }
 
     /**
@@ -561,7 +588,7 @@ public class RaceFrame extends JFrame implements ActionListener {
             AbsurvablleThread thread = new AbsurvablleThread();
             thread.start();
         }
-        else JOptionPane.showMessageDialog(this,"No race in progress");
+        else JOptionPane.showMessageDialog(this,"No race in progress.");
     }
 
     /**
@@ -582,13 +609,6 @@ public class RaceFrame extends JFrame implements ActionListener {
         if(didnotfinish == 0)RaceStarted=false;
     }
 
-
-
-
-
-    public static void main(String[] args){
-        new RaceFrame();
-    }
 }
 
 
