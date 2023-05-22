@@ -33,11 +33,20 @@ import javax.swing.table.TableRowSorter;
 
 
 public class RaceFrame extends JFrame implements ActionListener {
+    public static RaceBuilder getBuilder() {
+        return builder;
+    }
+
     private static RaceBuilder builder = RaceBuilder.getInstance();
     private static JFrame MainFrame ;
     private static JFrame ResFrame;
     private static Racer racer;
     private static ArrayList<Racer> racersArr =new ArrayList<Racer>();;
+
+    public static void setArena(Arena arena) {
+        RaceFrame.arena = arena;
+    }
+
     private static Arena arena;
     private ImageIcon racersImages[] = null;
     private String[] ARacernames = {};
@@ -270,12 +279,27 @@ public class RaceFrame extends JFrame implements ActionListener {
 
 
         //Clone btn
-        //build arena btn
         JButton CloneBut = new JButton("Clone");
         rightpanel.add(CloneBut);
         CloneBut.setLocation(215, 120);
         CloneBut.setSize(150, 30);
         CloneBut.addActionListener(this::Clone);
+
+
+        //ArenaFactoryBtn
+        JButton FactoryBtn = new JButton("ArenaFactory");
+        rightpanel.add(FactoryBtn);
+        FactoryBtn.setLocation(215, 160);
+        FactoryBtn.setSize(150, 30);
+        FactoryBtn.addActionListener(this::CallArenaFactory);
+
+        //BuilderBtn
+        JButton Builderbtn = new JButton("Builder");
+        rightpanel.add(Builderbtn);
+        Builderbtn.setLocation(215, 200);
+        Builderbtn.setSize(150, 30);
+        Builderbtn.addActionListener(this::Builder);
+
 
         return MainFrame;
     }
@@ -688,17 +712,17 @@ public class RaceFrame extends JFrame implements ActionListener {
     public void Clone(ActionEvent e)
     {
         int CloneRacer = ActiveRacersCombobox.getSelectedIndex();
-
-        if(RaceStarted==false){
+        if(RaceStarted==false ){
             try {
                 if(arena==null||NewArena==false){throw new IllegalArgumentException("Please build arena first to add racers!");}
+                if(ActiveRacersAmount==0){throw new IllegalArgumentException("No Racer to clone");}
                 racer = (Racer) arena.getActiveRacers().get(CloneRacer).clone();
                 racer.setCurrentLocation(new Point(0,70*ActiveRacersAmount));
                 racer.setName(racer.getName() + " "+ ActiveRacersAmount);
                 addRacersToArena();
             }
             catch (CloneNotSupportedException | IllegalArgumentException e1){
-                if(e1.getMessage()== "ivaild input values for Racer ,please try again."||e1.getMessage() =="Please build arena first to add racers!")
+                if(e1.getMessage()== "ivaild input values for Racer ,please try again."||e1.getMessage() =="Please build arena first to add racers!"||e1.getMessage() =="No Racer to clone")
                     JOptionPane.showMessageDialog(this,e1.getMessage());
                 else
                     JOptionPane.showMessageDialog(this,"please fill Racer information fields.");
@@ -707,6 +731,36 @@ public class RaceFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this,"Race Started - wait for finish.");
 
     }
+
+
+    public void CallArenaFactory(ActionEvent e){
+        if(RaceStarted==false) {
+            NewArena = true;
+            try {
+                arena = builder.buildArena("arenas.air.AerialArena" , 1000, 10);
+                ArenaImage("AerialArena", 1000, 10 * 70 +30);
+                RacerY = 0;
+                ActiveRacersCombobox.removeAllItems();
+            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+                     | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+
+                JOptionPane.showMessageDialog(this, "Inviald input values! Please try again.");
+            }
+        }
+        else
+            JOptionPane.showMessageDialog(this,"Race Started - wait for finish");
+
+        }
+
+    public void Builder(ActionEvent e)
+    {
+        CallArenaFactory(e);
+        for(int i = 0 ;i< arena.getMAX_RACERS();i++) {
+            Prototype(e);
+        }
+    }
+
 }
+
 
 

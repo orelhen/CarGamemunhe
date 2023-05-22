@@ -1,4 +1,7 @@
 package gui;
+
+import game.factory.Factory;
+
 /**
  * @author
  *
@@ -15,7 +18,7 @@ public class GuiRUN{
      *
      */
     public static void main(String[] args){
-        new RaceFrame();
+        new Factory();
     }
 
 }
