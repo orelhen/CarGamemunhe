@@ -54,6 +54,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     private int ArenaHeight = 700;
     private int maxRacers = 8;
     private JComboBox SelectArena ;
+    private JComboBox SelectShortcut;
     private JTextField ArenaLengthfield;
     private JTextField MaxRaceersfield;
     private JComboBox SelectRacer;
@@ -250,17 +251,30 @@ public class RaceFrame extends JFrame implements ActionListener {
 
         //hw3
         //seperator line
+
         JSeparator Seperator3 = new JSeparator(SwingConstants.VERTICAL);
         rightpanel.add(Seperator3);
         Seperator3.setLocation(200, 0);
         Seperator3.setSize(10, 700);
 
+//
+        JLabel QuickClable = new JLabel("Quick Create:");
+        rightpanel.add(QuickClable);
+        QuickClable.setLocation(220, 15);
+        QuickClable.setSize(150, 15);
+
+        //quickCreateoptions
+        String[] shortcutnames = {"Air", "Naval", "Land"};
+        SelectShortcut = new JComboBox(shortcutnames);
+        rightpanel.add(SelectShortcut);
+        SelectShortcut.setLocation(215, 30);
+        SelectShortcut.setSize(150, 25);
 
         //Prototype btn
         //build arena btn
         JButton PrototypeBut = new JButton("Prototype");
         rightpanel.add(PrototypeBut);
-        PrototypeBut.setLocation(215, 30);
+        PrototypeBut.setLocation(215, 80);
         PrototypeBut.setSize(150, 30);
         PrototypeBut.addActionListener(this::Prototype);
 
@@ -268,20 +282,20 @@ public class RaceFrame extends JFrame implements ActionListener {
         // active racers lable
         JLabel ActiveRacersLabel = new JLabel("Active Racers:");
         rightpanel.add(ActiveRacersLabel);
-        ActiveRacersLabel.setLocation(220, 65);
+        ActiveRacersLabel.setLocation(220, 115);
         ActiveRacersLabel.setSize(150, 15);
 
         //ActiveRacers Combobox
         ActiveRacersCombobox = new JComboBox();
         rightpanel.add(ActiveRacersCombobox);
-        ActiveRacersCombobox.setLocation(215, 80);
+        ActiveRacersCombobox.setLocation(215, 130);
         ActiveRacersCombobox.setSize(150, 25);
 
 
         //Clone btn
         JButton CloneBut = new JButton("Clone");
         rightpanel.add(CloneBut);
-        CloneBut.setLocation(215, 120);
+        CloneBut.setLocation(215, 170);
         CloneBut.setSize(150, 30);
         CloneBut.addActionListener(this::Clone);
 
@@ -289,14 +303,14 @@ public class RaceFrame extends JFrame implements ActionListener {
         //ArenaFactoryBtn
         JButton FactoryBtn = new JButton("ArenaFactory");
         rightpanel.add(FactoryBtn);
-        FactoryBtn.setLocation(215, 160);
+        FactoryBtn.setLocation(215, 210);
         FactoryBtn.setSize(150, 30);
         FactoryBtn.addActionListener(this::CallArenaFactory);
 
         //BuilderBtn
         JButton Builderbtn = new JButton("Builder");
         rightpanel.add(Builderbtn);
-        Builderbtn.setLocation(215, 200);
+        Builderbtn.setLocation(215, 250);
         Builderbtn.setSize(150, 30);
         Builderbtn.addActionListener(this::Builder);
 
@@ -693,9 +707,17 @@ public class RaceFrame extends JFrame implements ActionListener {
     {
         // works only for Air race
         if(RaceStarted==false){
+
+            int Quick = SelectShortcut.getSelectedIndex();
+            String Racertype = "";
+            if (Quick == 0) {Racertype="air.Helicopter";}
+            if (Quick == 1) {Racertype="naval.RowBoat";}
+            if (Quick == 2) {Racertype="land.Horse";}
+
             try {
                 if(arena==null||NewArena==false){throw new IllegalArgumentException("Please build arena first to add racers!");}
-                addWR("air.Airplane", "Protytpe " + ActiveRacersAmount, 5, 2, EnumContainer.Color.BLACK,3);
+
+                addR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2, EnumContainer.Color.BLACK);
                 racer.setCurrentLocation(new Point(0,70*ActiveRacersAmount));
                 addRacersToArena();
                  }
@@ -736,9 +758,24 @@ public class RaceFrame extends JFrame implements ActionListener {
     public void CallArenaFactory(ActionEvent e){
         if(RaceStarted==false) {
             NewArena = true;
+            int Quick = SelectShortcut.getSelectedIndex();
+            String ArenaType = "";
+            String ImageType = "";
+            if (Quick == 0) {
+                ArenaType = "air.AerialArena";
+                ImageType = "AerialArena";
+            }
+            if (Quick == 1) {
+                ArenaType = "naval.NavalArena";
+                ImageType = "NavalArena";
+            }
+            if (Quick == 2) {
+                ArenaType = "land.LandArena";
+                ImageType = "LandArena";
+            }
             try {
-                arena = builder.buildArena("arenas.air.AerialArena" , 1000, 10);
-                ArenaImage("AerialArena", 1000, 10 * 70 +30);
+                arena = builder.buildArena("arenas."+ArenaType , 1000, 10);
+                ArenaImage(ImageType, 1000, 10 * 70 +30);
                 RacerY = 0;
                 ActiveRacersCombobox.removeAllItems();
             } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
@@ -754,10 +791,13 @@ public class RaceFrame extends JFrame implements ActionListener {
 
     public void Builder(ActionEvent e)
     {
+        if(RaceStarted==false) {
         CallArenaFactory(e);
         for(int i = 0 ;i< arena.getMAX_RACERS();i++) {
             Prototype(e);
-        }
+        }}
+        else
+            JOptionPane.showMessageDialog(this,"Race Started - wait for finish");
     }
 
 }
