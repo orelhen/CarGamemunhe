@@ -71,4 +71,9 @@ public class EnumContainer {
 	public static enum Team {
 		SINGLE, DOUBLE, QUAD, EIGHT
 	}
+	public static enum State {
+		ACTIVE, BROKEN, DISABLED , COMPLETED
+	}
+
+
 }

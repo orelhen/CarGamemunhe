@@ -34,6 +34,7 @@ public class Mishap {
     public void nextTurn(){
         if (getTurnsToFix()>0)
             setTurnsToFix(getTurnsToFix()-1);
+
     }
 
     /**

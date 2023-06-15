@@ -95,6 +95,13 @@ public class RaceFrame extends JFrame implements ActionListener {
         setPreferredSize(new Dimension(1400 , 700));
         //setResizable(false);
 
+
+        //result frame
+        ResFrame = new JFrame("Racer information");
+        ResFrame.setLocation(50, 500);
+        ResFrame.setResizable(false);
+
+
         //main RaceFrame
         arenaPanel = new JPanel();
         arenaPanel.setLayout(null);
@@ -624,46 +631,56 @@ public class RaceFrame extends JFrame implements ActionListener {
         private volatile boolean running = true;
         @Override
         public void run() {
+
             while (running) {
                 showRes();
-                running=false;
+                if(RaceStarted==false){running = false;}
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+
         }
         public void showRes() {
-            ResFrame = new JFrame("Racer information");
-            DefaultTableModel table = new DefaultTableModel(0, 5);
-            String[] row = {"name", "speed", "Mspeed", "location", "finish"};
-            table.addRow(row);
-            JTable table2 = new JTable(table);
-            JScrollPane scrollPane = new JScrollPane(table2);
 
-            TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(table);
-            table2.setRowSorter(sorter);
+            DefaultTableModel tableModel = new DefaultTableModel(0, 5);
+
+            String[] row = {"name", "speed", "Mspeed", "location", "state"};
+            tableModel.addRow(row);
+            JTable table = new JTable(tableModel);
+
+            // Create a TableRowSorter and associate it with the table model
+            TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+            table.setRowSorter(sorter);
+
+            JScrollPane scrollPane = new JScrollPane(table);
+
             int counter = 1;
             for (Racer racer : arena.getCompletedRacers()) {
+                racer.setState(EnumContainer.State.COMPLETED);
                 int location = (int) racer.getCurrentLocation().getX();
                 if(location >= arena.getLength()) location = (int) arena.getLength();
-                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), "Yes"};
-                table.addRow(tempRow);
+                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location),String.valueOf(racer.getState())};
+                tableModel.addRow(tempRow);
                 counter++;
             }
             for (Racer racer : arena.getActiveRacers()) {
                 int location = (int) racer.getCurrentLocation().getX();
                 if(location < arena.getLength()){
-                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), "No"};
-                table.addRow(tempRow);
+                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), String.valueOf(racer.getState())};
+                tableModel.addRow(tempRow);
                 counter++;
                 }
             }
+
             ResFrame.add(scrollPane, BorderLayout.CENTER);
             ResFrame.setSize(500,300);
-            ResFrame.setLocation(850, 500);
             ResFrame.setVisible(true);
+
+            //sort by location
+            sorter.toggleSortOrder(3);
         }
 
     }
@@ -679,7 +696,8 @@ public class RaceFrame extends JFrame implements ActionListener {
             AbsurvablleThread thread = new AbsurvablleThread();
             thread.start();
         }
-        else JOptionPane.showMessageDialog(this,"No race in progress.");
+        else
+            JOptionPane.showMessageDialog(this,"No race in progress.");
     }
 
     /**
@@ -694,7 +712,10 @@ public class RaceFrame extends JFrame implements ActionListener {
         for(int i =0;i<ActiveRacersAmount;i++) {
             if (racerARR.get(i).getCurrentLocation().getX() < arena.getLength() ){
             RacerImeges.get(i).setLocation((int)racerARR.get(i).getCurrentLocation().getX(), (int) racerARR.get(i).getCurrentLocation().getY());
+            if(racerARR.get(i).getState() != EnumContainer.State.DISABLED){
             didnotfinish++;}
+
+            }
             else RacerImeges.get(i).setLocation((int)arena.getLength(), (int) racerARR.get(i).getCurrentLocation().getY());
         }
         if(didnotfinish == 0)RaceStarted=false;
@@ -702,6 +723,7 @@ public class RaceFrame extends JFrame implements ActionListener {
 
 
 
+//PART 3
 
     public void Prototype(ActionEvent e)
     {

@@ -13,9 +13,11 @@ package game.racers;
 
 //imports
 import arenas.Arena;
+import utilities.EnumContainer;
 import utilities.Fate;
 import utilities.Point;
 import utilities.EnumContainer.Color;
+import utilities.EnumContainer.State;
 import utilities.Mishap;
 
 //Racer-class
@@ -33,6 +35,7 @@ public abstract class Racer implements Cloneable {
     private double failureProbability;
     private Color color;
     private Mishap mishap;
+    private State state;
 
 
     //constructor
@@ -47,6 +50,7 @@ public abstract class Racer implements Cloneable {
         this.color = color;
         this.serial++;
         this.currentLocation = new Point();
+        this.state = State.ACTIVE;
     }
     @Override public Object clone() throws CloneNotSupportedException{
         return super.clone();
@@ -95,13 +99,19 @@ public abstract class Racer implements Cloneable {
     public Mishap getMishap() {
         return mishap;
     }
+    public State getState() {
+        return state;
+    }
 
-
+    //setters
+    public void setState(State state) {
+        this.state = state;
+    }
     /**
      * @param failureProbability
      * @return
      */
-    //setters
+
     public boolean  setFailureProbability(double failureProbability)
     { if(failureProbability>0 ){
             this.failureProbability = failureProbability;
@@ -258,9 +268,11 @@ public abstract class Racer implements Cloneable {
         //handle mishap
         if (hasMishap()){
             if(getMishap().isFixable()){
+
             reductionFactor = getMishap().getReductionFactor();
                 getMishap().nextTurn();}
-            else{ reductionFactor = getMishap().getReductionFactor();}
+            else{ setState(State.ACTIVE);
+                reductionFactor = getMishap().getReductionFactor();}
         }
 
         if(getCurrentSpeed()<getMaxSpeed()){
@@ -269,11 +281,25 @@ public abstract class Racer implements Cloneable {
 
         if (hasMishap() && getMishap().isFixable() && getMishap().getTurnsToFix() == 0){
             setMishap(null);
+            setState(State.ACTIVE);
+            //generate mishap mid race
+            if(Fate.breakDown()){
+                setState(State.BROKEN);
+                setMishap(Fate.generateMishap());
+                System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
+            }
         }
 
-        //generate new mishap
+        if (hasMishap() && !getMishap().isFixable() ){
+            setState(State.DISABLED);
+            return getCurrentLocation();
+        }
+
+        //generate first mishap
         if (!hasMishap()){
+            setState(State.ACTIVE);
             if(Fate.breakDown()){
+                setState(State.BROKEN);
                 setMishap(Fate.generateMishap());
                 System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
             }
