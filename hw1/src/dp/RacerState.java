@@ -1,4 +1,4 @@
-package utilities;
+package dp;
 
 import arenas.Arena;
 import game.racers.Racer;

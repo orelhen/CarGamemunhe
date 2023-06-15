@@ -15,6 +15,7 @@ package gui;
 import arenas.Arena;
 import arenas.exceptions.RacerLimitException;
 import arenas.exceptions.RacerTypeException;
+import dp.DisabledState;
 import game.factory.RaceBuilder;
 import game.racers.Racer;
 import utilities.EnumContainer;
@@ -26,9 +27,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Comparator;
+import java.util.Random;
 import javax.swing.table.TableRowSorter;
 
 
@@ -73,6 +76,11 @@ public class RaceFrame extends JFrame implements ActionListener {
     private boolean RaceStarted= false;
     private boolean NewArena= false;
 
+    public static LocalDateTime getStartTime() {
+        return startTime;
+    }
+    private static LocalDateTime startTime;
+
     //constructor
     public RaceFrame() {
         super("Race");
@@ -97,10 +105,6 @@ public class RaceFrame extends JFrame implements ActionListener {
         //setResizable(false);
 
 
-        //result frame
-        ResFrame = new JFrame("Racer information");
-        ResFrame.setLocation(50, 500);
-        ResFrame.setResizable(false);
 
 
         //main RaceFrame
@@ -592,6 +596,7 @@ public class RaceFrame extends JFrame implements ActionListener {
                     if (NewArena == true) {
                         NewArena = false;
                         RaceStarted = true;
+                        startTime = LocalDateTime.now();
                         //update raceFrame Thread - 30 miliseconds refreshrate
                         new Thread(new Runnable() {
                             @Override
@@ -613,7 +618,9 @@ public class RaceFrame extends JFrame implements ActionListener {
                                 public void run() {
                                     while (racer.getCurrentLocation().getX() < arena.getLength()) {
                                         //activate RacerMove Thread - 100 miliseconds refreshrate
-                                        racer.move(arena.getFRICTION());
+                                        if(!(racer.getState2() instanceof DisabledState)){
+                                        racer.move(arena.getFRICTION());}
+
                                         try {
                                             Thread.sleep(100);
                                         } catch (InterruptedException ex) {
@@ -648,7 +655,8 @@ public class RaceFrame extends JFrame implements ActionListener {
 
             while (running) {
                 showRes();
-                if(RaceStarted==false){running = false;}
+                running = false;
+
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -659,15 +667,31 @@ public class RaceFrame extends JFrame implements ActionListener {
         }
         public void showRes() {
 
-            DefaultTableModel tableModel = new DefaultTableModel(0, 5);
+            //result frame
+            ResFrame = new JFrame("Racer information");
+            ResFrame.setLocation(50, 500);
+            ResFrame.setResizable(false);
+
+            DefaultTableModel tableModel = new DefaultTableModel(0, 5) ;
 
             String[] row = {"name", "speed", "Mspeed", "location", "state"};
-            tableModel.addRow(row);
+
+            tableModel.setColumnIdentifiers(row);
             JTable table = new JTable(tableModel);
 
             // Create a TableRowSorter and associate it with the table model
             TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
             table.setRowSorter(sorter);
+            // Set custom comparator for the "location" column
+            sorter.setComparator(3, (o1, o2) -> {
+                String s1 = o1.toString();
+                String s2 = o2.toString();
+                if (s1.equalsIgnoreCase("Location")) s1 = "-1"; // Treat "Location" as a lower value
+                if (s2.equalsIgnoreCase("Location")) s2 = "-1";
+                Integer i1 = Integer.parseInt(s1);
+                Integer i2 = Integer.parseInt(s2);
+                return i2.compareTo(i1); // Compare in reverse order for descending sort
+            });
 
             JScrollPane scrollPane = new JScrollPane(table);
 
@@ -686,6 +710,8 @@ public class RaceFrame extends JFrame implements ActionListener {
                 String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), String.valueOf(racer.getState())};
                 tableModel.addRow(tempRow);
                 counter++;
+                racer.getState2().handleStateChange(racer,arena);
+
                 }
             }
 
@@ -694,8 +720,8 @@ public class RaceFrame extends JFrame implements ActionListener {
             ResFrame.setVisible(true);
 
             //sort by location
-            sorter.toggleSortOrder(3);
 
+            sorter.toggleSortOrder(3);
         }
 
     }
@@ -751,14 +777,30 @@ public class RaceFrame extends JFrame implements ActionListener {
             if (Quick == 2) {Racertype="naval.RowBoat";}
             if (Quick == 0) {Racertype="land.Car";}
 
+            Random rand = new Random();
+
+            int newcolor = rand.nextInt(4);
+            EnumContainer.Color NewColor = null;
+            if (newcolor == 0)
+                NewColor = EnumContainer.Color.BLACK;
+            if (newcolor == 1)
+                NewColor = EnumContainer.Color.RED;
+            if (newcolor == 2)
+                NewColor = EnumContainer.Color.GREEN;
+            if (newcolor == 3)
+                NewColor = EnumContainer.Color.BLUE;
+            if (newcolor == 4)
+                NewColor = EnumContainer.Color.YELLOW;
+
             try {
                 if(arena==null||NewArena==false){throw new IllegalArgumentException("Please build arena first to add racers!");}
 
                 if(Quick == 0){
-                    addWR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2, EnumContainer.Color.BLACK,4);
+                    addWR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2,NewColor,4);
                 }else
-                    addR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2, EnumContainer.Color.BLACK);
+                    addR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2, NewColor);
                 racer.setCurrentLocation(new Point(0,70*ActiveRacersAmount));
+                racer.setArena(arena);
                 addRacersToArena();
                  }
             catch (IllegalArgumentException e1){

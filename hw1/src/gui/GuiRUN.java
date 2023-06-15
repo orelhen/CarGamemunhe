@@ -1,6 +1,6 @@
 package gui;
 
-import game.factory.Factory;
+import dp.Factory;
 
 /**
  * @author

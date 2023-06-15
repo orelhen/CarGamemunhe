@@ -1,8 +1,7 @@
-package game.racers.states;
+package dp;
 
 import arenas.Arena;
 import game.racers.Racer;
-import utilities.RacerState;
 
 public class DisabledState implements RacerState {
     @Override

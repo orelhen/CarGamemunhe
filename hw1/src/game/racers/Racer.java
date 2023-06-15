@@ -12,8 +12,12 @@ package game.racers;
  */
 
 //imports
+import java.util.Random;
 import arenas.Arena;
-import game.racers.states.ActiveState;
+import dp.ActiveState;
+import dp.BrokenState;
+import dp.DisabledState;
+import dp.RacerState;
 import utilities.*;
 import utilities.EnumContainer.Color;
 import utilities.EnumContainer.State;
@@ -34,6 +38,7 @@ public abstract class Racer implements Cloneable {
     private Color color;
     private Mishap mishap;
     private State state;
+
     private RacerState state2;
 
 
@@ -51,6 +56,7 @@ public abstract class Racer implements Cloneable {
         this.currentLocation = new Point();
         this.state = State.ACTIVE;
         this.state2 = new ActiveState();
+
     }
     @Override public Object clone() throws CloneNotSupportedException{
         return super.clone();
@@ -102,8 +108,14 @@ public abstract class Racer implements Cloneable {
     public State getState() {
         return state;
     }
-
+    public RacerState getState2() {
+        return state2;
+    }
     //setters
+    public void setState2(RacerState state2) {
+        this.state2 = state2;
+    }
+
     public void setState(State state) {
         this.state = state;
     }
@@ -271,11 +283,21 @@ public abstract class Racer implements Cloneable {
 
             reductionFactor = getMishap().getReductionFactor();
                 getMishap().nextTurn();}
-            else{ setState(State.ACTIVE);
+            else{
+                if(!(getState2() instanceof ActiveState)){
+                setState(State.ACTIVE);
+                setState2(new ActiveState());
+                getState2().handleStateChange(this,getArena());}
                 reductionFactor = getMishap().getReductionFactor();}
         }
 
-        if(hasMishap() && getMishap().getTurnsToFix() >7 ){setState(State.BROKEN);}
+        if(hasMishap() && getMishap().getTurnsToFix() >7 ){
+            if(!(getState2() instanceof BrokenState)){
+            setState(State.BROKEN);
+        setState2(new BrokenState());
+        getState2().handleStateChange(this,getArena());}
+
+        }
 
         if(getCurrentSpeed()<getMaxSpeed()){
 
@@ -285,25 +307,40 @@ public abstract class Racer implements Cloneable {
 
         if (hasMishap() && getMishap().isFixable() && getMishap().getTurnsToFix() == 0){
             setMishap(null);
+            if(!(getState2() instanceof ActiveState)){
             setState(State.ACTIVE);
+            setState2(new ActiveState());
+            getState2().handleStateChange(this,getArena());}
             //generate mishap mid race
-            if(Fate.breakDown()){
+
+            Random rand = new Random();
+            int Fate2 = rand.nextInt(100);
+            if(Fate.breakDown() && Fate2>80){
                 setMishap(Fate.generateMishap());
-                System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
+               // System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
             }
         }
 
         if (hasMishap() && !getMishap().isFixable() ){
+
+            if(!(getState2() instanceof DisabledState)){
             setState(State.DISABLED);
+            setState2(new DisabledState());
+            getState2().handleStateChange(this,getArena());}
+
             return getCurrentLocation();
         }
 
         //generate first mishap
         if (!hasMishap()){
+            if(!(getState2() instanceof ActiveState)){
             setState(State.ACTIVE);
+            setState2(new ActiveState());
+            getState2().handleStateChange(this,getArena());}
+
             if(Fate.breakDown()){
                 setMishap(Fate.generateMishap());
-                System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
+               // System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
             }
         }
         //create new point and return it.

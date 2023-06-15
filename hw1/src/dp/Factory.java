@@ -1,4 +1,4 @@
-package game.factory;
+package dp;
 
 import arenas.Arena;
 import gui.RaceFrame;

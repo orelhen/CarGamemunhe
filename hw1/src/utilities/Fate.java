@@ -16,7 +16,7 @@ public class Fate {
 	}
 
 	public static boolean generateFixable() {
-		return rand.nextInt(500) > 7;
+		return rand.nextInt(500) > 10;
 	}
 
 	public static Mishap generateMishap() {
