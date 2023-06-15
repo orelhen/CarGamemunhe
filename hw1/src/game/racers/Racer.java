@@ -13,12 +13,10 @@ package game.racers;
 
 //imports
 import arenas.Arena;
-import utilities.EnumContainer;
-import utilities.Fate;
-import utilities.Point;
+import game.racers.states.ActiveState;
+import utilities.*;
 import utilities.EnumContainer.Color;
 import utilities.EnumContainer.State;
-import utilities.Mishap;
 
 //Racer-class
 public abstract class Racer implements Cloneable {
@@ -36,6 +34,7 @@ public abstract class Racer implements Cloneable {
     private Color color;
     private Mishap mishap;
     private State state;
+    private RacerState state2;
 
 
     //constructor
@@ -51,6 +50,7 @@ public abstract class Racer implements Cloneable {
         this.serial++;
         this.currentLocation = new Point();
         this.state = State.ACTIVE;
+        this.state2 = new ActiveState();
     }
     @Override public Object clone() throws CloneNotSupportedException{
         return super.clone();
@@ -275,8 +275,12 @@ public abstract class Racer implements Cloneable {
                 reductionFactor = getMishap().getReductionFactor();}
         }
 
+        if(hasMishap() && getMishap().getTurnsToFix() >7 ){setState(State.BROKEN);}
+
         if(getCurrentSpeed()<getMaxSpeed()){
+
         setCurrentSpeed(getCurrentSpeed() + getAcceleration() * reductionFactor * friction);
+
         }
 
         if (hasMishap() && getMishap().isFixable() && getMishap().getTurnsToFix() == 0){
@@ -284,7 +288,6 @@ public abstract class Racer implements Cloneable {
             setState(State.ACTIVE);
             //generate mishap mid race
             if(Fate.breakDown()){
-                setState(State.BROKEN);
                 setMishap(Fate.generateMishap());
                 System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
             }
@@ -299,7 +302,6 @@ public abstract class Racer implements Cloneable {
         if (!hasMishap()){
             setState(State.ACTIVE);
             if(Fate.breakDown()){
-                setState(State.BROKEN);
                 setMishap(Fate.generateMishap());
                 System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
             }

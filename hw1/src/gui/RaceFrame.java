@@ -59,6 +59,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     private JTextField MaxRaceersfield;
     private JComboBox SelectRacer;
     private JComboBox SelectColor;
+    private JComboBox SelectColorClone;
     private JComboBox ActiveRacersCombobox;
     private JTextField Namefield;
     private JTextField Speedfield;
@@ -271,7 +272,7 @@ public class RaceFrame extends JFrame implements ActionListener {
         QuickClable.setSize(150, 15);
 
         //quickCreateoptions
-        String[] shortcutnames = {"Air", "Naval", "Land"};
+        String[] shortcutnames = {"Land","Air", "Naval"};
         SelectShortcut = new JComboBox(shortcutnames);
         rightpanel.add(SelectShortcut);
         SelectShortcut.setLocation(215, 30);
@@ -298,11 +299,22 @@ public class RaceFrame extends JFrame implements ActionListener {
         ActiveRacersCombobox.setLocation(215, 130);
         ActiveRacersCombobox.setSize(150, 25);
 
+        //Choose Color Clone lable
+        JLabel ChooseColorClone = new JLabel("Clone color:");
+        rightpanel.add(ChooseColorClone);
+        ChooseColorClone.setLocation(215, 170);
+        ChooseColorClone.setSize(150, 15);
+
+        //CloneColor
+        SelectColorClone = new JComboBox(colors);
+        rightpanel.add(SelectColorClone);
+        SelectColorClone.setLocation(215, 200);
+        SelectColorClone.setSize(150, 25);
 
         //Clone btn
         JButton CloneBut = new JButton("Clone");
         rightpanel.add(CloneBut);
-        CloneBut.setLocation(215, 170);
+        CloneBut.setLocation(215, 240);
         CloneBut.setSize(150, 30);
         CloneBut.addActionListener(this::Clone);
 
@@ -310,16 +322,18 @@ public class RaceFrame extends JFrame implements ActionListener {
         //ArenaFactoryBtn
         JButton FactoryBtn = new JButton("ArenaFactory");
         rightpanel.add(FactoryBtn);
-        FactoryBtn.setLocation(215, 210);
+        FactoryBtn.setLocation(215, 280);
         FactoryBtn.setSize(150, 30);
         FactoryBtn.addActionListener(this::CallArenaFactory);
 
         //BuilderBtn
         JButton Builderbtn = new JButton("Builder");
         rightpanel.add(Builderbtn);
-        Builderbtn.setLocation(215, 250);
+        Builderbtn.setLocation(215, 320);
         Builderbtn.setSize(150, 30);
         Builderbtn.addActionListener(this::Builder);
+
+
 
 
         return MainFrame;
@@ -681,6 +695,7 @@ public class RaceFrame extends JFrame implements ActionListener {
 
             //sort by location
             sorter.toggleSortOrder(3);
+
         }
 
     }
@@ -732,14 +747,17 @@ public class RaceFrame extends JFrame implements ActionListener {
 
             int Quick = SelectShortcut.getSelectedIndex();
             String Racertype = "";
-            if (Quick == 0) {Racertype="air.Helicopter";}
-            if (Quick == 1) {Racertype="naval.RowBoat";}
-            if (Quick == 2) {Racertype="land.Horse";}
+            if (Quick == 1) {Racertype="air.Helicopter";}
+            if (Quick == 2) {Racertype="naval.RowBoat";}
+            if (Quick == 0) {Racertype="land.Car";}
 
             try {
                 if(arena==null||NewArena==false){throw new IllegalArgumentException("Please build arena first to add racers!");}
 
-                addR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2, EnumContainer.Color.BLACK);
+                if(Quick == 0){
+                    addWR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2, EnumContainer.Color.BLACK,4);
+                }else
+                    addR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2, EnumContainer.Color.BLACK);
                 racer.setCurrentLocation(new Point(0,70*ActiveRacersAmount));
                 addRacersToArena();
                  }
@@ -758,10 +776,24 @@ public class RaceFrame extends JFrame implements ActionListener {
         int CloneRacer = ActiveRacersCombobox.getSelectedIndex();
         if(RaceStarted==false ){
             try {
+                int newcolor = SelectColorClone.getSelectedIndex();
+                EnumContainer.Color NewColor = null;
+                if (newcolor == 0)
+                    NewColor = EnumContainer.Color.BLACK;
+                if (newcolor == 1)
+                    NewColor = EnumContainer.Color.RED;
+                if (newcolor == 2)
+                    NewColor = EnumContainer.Color.GREEN;
+                if (newcolor == 3)
+                    NewColor = EnumContainer.Color.BLUE;
+                if (newcolor == 4)
+                    NewColor = EnumContainer.Color.YELLOW;
+
                 if(arena==null||NewArena==false){throw new IllegalArgumentException("Please build arena first to add racers!");}
                 if(ActiveRacersAmount==0){throw new IllegalArgumentException("No Racer to clone");}
                 racer = (Racer) arena.getActiveRacers().get(CloneRacer).clone();
                 racer.setCurrentLocation(new Point(0,70*ActiveRacersAmount));
+                racer.setColor(NewColor);
                 racer.setName(racer.getName() + " "+ ActiveRacersAmount);
                 addRacersToArena();
             }
@@ -783,15 +815,15 @@ public class RaceFrame extends JFrame implements ActionListener {
             int Quick = SelectShortcut.getSelectedIndex();
             String ArenaType = "";
             String ImageType = "";
-            if (Quick == 0) {
+            if (Quick == 1) {
                 ArenaType = "air.AerialArena";
                 ImageType = "AerialArena";
             }
-            if (Quick == 1) {
+            if (Quick == 2) {
                 ArenaType = "naval.NavalArena";
                 ImageType = "NavalArena";
             }
-            if (Quick == 2) {
+            if (Quick == 0) {
                 ArenaType = "land.LandArena";
                 ImageType = "LandArena";
             }

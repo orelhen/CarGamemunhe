@@ -28,7 +28,7 @@ public class Fate {
 	}
 
 	private static int generateTurns() {
-		return rand.nextInt(5) + 1;
+		return rand.nextInt(10) + 1;
 	}
 
 	public static void setSeed(int seed) {
