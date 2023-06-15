@@ -15,6 +15,8 @@ package gui;
 import arenas.Arena;
 import arenas.exceptions.RacerLimitException;
 import arenas.exceptions.RacerTypeException;
+import dp.ActiveState;
+import dp.BrokenState;
 import dp.CompletedState;
 import dp.DisabledState;
 import game.factory.RaceBuilder;
@@ -82,7 +84,9 @@ public class RaceFrame extends JFrame implements ActionListener {
     }
     private static LocalDateTime startTime;
 
-    //constructor
+    /**
+     * constructor
+     */
     public RaceFrame() {
         super("Race");
         getframe();
@@ -599,6 +603,7 @@ public class RaceFrame extends JFrame implements ActionListener {
                     if (NewArena == true) {
                         NewArena = false;
                         RaceStarted = true;
+                        System.out.println("New Race Started");
                         startTime = LocalDateTime.now();
                         //update raceFrame Thread - 30 miliseconds refreshrate
                         new Thread(new Runnable() {
@@ -719,8 +724,7 @@ public class RaceFrame extends JFrame implements ActionListener {
                 String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), racerstate};
                 tableModel.addRow(tempRow);
                 counter++;
-                racer.getState().handleStateChange(racer,arena);
-
+                //racer.getState().handleStateChange(racer,arena);
                 }
 
             }
@@ -761,19 +765,26 @@ public class RaceFrame extends JFrame implements ActionListener {
         int didnotfinish =0;
         ArrayList<Racer> racerARR= arena.getActiveRacers();
         for(int i =0;i<ActiveRacersAmount;i++) {
-            if (racerARR.get(i).getCurrentLocation().getX() < arena.getLength() ){
-
+            if (racerARR.get(i).getCurrentLocation().getX() < arena.getLength() && (racerARR.get(i).getState() instanceof ActiveState
+                    || racerARR.get(i).getState() instanceof BrokenState)){
             RacerImeges.get(i).setLocation((int)racerARR.get(i).getCurrentLocation().getX(), (int) racerARR.get(i).getCurrentLocation().getY());
             didnotfinish++;}
-            else RacerImeges.get(i).setLocation((int)arena.getLength(), (int) racerARR.get(i).getCurrentLocation().getY());
+
         }
         if(didnotfinish == 0)RaceStarted=false;
+
     }
 
 
 
 //PART 3
 
+    /**
+     * @param e
+     *Prototype btn on-click
+     *Reciving Arena info and creating a prototype Racer for Requested input
+     *generating random color , adding position to Cloned name
+     */
     public void Prototype(ActionEvent e)
     {
         // works only for Air race
@@ -820,6 +831,10 @@ public class RaceFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this,"Race Started - wait for finish.");
     }
 
+    /**
+     * @param e
+     * Clone btn on-click reciving inputs and cloning req Racer
+     */
     public void Clone(ActionEvent e)
     {
         int CloneRacer = ActiveRacersCombobox.getSelectedIndex();
@@ -857,6 +872,11 @@ public class RaceFrame extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * @param e
+     *  Builder btn on-click calling ArenaFactory
+     *  creating required arena
+     */
     public void CallArenaFactory(ActionEvent e){
         if(RaceStarted==false) {
             NewArena = true;
@@ -891,6 +911,12 @@ public class RaceFrame extends JFrame implements ActionListener {
 
         }
 
+    /**
+     * @param e
+     * Builder btn on-click calling ArenaFactory
+     * then generating Prototypes for current arena
+     *
+     */
     public void Builder(ActionEvent e)
     {
         if(RaceStarted==false) {

@@ -5,10 +5,25 @@ import arenas.air.AerialArena;
 import arenas.land.LandArena;
 import arenas.naval.NavalArena;
 import gui.RaceFrame;
+/**
+ * @author
+ *
+ * orel hen 316179423
+ * guy aloosh 316471465
+ *
+ *
+ */
 
 public class ArenaFactory extends RaceFrame {
 
 
+    /**
+     * @param condition
+     * @param num
+     * ArenaFactoryMethod
+     * creating arena object using required inputs
+     * @return
+     */
     public Arena getArena(String condition,int num)
     {
         Arena choosen=null;

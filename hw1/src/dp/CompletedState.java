@@ -6,10 +6,22 @@ import gui.RaceFrame;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+/**
+ * @author
+ *
+ * orel hen 316179423
+ * guy aloosh 316471465
+ *
+ *
+ */
 
 public class CompletedState implements RacerState {
 
-
+    /**
+     * @param racer
+     * @param arena
+     * handeling state change, printing finish line time for each racer when completeState.
+     */
     @Override
     public void handleStateChange(Racer racer, Arena arena) {
         LocalDateTime StartTime = RaceFrame.getStartTime();
