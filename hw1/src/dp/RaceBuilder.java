@@ -16,7 +16,7 @@ public interface RaceBuilder {
      * @throws RacerTypeException
      * @throws RacerLimitException
      */
-    public void BuildRacersList() throws RacerTypeException, RacerLimitException;
+    public void BuildRacersList() throws RacerTypeException, RacerLimitException, CloneNotSupportedException;
 
     /**
      *

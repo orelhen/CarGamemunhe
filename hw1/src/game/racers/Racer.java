@@ -379,26 +379,11 @@ public abstract class Racer implements Cloneable {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * @param color
+     * upgrade func, reciving new color and setting it
+     */
+    public void upgrade(Color color) {
+        setColor(color);
+    }
 }

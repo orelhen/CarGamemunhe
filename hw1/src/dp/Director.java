@@ -2,6 +2,14 @@ package dp;
 
 import arenas.exceptions.RacerLimitException;
 import arenas.exceptions.RacerTypeException;
+/**
+ * @author
+ *
+ * orel hen 316179423
+ * guy aloosh 316471465
+ *
+ *
+ */
 
 
 public class Director {
@@ -16,7 +24,7 @@ public class Director {
      * @throws RacerLimitException
      * Building Race generated from raceBuilder
      */
-    public void BuildRace() throws RacerTypeException, RacerLimitException {
+    public void BuildRace() throws RacerTypeException, RacerLimitException, CloneNotSupportedException {
         raceBuilder.BuildArena();
         raceBuilder.BuildRacersList();
     }

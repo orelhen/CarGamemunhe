@@ -603,7 +603,7 @@ public class RaceFrame extends JFrame implements ActionListener {
                     if (NewArena == true) {
                         NewArena = false;
                         RaceStarted = true;
-                        System.out.println("New Race Started");
+                        System.out.println("\n\nNew Race Started\n");
                         startTime = LocalDateTime.now();
                         //update raceFrame Thread - 30 miliseconds refreshrate
                         new Thread(new Runnable() {
@@ -777,7 +777,7 @@ public class RaceFrame extends JFrame implements ActionListener {
 
 
 
-//PART 3
+//PART 3 - New Controllers in UI
 
     /**
      * @param e

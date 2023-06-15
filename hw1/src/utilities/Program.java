@@ -6,6 +6,10 @@ package utilities;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import dp.AirRaceBuilder;
+import dp.LandRaceBuilder;
+import dp.Director;
+import dp.NavalRaceBuilder;
 import game.factory.RaceBuilder;
 import arenas.Arena;
 import arenas.air.AerialArena;
@@ -170,7 +174,7 @@ public class Program {
 		System.out.println("End of test.");
 	}
 
-}
+
 
 // output
 /*
@@ -246,3 +250,136 @@ Race Compleated!
 #0 -> name: Bob, SerialNumber: 20, maxSpeed: 220.0, acceleration: 10.0, color: BLUE, Type: SKULLING, Team: SINGLE
 #1 -> name: John, SerialNumber: 21, maxSpeed: 175.0, acceleration: 20.0, color: BLUE, Type: SKULLING, Team: SINGLE
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void Test() throws RacerTypeException, RacerLimitException, CloneNotSupportedException {
+	AirRaceBuilder race1 = new AirRaceBuilder();
+	NavalRaceBuilder race2 = new NavalRaceBuilder();
+	LandRaceBuilder race3 = new LandRaceBuilder();
+	Director direct = new Director(race3);
+	direct.BuildRace();
+}
+}
+
+
+
+
