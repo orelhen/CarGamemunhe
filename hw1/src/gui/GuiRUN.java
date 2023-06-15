@@ -1,6 +1,6 @@
 package gui;
 
-import dp.Factory;
+import dp.ArenaFactory;
 
 /**
  * @author
@@ -18,7 +18,7 @@ public class GuiRUN{
      *
      */
     public static void main(String[] args){
-        new Factory();
+        new ArenaFactory();
     }
 
 }

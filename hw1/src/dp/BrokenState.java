@@ -8,6 +8,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class BrokenState implements RacerState {
+
+
     @Override
     public void handleStateChange(Racer racer, Arena arena) {
         LocalDateTime StartTime = RaceFrame.getStartTime();

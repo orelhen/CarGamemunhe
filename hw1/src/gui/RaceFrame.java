@@ -15,6 +15,7 @@ package gui;
 import arenas.Arena;
 import arenas.exceptions.RacerLimitException;
 import arenas.exceptions.RacerTypeException;
+import dp.CompletedState;
 import dp.DisabledState;
 import game.factory.RaceBuilder;
 import game.racers.Racer;
@@ -525,6 +526,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     public void addR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor){
         try {
             racer=builder.buildRacer("game.racers."+ rt, name, mSpeed, Acc, NewColor);
+            racer.setArena(arena);
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
             e1.printStackTrace();
@@ -545,6 +547,7 @@ public class RaceFrame extends JFrame implements ActionListener {
     public void addWR(String rt,String name,int mSpeed,int Acc,EnumContainer.Color NewColor,int Numofwheels){
         try {
             racer=builder.buildWheeledRacer("game.racers."+rt, name, mSpeed, Acc,NewColor, Numofwheels);
+            racer.setArena(arena);
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                  | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1)
         {
@@ -618,7 +621,7 @@ public class RaceFrame extends JFrame implements ActionListener {
                                 public void run() {
                                     while (racer.getCurrentLocation().getX() < arena.getLength()) {
                                         //activate RacerMove Thread - 100 miliseconds refreshrate
-                                        if(!(racer.getState2() instanceof DisabledState)){
+                                        if(!(racer.getState() instanceof DisabledState)){
                                         racer.move(arena.getFRICTION());}
 
                                         try {
@@ -628,6 +631,9 @@ public class RaceFrame extends JFrame implements ActionListener {
                                         }
                                     }
                                     arena.crossFinishLine(racer);
+                                    racer.setState(new CompletedState());
+                                    racer.getState().handleStateChange(racer, arena);
+
                                 }
                             }).start();
                         }
@@ -674,7 +680,7 @@ public class RaceFrame extends JFrame implements ActionListener {
 
             DefaultTableModel tableModel = new DefaultTableModel(0, 5) ;
 
-            String[] row = {"name", "speed", "Mspeed", "location", "state"};
+            String[] row = {"name", "speed", "Mspeed", "location", "Result"};
 
             tableModel.setColumnIdentifiers(row);
             JTable table = new JTable(tableModel);
@@ -697,22 +703,26 @@ public class RaceFrame extends JFrame implements ActionListener {
 
             int counter = 1;
             for (Racer racer : arena.getCompletedRacers()) {
-                racer.setState(EnumContainer.State.COMPLETED);
                 int location = (int) racer.getCurrentLocation().getX();
                 if(location >= arena.getLength()) location = (int) arena.getLength();
-                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location),String.valueOf(racer.getState())};
+                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location),"#"+String.valueOf(counter)+" Racer"};
                 tableModel.addRow(tempRow);
                 counter++;
             }
             for (Racer racer : arena.getActiveRacers()) {
                 int location = (int) racer.getCurrentLocation().getX();
+                String racerstate = "";
+                if(racer.getState() instanceof DisabledState){
+                    racerstate ="Failed";
+                }
                 if(location < arena.getLength()){
-                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), String.valueOf(racer.getState())};
+                String[] tempRow = {racer.getName(), String.valueOf((int)racer.getCurrentSpeed()), String.valueOf(racer.getMaxSpeed()), String.valueOf(location), racerstate};
                 tableModel.addRow(tempRow);
                 counter++;
-                racer.getState2().handleStateChange(racer,arena);
+                racer.getState().handleStateChange(racer,arena);
 
                 }
+
             }
 
             ResFrame.add(scrollPane, BorderLayout.CENTER);
@@ -752,11 +762,9 @@ public class RaceFrame extends JFrame implements ActionListener {
         ArrayList<Racer> racerARR= arena.getActiveRacers();
         for(int i =0;i<ActiveRacersAmount;i++) {
             if (racerARR.get(i).getCurrentLocation().getX() < arena.getLength() ){
-            RacerImeges.get(i).setLocation((int)racerARR.get(i).getCurrentLocation().getX(), (int) racerARR.get(i).getCurrentLocation().getY());
-            if(racerARR.get(i).getState() != EnumContainer.State.DISABLED){
-            didnotfinish++;}
 
-            }
+            RacerImeges.get(i).setLocation((int)racerARR.get(i).getCurrentLocation().getX(), (int) racerARR.get(i).getCurrentLocation().getY());
+            didnotfinish++;}
             else RacerImeges.get(i).setLocation((int)arena.getLength(), (int) racerARR.get(i).getCurrentLocation().getY());
         }
         if(didnotfinish == 0)RaceStarted=false;
@@ -779,7 +787,7 @@ public class RaceFrame extends JFrame implements ActionListener {
 
             Random rand = new Random();
 
-            int newcolor = rand.nextInt(4);
+            int newcolor = rand.nextInt(5);
             EnumContainer.Color NewColor = null;
             if (newcolor == 0)
                 NewColor = EnumContainer.Color.BLACK;
@@ -796,11 +804,10 @@ public class RaceFrame extends JFrame implements ActionListener {
                 if(arena==null||NewArena==false){throw new IllegalArgumentException("Please build arena first to add racers!");}
 
                 if(Quick == 0){
-                    addWR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2,NewColor,4);
+                    addWR(Racertype, "Protytpe " + ActiveRacersAmount, 15, 3,NewColor,4);
                 }else
-                    addR(Racertype, "Protytpe " + ActiveRacersAmount, 10, 2, NewColor);
+                    addR(Racertype, "Protytpe " + ActiveRacersAmount, 15, 3, NewColor);
                 racer.setCurrentLocation(new Point(0,70*ActiveRacersAmount));
-                racer.setArena(arena);
                 addRacersToArena();
                  }
             catch (IllegalArgumentException e1){
@@ -849,7 +856,6 @@ public class RaceFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this,"Race Started - wait for finish.");
 
     }
-
 
     public void CallArenaFactory(ActionEvent e){
         if(RaceStarted==false) {

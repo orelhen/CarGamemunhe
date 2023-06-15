@@ -37,9 +37,8 @@ public abstract class Racer implements Cloneable {
     private double failureProbability;
     private Color color;
     private Mishap mishap;
-    private State state;
 
-    private RacerState state2;
+    private RacerState state;
 
 
     //constructor
@@ -54,12 +53,15 @@ public abstract class Racer implements Cloneable {
         this.color = color;
         this.serial++;
         this.currentLocation = new Point();
-        this.state = State.ACTIVE;
-        this.state2 = new ActiveState();
+        this.state = new ActiveState();
 
     }
-    @Override public Object clone() throws CloneNotSupportedException{
-        return super.clone();
+    @Override public Object clone() throws CloneNotSupportedException {
+        Racer cloned = (Racer) super.clone();
+        // Copy any mutable fields here
+        cloned.currentLocation = new Point(this.currentLocation.getX(), this.currentLocation.getY());
+        cloned.state = new ActiveState(); // Assuming ActiveState is mutable, create a new instance
+        return cloned;
     }
     //getters
 
@@ -105,20 +107,15 @@ public abstract class Racer implements Cloneable {
     public Mishap getMishap() {
         return mishap;
     }
-    public State getState() {
+
+    public RacerState getState() {
         return state;
     }
-    public RacerState getState2() {
-        return state2;
-    }
     //setters
-    public void setState2(RacerState state2) {
-        this.state2 = state2;
-    }
-
-    public void setState(State state) {
+    public void setState(RacerState state) {
         this.state = state;
     }
+
     /**
      * @param failureProbability
      * @return
@@ -274,81 +271,75 @@ public abstract class Racer implements Cloneable {
      * @return
      */
     public Point move(double friction) {
+        double reductionFactor = 1; // No mishap, no reduction factor
 
-        double reductionFactor = 1;//No mishap, no reduction factor
-
-        //handle mishap
-        if (hasMishap()){
-            if(getMishap().isFixable()){
-
-            reductionFactor = getMishap().getReductionFactor();
-                getMishap().nextTurn();}
-            else{
-                if(!(getState2() instanceof ActiveState)){
-                setState(State.ACTIVE);
-                setState2(new ActiveState());
-                getState2().handleStateChange(this,getArena());}
-                reductionFactor = getMishap().getReductionFactor();}
-        }
-
-        if(hasMishap() && getMishap().getTurnsToFix() >7 ){
-            if(!(getState2() instanceof BrokenState)){
-            setState(State.BROKEN);
-        setState2(new BrokenState());
-        getState2().handleStateChange(this,getArena());}
-
-        }
-
-        if(getCurrentSpeed()<getMaxSpeed()){
-
-        setCurrentSpeed(getCurrentSpeed() + getAcceleration() * reductionFactor * friction);
-
-        }
-
-        if (hasMishap() && getMishap().isFixable() && getMishap().getTurnsToFix() == 0){
-            setMishap(null);
-            if(!(getState2() instanceof ActiveState)){
-            setState(State.ACTIVE);
-            setState2(new ActiveState());
-            getState2().handleStateChange(this,getArena());}
-            //generate mishap mid race
-
-            Random rand = new Random();
-            int Fate2 = rand.nextInt(100);
-            if(Fate.breakDown() && Fate2>80){
-                setMishap(Fate.generateMishap());
-               // System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
+        // Handle mishap
+        if (hasMishap()) {
+            if (getMishap().isFixable()) {
+                reductionFactor = getMishap().getReductionFactor();
+                getMishap().nextTurn();
+            } else {
+                if (!(getState() instanceof ActiveState)) {
+                    setState(new ActiveState());
+                    getState().handleStateChange(this, getArena());
+                }
+                reductionFactor = getMishap().getReductionFactor();
             }
         }
 
-        if (hasMishap() && !getMishap().isFixable() ){
+        if (hasMishap() && getMishap().getTurnsToFix() > 7) {
+            if (!(getState() instanceof BrokenState)) {
 
-            if(!(getState2() instanceof DisabledState)){
-            setState(State.DISABLED);
-            setState2(new DisabledState());
-            getState2().handleStateChange(this,getArena());}
+                setState(new BrokenState());
+                getState().handleStateChange(this, getArena());
+            }
+        }
 
+        if (getCurrentSpeed() < getMaxSpeed()) {
+            setCurrentSpeed(getCurrentSpeed() + getAcceleration() * reductionFactor * friction);
+        }
+
+        if (hasMishap() && getMishap().isFixable() && getMishap().getTurnsToFix() == 0) {
+            setMishap(null);
+            if (!(getState() instanceof ActiveState)) {
+
+                setState(new ActiveState());
+                getState().handleStateChange(this, getArena());
+            }
+            // Generate mishap mid race
+            Random rand = new Random();
+            int Fate2 = rand.nextInt(100);
+            if (Fate.breakDown() && Fate2 > 80) {
+                setMishap(Fate.generateMishap());
+                // System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
+            }
+        }
+
+        if (hasMishap() && !getMishap().isFixable()) {
+            if (!(getState() instanceof DisabledState)) {
+                setState(new DisabledState());
+                getState().handleStateChange(this, getArena());
+            }
             return getCurrentLocation();
         }
 
-        //generate first mishap
-        if (!hasMishap()){
-            if(!(getState2() instanceof ActiveState)){
-            setState(State.ACTIVE);
-            setState2(new ActiveState());
-            getState2().handleStateChange(this,getArena());}
+        // Generate first mishap
+        if (!hasMishap()) {
+            if (!(getState() instanceof ActiveState)) {
+                setState(new ActiveState());
+                getState().handleStateChange(this, getArena());
+            }
 
-            if(Fate.breakDown()){
+            if (Fate.breakDown()) {
                 setMishap(Fate.generateMishap());
-               // System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
+                // System.out.println(getName()+" Has a new mishap!"+getMishap().toString());
             }
         }
-        //create new point and return it.
 
-        Point current = new Point(getCurrentLocation().getX()+getCurrentSpeed(),getCurrentLocation().getY());
-        this.setCurrentLocation(current);
+        // Create a new point and return it.
+        Point current = new Point(getCurrentLocation().getX() + getCurrentSpeed(), getCurrentLocation().getY());
+        setCurrentLocation(current);
         return getCurrentLocation();
-
     }
 
     /**
